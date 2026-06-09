@@ -21,17 +21,31 @@ if (!$vino) {
 }
 
 $categorias = Categoria::todas();
+$error = $_GET['error'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $anioCosecha = trim($_POST['anio_cosecha'] ?? '');
+    $temperaturaServicio = trim($_POST['temperatura_servicio'] ?? '');
+
+    if ($anioCosecha === '') {
+        header('Location: vino-editar.php?id=' . (int)$id . '&error=anio_cosecha');
+        exit;
+    }
+
+    if ($temperaturaServicio === '') {
+        header('Location: vino-editar.php?id=' . (int)$id . '&error=temperatura_servicio');
+        exit;
+    }
 
     $vino->setNombre($_POST['nombre']);
     $vino->setDescripcion($_POST['descripcion']);
     $vino->setPrecio((float)$_POST['precio']);
     $vino->setStock((int)$_POST['stock']);
     $vino->setImagen($_POST['imagen']);
-    $vino->setAnioCosecha($_POST['anio_cosecha']);
+    $vino->setAnioCosecha($anioCosecha);
     $vino->setVolumenMl((int)$_POST['volumen_ml']);
-    $vino->setTemperaturaServicio($_POST['temperatura_servicio']);
+    $vino->setTemperaturaServicio((int)$temperaturaServicio);
     $vino->setBodega($_POST['bodega']);
     $vino->setCategoriaId((int)$_POST['categoria_id']);
     $vino->setMaridaje($_POST['maridaje']);
@@ -47,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Editar vino</title>
@@ -57,171 +72,172 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body class="container py-5">
 
-<h1 class="mb-4">Editar vino</h1>
+    <h1 class="mb-4">Editar vino</h1>
 
-<form method="POST">
-
-    <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <input
-            type="text"
-            name="nombre"
-            class="form-control"
-            value="<?= htmlspecialchars($vino->getNombre()) ?>"
-            required
-        >
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Descripción</label>
-        <textarea
-            name="descripcion"
-            class="form-control"
-            rows="4"
-        ><?= htmlspecialchars($vino->getDescripcion()) ?></textarea>
-    </div>
-
-    <div class="row">
-
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Precio</label>
-            <input
-                type="number"
-                step="0.01"
-                name="precio"
-                class="form-control"
-                value="<?= $vino->getPrecio() ?>"
-            >
+    <?php if ($error === 'anio_cosecha'): ?>
+        <div class="alert alert-danger">
+            Debes completar el año de cosecha antes de guardar.
         </div>
-
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Stock</label>
-            <input
-                type="number"
-                name="stock"
-                class="form-control"
-                value="<?= $vino->getStock() ?>"
-            >
+    <?php elseif ($error === 'temperatura_servicio'): ?>
+        <div class="alert alert-danger">
+            Debes completar la temperatura de servicio antes de guardar.
         </div>
+    <?php endif; ?>
 
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Volumen (ml)</label>
-            <input
-                type="number"
-                name="volumen_ml"
-                class="form-control"
-                value="<?= $vino->getVolumenMl() ?>"
-            >
-        </div>
+    <form method="POST">
 
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Imagen</label>
-        <input
-            type="text"
-            name="imagen"
-            class="form-control"
-            value="<?= htmlspecialchars($vino->getImagen()) ?>"
-        >
-    </div>
-
-    <div class="row">
-
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Bodega</label>
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
             <input
                 type="text"
-                name="bodega"
+                name="nombre"
                 class="form-control"
-                value="<?= htmlspecialchars($vino->getBodega()) ?>"
-            >
+                value="<?= htmlspecialchars($vino->getNombre()) ?>"
+                required>
         </div>
 
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Región</label>
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea
+                name="descripcion"
+                class="form-control"
+                rows="4"><?= htmlspecialchars($vino->getDescripcion()) ?></textarea>
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Precio</label>
+                <input
+                    type="number"
+                    step="0.01"
+                    name="precio"
+                    class="form-control"
+                    value="<?= $vino->getPrecio() ?>">
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Stock</label>
+                <input
+                    type="number"
+                    name="stock"
+                    class="form-control"
+                    value="<?= $vino->getStock() ?>">
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Volumen (ml)</label>
+                <input
+                    type="number"
+                    name="volumen_ml"
+                    class="form-control"
+                    value="<?= $vino->getVolumenMl() ?>">
+            </div>
+
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Imagen</label>
             <input
                 type="text"
-                name="region"
+                name="imagen"
                 class="form-control"
-                value="<?= htmlspecialchars($vino->getRegion()) ?>"
-            >
+                value="<?= htmlspecialchars($vino->getImagen()) ?>">
         </div>
 
-    </div>
+        <div class="row">
 
-    <div class="mb-3">
-        <label class="form-label">Año cosecha</label>
-        <input
-            type="date"
-            name="anio_cosecha"
-            class="form-control"
-            value="<?= $vino->getAnioCosecha() ?>"
-        >
-    </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Bodega</label>
+                <input
+                    type="text"
+                    name="bodega"
+                    class="form-control"
+                    value="<?= htmlspecialchars($vino->getBodega()) ?>">
+            </div>
 
-    <div class="mb-3">
-        <label class="form-label">Temperatura servicio</label>
-        <input
-            type="text"
-            name="temperatura_servicio"
-            class="form-control"
-            value="<?= htmlspecialchars($vino->getTemperaturaServicio()) ?>"
-        >
-    </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Región</label>
+                <input
+                    type="text"
+                    name="region"
+                    class="form-control"
+                    value="<?= htmlspecialchars($vino->getRegion()) ?>">
+            </div>
 
-    <div class="mb-3">
-        <label class="form-label">Categoría</label>
+        </div>
 
-        <select name="categoria_id" class="form-select">
+        <div class="mb-3">
+            <label class="form-label">Año cosecha</label>
+            <input
+                type="date"
+                name="anio_cosecha"
+                class="form-control"
+                value="<?= htmlspecialchars($vino->getAnioCosecha()) ?>"
+                required>
+        </div>
 
-            <?php foreach($categorias as $categoria): ?>
+        <div class="mb-3">
+            <label class="form-label">Temperatura servicio</label>
+            <input
+                type="number"
+                name="temperatura_servicio"
+                class="form-control"
+                value="<?= htmlspecialchars((string)$vino->getTemperaturaServicio()) ?>"
+                required>
+        </div>
 
-                <option
-                    value="<?= $categoria->getId() ?>"
-                    <?= $categoria->getId() == $vino->getCategoriaId() ? 'selected' : '' ?>
-                >
-                    <?= htmlspecialchars($categoria->getNombre()) ?>
+        <div class="mb-3">
+            <label class="form-label">Categoría</label>
+
+            <select name="categoria_id" class="form-select">
+
+                <?php foreach ($categorias as $categoria): ?>
+
+                    <option
+                        value="<?= $categoria->getId() ?>"
+                        <?= $categoria->getId() == $vino->getCategoriaId() ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($categoria->getNombre()) ?>
+                    </option>
+
+                <?php endforeach; ?>
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Maridaje</label>
+            <textarea
+                name="maridaje"
+                class="form-control"
+                rows="3"><?= htmlspecialchars($vino->getMaridaje()) ?></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Destacado</label>
+
+            <select name="destacado" class="form-select">
+                <option value="1" <?= $vino->getDestacado() ? 'selected' : '' ?>>
+                    Sí
                 </option>
+                <option value="0" <?= !$vino->getDestacado() ? 'selected' : '' ?>>
+                    No
+                </option>
+            </select>
 
-            <?php endforeach; ?>
+        </div>
 
-        </select>
+        <button type="submit" class="btn btn-primary">
+            Guardar cambios
+        </button>
 
-    </div>
+        <a href="vinos.php" class="btn btn-secondary">
+            Cancelar
+        </a>
 
-    <div class="mb-3">
-        <label class="form-label">Maridaje</label>
-        <textarea
-            name="maridaje"
-            class="form-control"
-            rows="3"
-        ><?= htmlspecialchars($vino->getMaridaje()) ?></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Destacado</label>
-
-        <select name="destacado" class="form-select">
-            <option value="1" <?= $vino->getDestacado() ? 'selected' : '' ?>>
-                Sí
-            </option>
-            <option value="0" <?= !$vino->getDestacado() ? 'selected' : '' ?>>
-                No
-            </option>
-        </select>
-
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        Guardar cambios
-    </button>
-
-    <a href="vinos.php" class="btn btn-secondary">
-        Cancelar
-    </a>
-
-</form>
+    </form>
 
 </body>
+
 </html>

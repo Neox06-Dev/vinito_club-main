@@ -2,10 +2,10 @@
 -- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost:3306
--- Tiempo de generación: 08-06-2026 a las 00:58:42
--- Versión del servidor: 8.4.3
--- Versión de PHP: 8.5.1
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 08-06-2026 a las 21:18:10
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,8 +30,8 @@ USE `vinitoclub_bbdd`;
 --
 
 CREATE TABLE `categorias` (
-  `id_categoria` int NOT NULL,
-  `nombre` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
+  `id_categoria` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -52,11 +52,11 @@ INSERT INTO `categorias` (`id_categoria`, `nombre`) VALUES
 --
 
 CREATE TABLE `usuarios` (
-  `id_usuario` int NOT NULL,
-  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `rol` enum('cliente','admin') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'cliente'
+  `id_usuario` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `rol` enum('cliente','admin') NOT NULL DEFAULT 'cliente'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -73,8 +73,8 @@ INSERT INTO `usuarios` (`id_usuario`, `nombre`, `email`, `password`, `rol`) VALU
 --
 
 CREATE TABLE `varietales` (
-  `id_varietal` int NOT NULL,
-  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+  `id_varietal` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -99,20 +99,20 @@ INSERT INTO `varietales` (`id_varietal`, `nombre`) VALUES
 --
 
 CREATE TABLE `vinos` (
-  `id_vino` int NOT NULL,
-  `nombre` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `descripcion` text COLLATE utf8mb4_general_ci NOT NULL,
+  `id_vino` int(11) NOT NULL,
+  `nombre` varchar(150) NOT NULL,
+  `descripcion` text NOT NULL,
   `precio` decimal(10,2) NOT NULL,
-  `stock` int NOT NULL,
-  `imagen` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `stock` int(11) NOT NULL,
+  `imagen` varchar(255) NOT NULL,
   `anio_cosecha` date NOT NULL,
-  `volumen_ml` int NOT NULL,
-  `temperatura_servicio` int NOT NULL,
-  `bodega` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `categoria_id` int NOT NULL,
-  `maridaje` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `volumen_ml` int(11) NOT NULL,
+  `temperatura_servicio` int(11) NOT NULL,
+  `bodega` varchar(100) NOT NULL,
+  `categoria_id` int(11) NOT NULL,
+  `maridaje` varchar(255) NOT NULL,
   `destacado` tinyint(1) NOT NULL,
-  `region` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+  `region` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -134,8 +134,7 @@ INSERT INTO `vinos` (`id_vino`, `nombre`, `descripcion`, `precio`, `stock`, `ima
 (12, 'Extra Brut Prestige', 'El lujo en una copa. Elaborado con método tradicional champenoise, este espumante premium presenta aromas de levadura, tostados, manzana golden y frutos secos. Burbuja cremosa e inagotable.', 28900.00, 10, 'brut-prestige.png', '2020-08-20', 750, 7, 'Baron B', 4, 'Celebraciones, ostras, canapés de lujo', 1, 'Champagne, Mendoza'),
 (13, 'Malbec Clásico', 'El Malbec cotidiano por excelencia. Frutal, amable y versátil. Aromas a ciruela y mora con un toque de vainilla. Taninos suaves y final agradable. El vino de todos los días.', 7900.00, 80, 'malbec-clasico.png', '2022-03-20', 750, 16, 'Trapiche', 1, 'Pastas, pizza, carnes a la parrilla', 0, 'Mendoza'),
 (14, 'Pinot Noir', 'Estilo alsaciano poco común en Argentina. Aromas ahumados, melocotón, jengibre y flores blancas. Textura untuosa y acidez refrescante. Un blanco que sorprende y enamora.', 15300.00, 20, 'pinot-noir.png', '2022-02-28', 750, 11, 'Zuccardi', 2, 'Carne de cerdo, curry suave, pasta al salmón', 0, 'Patagonia'),
-(15, 'Los Haroldos Gran Corte', 'La cima de la vitivinicultura argentina. Blend icónico de Catena Zapata con 5 años de crianza en roble francés. Complejidad extraordinaria: cassis, chocolate amargo, cedro y tabaco. Vino de colección.', 48000.00, 5, 'haroldos-gran-corte.png', '2017-04-10', 750, 18, 'Catena Zapata', 1, 'Rib eye, ossobuco, quesos muy añejos', 0, 'Mendoza'),
-(16, 'San Nicolás Wines', 'San Nicolás Wines se destaca por su compromiso con la calidad y la tradición vitivinícola. La bodega Nicolás, por su parte, es un referente en la producción de vinos de alta gama, ofreciendo una amplia gama de vinos que van desde blancos frescos y afrutados hasta tintos robustos y estructurados.', 74800.00, 25, 'vino-nicolas.webp', '2021-05-15', 750, 16, 'Nicolás', 1, 'Risottos de hongos, pastas con salsa boloñesa, cocina mediterránea con hierbas', 1, 'Mendoza');
+(15, 'Los Haroldos Gran Corte', 'La cima de la vitivinicultura argentina. Blend icónico de Catena Zapata con 5 años de crianza en roble francés. Complejidad extraordinaria: cassis, chocolate amargo, cedro y tabaco. Vino de colección.', 48000.00, 5, 'haroldos-gran-corte.png', '2017-04-10', 750, 18, 'Catena Zapata', 1, 'Rib eye, ossobuco, quesos muy añejos', 0, 'Mendoza');
 
 -- --------------------------------------------------------
 
@@ -144,8 +143,8 @@ INSERT INTO `vinos` (`id_vino`, `nombre`, `descripcion`, `precio`, `stock`, `ima
 --
 
 CREATE TABLE `vino_varietal` (
-  `vino_id` int NOT NULL,
-  `varietal_id` int NOT NULL
+  `vino_id` int(11) NOT NULL,
+  `varietal_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -154,24 +153,23 @@ CREATE TABLE `vino_varietal` (
 
 INSERT INTO `vino_varietal` (`vino_id`, `varietal_id`) VALUES
 (1, 1),
-(5, 1),
-(11, 1),
-(13, 1),
-(15, 1),
-(5, 2),
-(15, 2),
-(5, 3),
 (2, 4),
-(4, 4),
-(12, 4),
 (3, 5),
-(14, 5),
-(16, 5),
-(7, 6),
+(4, 4),
+(5, 1),
+(5, 2),
+(5, 3),
 (6, 7),
-(10, 7),
+(7, 6),
 (8, 8),
-(9, 9);
+(9, 9),
+(10, 7),
+(11, 1),
+(12, 4),
+(13, 1),
+(14, 5),
+(15, 1),
+(15, 2);
 
 --
 -- Índices para tablas volcadas
@@ -218,25 +216,25 @@ ALTER TABLE `vino_varietal`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id_categoria` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `varietales`
 --
 ALTER TABLE `varietales`
-  MODIFY `id_varietal` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_varietal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `vinos`
 --
 ALTER TABLE `vinos`
-  MODIFY `id_vino` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_vino` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Restricciones para tablas volcadas

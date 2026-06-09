@@ -7,8 +7,22 @@ require_once '../classes/Vino.php';
 require_once '../classes/Categoria.php';
 
 $categorias = Categoria::todas();
+$error = $_GET['error'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $anioCosecha = trim($_POST['anio_cosecha'] ?? '');
+    $temperaturaServicio = trim($_POST['temperatura_servicio'] ?? '');
+
+    if ($anioCosecha === '') {
+        header('Location: vino-crear.php?error=anio_cosecha');
+        exit;
+    }
+
+    if ($temperaturaServicio === '') {
+        header('Location: vino-crear.php?error=temperatura_servicio');
+        exit;
+    }
 
     $vino = new Vino();
 
@@ -17,9 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $vino->setPrecio((float)$_POST['precio']);
     $vino->setStock((int)$_POST['stock']);
     $vino->setImagen($_POST['imagen']);
-    $vino->setAnioCosecha($_POST['anio_cosecha']);
+    $vino->setAnioCosecha($anioCosecha);
     $vino->setVolumenMl((int)$_POST['volumen_ml']);
-    $vino->setTemperaturaServicio($_POST['temperatura_servicio']);
+    $vino->setTemperaturaServicio((int)$temperaturaServicio);
     $vino->setBodega($_POST['bodega']);
     $vino->setCategoriaId((int)$_POST['categoria_id']);
     $vino->setMaridaje($_POST['maridaje']);
@@ -35,118 +49,130 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Crear vino</title>
-    
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 </head>
 
 <body class="container py-5">
 
-<h1 class="mb-4">Nuevo vino</h1>
+    <h1 class="mb-4">Nuevo vino</h1>
 
-<form method="POST">
+    <?php if ($error === 'anio_cosecha'): ?>
+        <div class="alert alert-danger">
+            Debes completar el año de cosecha antes de guardar.
+        </div>
+    <?php elseif ($error === 'temperatura_servicio'): ?>
+        <div class="alert alert-danger">
+            Debes completar la temperatura de servicio antes de guardar.
+        </div>
+    <?php endif; ?>
 
-    <div class="mb-3">
-        <label class="form-label">Nombre</label>
-        <input type="text" name="nombre" class="form-control" required>
-    </div>
+    <form method="POST">
 
-    <div class="mb-3">
-        <label class="form-label">Descripción</label>
-        <textarea name="descripcion" class="form-control" rows="4"></textarea>
-    </div>
-
-    <div class="row">
-
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Precio</label>
-            <input type="number" step="0.01" name="precio" class="form-control">
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" name="nombre" class="form-control" required>
         </div>
 
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Stock</label>
-            <input type="number" name="stock" class="form-control">
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea name="descripcion" class="form-control" rows="4"></textarea>
         </div>
 
-        <div class="col-md-4 mb-3">
-            <label class="form-label">Volumen (ml)</label>
-            <input type="number" name="volumen_ml" class="form-control">
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Precio</label>
+                <input type="number" step="0.01" name="precio" class="form-control">
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Stock</label>
+                <input type="number" name="stock" class="form-control">
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Volumen (ml)</label>
+                <input type="number" name="volumen_ml" class="form-control">
+            </div>
+
         </div>
 
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Imagen</label>
-        <input type="text" name="imagen" class="form-control">
-    </div>
-
-    <div class="row">
-
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Bodega</label>
-            <input type="text" name="bodega" class="form-control">
+        <div class="mb-3">
+            <label class="form-label">Imagen</label>
+            <input type="text" name="imagen" class="form-control">
         </div>
 
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Región</label>
-            <input type="text" name="region" class="form-control">
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Bodega</label>
+                <input type="text" name="bodega" class="form-control">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Región</label>
+                <input type="text" name="region" class="form-control">
+            </div>
+
         </div>
 
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Año cosecha</label>
+            <input type="date" name="anio_cosecha" class="form-control" required>
+        </div>
 
-    <div class="mb-3">
-        <label class="form-label">Año cosecha</label>
-        <input type="date" name="anio_cosecha" class="form-control">
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Temperatura servicio</label>
+            <input type="number" name="temperatura_servicio" class="form-control" required>
+        </div>
 
-    <div class="mb-3">
-        <label class="form-label">Temperatura servicio</label>
-        <input type="text" name="temperatura_servicio" class="form-control">
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Categoría</label>
 
-    <div class="mb-3">
-        <label class="form-label">Categoría</label>
+            <select name="categoria_id" class="form-select">
 
-        <select name="categoria_id" class="form-select">
+                <?php foreach ($categorias as $categoria): ?>
 
-            <?php foreach($categorias as $categoria): ?>
+                    <option value="<?= $categoria->getId() ?>">
+                        <?= htmlspecialchars($categoria->getNombre()) ?>
+                    </option>
 
-                <option value="<?= $categoria->getId() ?>">
-                    <?= htmlspecialchars($categoria->getNombre()) ?>
-                </option>
+                <?php endforeach; ?>
 
-            <?php endforeach; ?>
+            </select>
 
-        </select>
+        </div>
 
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Maridaje</label>
+            <textarea name="maridaje" class="form-control" rows="3"></textarea>
+        </div>
 
-    <div class="mb-3">
-        <label class="form-label">Maridaje</label>
-        <textarea name="maridaje" class="form-control" rows="3"></textarea>
-    </div>
+        <div class="mb-3">
+            <label class="form-label">Destacado</label>
 
-    <div class="mb-3">
-        <label class="form-label">Destacado</label>
+            <select name="destacado" class="form-select">
+                <option value="1">Sí</option>
+                <option value="0">No</option>
+            </select>
 
-        <select name="destacado" class="form-select">
-            <option value="1">Sí</option>
-            <option value="0">No</option>
-        </select>
+        </div>
 
-    </div>
+        <button type="submit" class="btn btn-success">
+            Crear vino
+        </button>
 
-    <button type="submit" class="btn btn-success">
-        Crear vino
-    </button>
+        <a href="vinos.php" class="btn btn-secondary">
+            Cancelar
+        </a>
 
-    <a href="vinos.php" class="btn btn-secondary">
-        Cancelar
-    </a>
-
-</form>
+    </form>
 
 </body>
+
 </html>
