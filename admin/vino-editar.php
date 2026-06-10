@@ -101,7 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <textarea
                 name="descripcion"
                 class="form-control"
-                rows="4"><?= htmlspecialchars($vino->getDescripcion()) ?></textarea>
+                rows="4"
+                required><?= htmlspecialchars($vino->getDescripcion()) ?></textarea>
         </div>
 
         <div class="row">
@@ -113,7 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     step="0.01"
                     name="precio"
                     class="form-control"
-                    value="<?= $vino->getPrecio() ?>">
+                    value="<?= $vino->getPrecio() ?>"
+                    required>
             </div>
 
             <div class="col-md-4 mb-3">
@@ -122,7 +124,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     type="number"
                     name="stock"
                     class="form-control"
-                    value="<?= $vino->getStock() ?>">
+                    value="<?= $vino->getStock() ?>"
+                    min="0"
+                    required>
             </div>
 
             <div class="col-md-4 mb-3">
@@ -131,7 +135,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     type="number"
                     name="volumen_ml"
                     class="form-control"
-                    value="<?= $vino->getVolumenMl() ?>">
+                    min="0"
+                    value="<?= $vino->getVolumenMl() ?>"
+                    required>
             </div>
 
         </div>
@@ -142,7 +148,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 type="text"
                 name="imagen"
                 class="form-control"
-                value="<?= htmlspecialchars($vino->getImagen()) ?>">
+                value="<?= htmlspecialchars($vino->getImagen()) ?>"
+                required
+                placeholder="URL de la imagen">
         </div>
 
         <div class="row">
@@ -153,7 +161,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     type="text"
                     name="bodega"
                     class="form-control"
-                    value="<?= htmlspecialchars($vino->getBodega()) ?>">
+                    value="<?= htmlspecialchars($vino->getBodega()) ?>"
+                    required>
             </div>
 
             <div class="col-md-6 mb-3">
@@ -162,7 +171,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     type="text"
                     name="region"
                     class="form-control"
-                    value="<?= htmlspecialchars($vino->getRegion()) ?>">
+                    value="<?= htmlspecialchars($vino->getRegion()) ?>"
+                    required>
             </div>
 
         </div>
@@ -183,6 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 type="number"
                 name="temperatura_servicio"
                 class="form-control"
+                min="0"
                 value="<?= htmlspecialchars((string)$vino->getTemperaturaServicio()) ?>"
                 required>
         </div>
@@ -190,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="mb-3">
             <label class="form-label">Categoría</label>
 
-            <select name="categoria_id" class="form-select">
+            <select name="categoria_id" class="form-select" required>
 
                 <?php foreach ($categorias as $categoria): ?>
 
@@ -211,13 +222,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <textarea
                 name="maridaje"
                 class="form-control"
-                rows="3"><?= htmlspecialchars($vino->getMaridaje()) ?></textarea>
+                rows="3"
+                required><?= htmlspecialchars($vino->getMaridaje()) ?></textarea>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Destacado</label>
 
-            <select name="destacado" class="form-select">
+            <select name="destacado" class="form-select" required>
                 <option value="1" <?= $vino->getDestacado() ? 'selected' : '' ?>>
                     Sí
                 </option>

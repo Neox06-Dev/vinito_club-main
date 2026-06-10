@@ -16,7 +16,7 @@ $footerBase = $footerBase ?? '';
                     </a>
                 </div>
                 <p class="footer-desc">Elegimos los mejores vinos de bodegas boutique argentinas para que vos solo tengas que descorchar y disfrutar.</p>
-                <div class="footer-social d-flex gap-3 mt-3">
+                <div class="footer-social d-flex gap-2 mt-3">
                     <a href="https://www.instagram.com" target="_blank" class="social-link" title="Instagram">
                         <i class="bi bi-instagram"></i>
                     </a>

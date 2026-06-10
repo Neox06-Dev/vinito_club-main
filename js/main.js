@@ -64,3 +64,109 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+// ── LOGIN PAGE ────────────────────────────────────────────────
+(function () {
+    'use strict';
+
+    // Solo ejecutar si está en la página de login
+    if (!document.getElementById('loginForm')) return;
+
+    // — Toggle contraseña —
+    const toggleBtn  = document.getElementById('togglePassword');
+    const passwordIn = document.getElementById('password');
+    
+
+    if (toggleBtn && passwordIn) {
+        toggleBtn.addEventListener('click', function () {
+            const isPassword = passwordIn.type === 'password';
+            passwordIn.type  = isPassword ? 'text' : 'password';
+            if (toggleIcon) {
+                toggleIcon.className = isPassword ? 'bi bi-eye-slash' : 'bi bi-eye';
+            }
+            toggleBtn.title = isPassword ? 'Ocultar contraseña' : 'Mostrar contraseña';
+            toggleBtn.setAttribute('aria-pressed', String(isPassword));
+        });
+    }
+
+    // — Validación cliente —
+    const form       = document.getElementById('loginForm');
+    const emailIn    = document.getElementById('email');
+    const emailErr   = document.getElementById('emailError');
+    const passErr    = document.getElementById('passwordError');
+    const jsAlert    = document.getElementById('jsAlert');
+    const jsAlertMsg = document.getElementById('jsAlertMsg');
+    const submitBtn  = document.getElementById('submitBtn');
+    const btnSpinner = document.getElementById('btnSpinner');
+    const btnIcon    = document.getElementById('btnIcon');
+    const btnText    = document.getElementById('btnText');
+
+    function showError(input, msgEl) {
+        input.classList.add('is-invalid-custom');
+        msgEl.classList.add('show');
+    }
+
+    function clearError(input, msgEl) {
+        input.classList.remove('is-invalid-custom');
+        msgEl.classList.remove('show');
+    }
+
+    // Limpieza en tiempo real
+    if (emailIn) {
+        emailIn.addEventListener('input', function () {
+            if (this.validity.valid) clearError(this, emailErr);
+        });
+    }
+    if (passwordIn) {
+        passwordIn.addEventListener('input', function () {
+            if (this.value.length > 0) clearError(this, passErr);
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', function (e) {
+            let valid = true;
+
+            // Validar email
+            if (!emailIn.value.trim() || !emailIn.validity.valid) {
+                showError(emailIn, emailErr);
+                valid = false;
+            } else {
+                clearError(emailIn, emailErr);
+            }
+
+            // Validar password
+            if (!passwordIn.value) {
+                showError(passwordIn, passErr);
+                valid = false;
+            } else {
+                clearError(passwordIn, passErr);
+            }
+
+            if (!valid) {
+                e.preventDefault();
+                jsAlertMsg.textContent = 'Por favor, completá todos los campos correctamente.';
+                jsAlert.style.display  = 'flex';
+                emailIn.focus();
+                return;
+            }
+
+            // Estado loading
+            jsAlert.style.display    = 'none';
+            btnSpinner.style.display = 'block';
+            btnIcon.style.display    = 'none';
+            btnText.textContent      = 'Verificando…';
+            submitBtn.disabled       = true;
+        });
+    }
+
+    // Auto-ocultar alertas PHP después de 6s
+    const phpAlert = document.querySelector('.alert-vinito--error:not(#jsAlert), .alert-vinito--success');
+    if (phpAlert) {
+        setTimeout(function () {
+            phpAlert.style.transition = 'opacity 0.5s';
+            phpAlert.style.opacity    = '0';
+            setTimeout(function () { phpAlert.remove(); }, 500);
+        }, 6000);
+    }
+})();

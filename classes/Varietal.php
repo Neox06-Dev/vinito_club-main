@@ -32,4 +32,5 @@ class Varietal
     {
         return $this->nombre;
     }
+    
 }

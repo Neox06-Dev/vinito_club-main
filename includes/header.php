@@ -60,9 +60,15 @@ $seccion_actual = $_GET['seccion'] ?? 'inicio';
                         <a class="nav-link <?= $seccion_actual === 'contacto' ? 'active' : '' ?>" href="index.php?seccion=contacto">Contacto</a>
                     </li>
                 </ul>
-                <div class="navbar-icons">
+                <div class="navbar-icons cart-icon">
                     <a href="#" class="nav-icon-link" title="Carrito">
                         <i class="bi bi-bag"></i>
+                    </a>
+                </div>
+
+                <div class="navbar-icons ps-2 admin-icon">
+                    <a href="admin/login.php" class="nav-icon-link" title="Panel de Administración">
+                        <i class="bi bi-person"></i>
                     </a>
                 </div>
             </div>
