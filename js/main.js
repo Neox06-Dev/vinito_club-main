@@ -63,6 +63,117 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // ── PANEL ADMIN: CONTADORES ANIMADOS ─────────────────────
+    const statNumbers = document.querySelectorAll('.stat-card h2');
+    if (statNumbers.length) {
+        const animarContador = (el) => {
+            const target = parseInt(el.dataset.target, 10) || 0;
+            const duracion = 900;
+            const inicio = performance.now();
+
+            const paso = (ahora) => {
+                const progreso = Math.min((ahora - inicio) / duracion, 1);
+                // easeOutCubic
+                const easedProgreso = 1 - Math.pow(1 - progreso, 3);
+                el.textContent = Math.floor(easedProgreso * target);
+                if (progreso < 1) {
+                    requestAnimationFrame(paso);
+                } else {
+                    el.textContent = target;
+                }
+            };
+            requestAnimationFrame(paso);
+        };
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animarContador(entry.target);
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.4 });
+
+        statNumbers.forEach(el => {
+            el.dataset.target = (el.textContent.replace(/\D/g, '') || '0');
+            el.textContent = '0';
+            counterObserver.observe(el);
+        });
+    }
+
+    // ── PANEL ADMIN: ENLACE ACTIVO EN SIDEBAR ────────────────
+    const adminLinks = document.querySelectorAll('.admin-nav a');
+    if (adminLinks.length) {
+        const pagina = window.location.pathname.split('/').pop() || 'index.php';
+        adminLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href === pagina) {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    // ── PANEL ADMIN: MENÚ HAMBURGUESA (RESPONSIVE) ───────────
+    const adminToggle  = document.getElementById('adminToggle');
+    const adminSidebar = document.getElementById('adminSidebar');
+    const adminOverlay = document.getElementById('adminOverlay');
+
+    if (adminToggle && adminSidebar && adminOverlay) {
+        const toggleIconEl = adminToggle.querySelector('i');
+
+        const abrirMenu = () => {
+            adminSidebar.classList.add('active');
+            adminOverlay.classList.add('active');
+            adminToggle.classList.add('active');
+            adminToggle.setAttribute('aria-expanded', 'true');
+            adminToggle.setAttribute('aria-label', 'Cerrar menú');
+            if (toggleIconEl) toggleIconEl.className = 'bi bi-x-lg';
+            document.body.classList.add('admin-nav-open');
+        };
+
+        const cerrarMenu = () => {
+            adminSidebar.classList.remove('active');
+            adminOverlay.classList.remove('active');
+            adminToggle.classList.remove('active');
+            adminToggle.setAttribute('aria-expanded', 'false');
+            adminToggle.setAttribute('aria-label', 'Abrir menú');
+            if (toggleIconEl) toggleIconEl.className = 'bi bi-list';
+            document.body.classList.remove('admin-nav-open');
+        };
+
+        adminToggle.addEventListener('click', () => {
+            if (adminSidebar.classList.contains('active')) {
+                cerrarMenu();
+            } else {
+                abrirMenu();
+            }
+        });
+
+        // Cerrar al hacer click fuera (overlay)
+        adminOverlay.addEventListener('click', cerrarMenu);
+
+        // Cerrar al elegir una opción del menú en mobile
+        adminSidebar.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 991) cerrarMenu();
+            });
+        });
+
+        // Cerrar con la tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && adminSidebar.classList.contains('active')) {
+                cerrarMenu();
+            }
+        });
+
+        // Cerrar automáticamente si se agranda la ventana a escritorio
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 991 && adminSidebar.classList.contains('active')) {
+                cerrarMenu();
+            }
+        });
+    }
 });
 
 // ── LOGIN PAGE ────────────────────────────────────────────────
