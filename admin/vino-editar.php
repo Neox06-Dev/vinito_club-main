@@ -1,6 +1,7 @@
 <?php
 
 require_once 'includes/auth.php';
+require_once 'includes/header-admin.php';
 
 require_once '../classes/Conexion.php';
 require_once '../classes/Vino.php';
@@ -58,19 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Editar vino</title>
-    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/style.css">
-</head>
-
-<body class="container py-5">
+<div class="container py-5">
 
     <h1 class="mb-4">Editar vino</h1>
 
@@ -250,6 +239,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     </form>
 
-</body>
+</div>
 
-</html>
+<?php require_once 'includes/footer-admin.php'; ?>

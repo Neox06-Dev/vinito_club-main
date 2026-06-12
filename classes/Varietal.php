@@ -28,6 +28,24 @@ class Varietal
         return $resultado ?: null;
     }
 
+    public static function todos(): array
+    {
+        $conexion = (new Conexion())->getConexion();
+
+        $query = "SELECT * FROM varietales";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->setFetchMode(
+            PDO::FETCH_CLASS,
+            self::class
+        );
+
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
     public function getNombre(): string
     {
         return $this->nombre;

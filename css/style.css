@@ -87,7 +87,6 @@ img { max-width: 100%; display: block; }
     color: var(--color-cream);
     transition: var(--transition);
 }
-.bi:hover { color: var(--color-gold-light); }
 
 /*  NAVBAR  */
 .vinito-navbar {
@@ -166,9 +165,13 @@ img { max-width: 100%; display: block; }
     filter: invert(1);
 }
 
+.bi-bag:hover { color: var(--color-gold-light); }
+
 .admin-icon i {
     font-size: 1.5rem;
 }
+
+.admin-icon i:hover { color: var(--color-gold-light); }
 
 /* ── TIPOGRAFÍA ─────────────────────────────────────────────── */
 .section-label {
@@ -242,12 +245,14 @@ img { max-width: 100%; display: block; }
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    text-decoration: none;
 }
 .btn-hero-primary:hover,
 .btn-contacto-submit:hover {
     background-color: var(--color-wine-dark);
     border-color: var(--color-wine-dark);
     transform: translateY(-1px);
+    text-decoration: none;
 }
 .btn-hero-primary:disabled,
 .btn-contacto-submit:disabled {
@@ -279,10 +284,12 @@ img { max-width: 100%; display: block; }
     border: 1px solid rgba(255,255,255,0.35);
     padding: 13px 28px;
     font-size: 12px;
+    text-decoration: none;
 }
 .btn-hero-outline:hover {
     border-color: var(--color-gold);
     color: var(--color-gold) !important;
+    text-decoration: none;
 }
 
 .btn-outline-gold {
@@ -294,6 +301,7 @@ img { max-width: 100%; display: block; }
 .btn-outline-gold:hover {
     background: var(--color-gold);
     color: var(--color-wine-dark) !important;
+    text-decoration: none;
 }
 
 /* ── HERO ───────────────────────────────────────────────────── */
@@ -1605,7 +1613,7 @@ dialog {
         170deg,
         transparent 0px,
         transparent 38px,
-        rgba(196, 163, 103, 0.03) 39px,
+        rgba(196, 164, 103, 0.075) 39px,
         rgba(196, 163, 103, 0.03) 40px
     );
 }
@@ -1966,6 +1974,196 @@ body.login-page {
 .login-home-link:hover {
     color: var(--color-gold-light);
     transform: translateX(-3px);
+}
+
+/* ADMIN DASHBOARD */
+.admin-layout{
+    display:flex;
+    min-height:100vh;
+}
+
+/* ===== SIDEBAR ===== */
+
+.admin-sidebar{
+
+    width:260px;
+
+    background: var(--color-wine);
+
+    border-right:1px solid rgba(196,163,103,.15);
+
+    padding:2rem 1.5rem;
+}
+
+.admin-logo{
+
+    margin-bottom:3rem;
+}
+
+.admin-logo h2{
+
+    margin:0;
+
+    font-family:'Playfair Display',serif;
+
+    font-size:2rem;
+}
+
+.admin-logo span{
+
+    color: var(--color-gold);
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+
+    font-size:.75rem;
+}
+
+.admin-nav{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:.5rem;
+}
+
+.admin-nav h6{
+
+    margin-top:1.5rem;
+
+    color:#C4A367;
+
+    letter-spacing:2px;
+
+    font-size:.7rem;
+}
+
+.admin-nav a{
+
+    text-decoration:none;
+
+    color:white;
+
+    padding:.85rem 1rem;
+
+    border-radius:10px;
+
+    transition:.3s;
+}
+
+.admin-nav a:hover{
+
+    background:rgba(255,255,255,.08);
+}
+
+/* ===== CONTENIDO ===== */
+
+.admin-content{
+
+    flex:1;
+
+    padding:3rem;
+}
+
+.admin-header{
+
+    margin-bottom:2rem;
+}
+
+.admin-header p{
+
+    color:#C4A367;
+}
+
+.admin-header h1{
+
+    margin:0;
+
+    font-family:'Playfair Display',serif;
+
+    font-size:3rem;
+}
+
+/* ===== STATS ===== */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(220px,1fr)
+        );
+
+    gap:1.5rem;
+
+    margin-bottom:2rem;
+}
+
+.stat-card{
+
+    background:#1a1009;
+
+    border:1px solid rgba(196,163,103,.15);
+
+    border-radius:18px;
+
+    padding:1.5rem;
+}
+
+.stat-card h2{
+
+    margin:0;
+
+    font-size:2.5rem;
+
+    font-family:'Playfair Display',serif;
+}
+
+.stat-card span{
+
+    color:#C4A367;
+
+    text-transform:uppercase;
+
+    letter-spacing:2px;
+
+    font-size:.8rem;
+}
+
+.quick-actions,
+.latest-wines{
+
+    background:#1a1009;
+
+    border:1px solid rgba(196,163,103,.15);
+
+    border-radius:18px;
+
+    padding:1.5rem;
+
+    margin-bottom:1.5rem;
+}
+
+.quick-actions a{
+
+}
+
+
+
+.quick-actions a:last-child{
+
+    border:1px solid #C4A367;
+
+    color:#C4A367;
+}
+
+.latest-wines ul{
+
+    padding-left:1rem;
 }
 
 /* ── RESPONSIVE ──────────────────────────────────────────────── */

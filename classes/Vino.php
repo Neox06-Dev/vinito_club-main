@@ -95,6 +95,35 @@ class Vino
         return $resultado ?: null;
     }
 
+    public static function ultimos(int $limite = 4): array
+    {
+        $conexion = (new Conexion())->getConexion();
+
+        $query = "
+            SELECT *
+            FROM vinos
+            ORDER BY id_vino DESC
+            LIMIT ?
+        ";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->bindValue(
+            1,
+            $limite,
+            PDO::PARAM_INT
+        );
+
+        $stmt->setFetchMode(
+            PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
+            self::class
+        );
+
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
     // GETTERS
     public function getIdVino(): int
     {
