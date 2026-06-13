@@ -1045,6 +1045,12 @@ img { max-width: 100%; display: block; }
     color: var(--color-cream) !important;
     border-radius: var(--radius-sm) !important;
 }
+.form-control-custom {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
 .form-control-custom,
 #contacto input:not([type="checkbox"]),
 #contacto select,
@@ -1068,6 +1074,8 @@ img { max-width: 100%; display: block; }
 .form-control-custom:focus,
 .footer-input:focus {
     border-color: var(--color-gold) !important;
+    box-shadow: 0 0 0 3px rgba(196,163,103,0.1) !important;
+    outline: none !important;
 }
 .contacto-form input:not([type="checkbox"]):focus,
 .contacto-form select:focus,
@@ -1556,6 +1564,7 @@ dialog {
 /* ============================================================
     LOGIN — admin/login.php
    ============================================================ */
+
 /* ── FONDO ATMOSFÉRICO ──────────────────────────────────────── */
 .login-backdrop {
     position: fixed;
@@ -1904,7 +1913,8 @@ body.login-page {
     transform: translateY(0);
 }
 
-.form-control.is-invalid-custom {
+.form-control.is-invalid-custom,
+.form-control-custom.is-invalid-custom {
     border-color: rgba(245,184,192,0.6) !important;
     background: rgba(96,22,33,0.1) !important;
 }
@@ -2007,6 +2017,8 @@ body.login-page {
 .admin-sidebar{
 
     width:260px;
+
+    flex-shrink: 0;
 
     background: var(--color-wine);
 
@@ -2123,6 +2135,8 @@ body.login-page {
 .admin-content{
 
     flex:1;
+
+    min-width: 0;
 
     padding:3rem;
 }
@@ -2252,8 +2266,6 @@ body.login-page {
     display: inline-block;
     transition: transform .25s var(--ease);
 }
-
-
 
 .quick-actions a:first-child:hover i{
     transform: translateX(4px);
@@ -2426,6 +2438,568 @@ body.admin-nav-open{
     .admin-toggle{
         top: .75rem;
         left: .75rem;
+    }
+}
+
+/* ===== TABLA DE VINOS ===== */
+
+.vinos-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+}
+
+.table-panel{
+    background:#1a1009;
+    border:1px solid rgba(196,163,103,.15);
+    border-radius:18px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: adminFadeInUp .6s var(--ease) .1s both;
+}
+
+.table-responsive{
+    overflow-x: auto;
+}
+
+.table-vinos{
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: var(--color-grey-light);
+}
+
+.table-vinos thead th{
+    text-align: left;
+    color: #C4A367;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: .72rem;
+    font-weight: 500;
+    padding: 0 1rem .9rem;
+    border-bottom: 1px solid rgba(196,163,103,.18);
+    white-space: nowrap;
+}
+
+.table-vinos tbody tr{
+    opacity: 0;
+    transform: translateX(-14px);
+    animation: adminFadeInLeft .45s var(--ease) forwards;
+    transition: background .25s var(--ease);
+}
+
+.table-vinos tbody tr:hover{
+    background: rgba(196,163,103,.06);
+}
+
+.table-vinos tbody td{
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    vertical-align: middle;
+}
+
+.table-vinos tbody tr:last-child td{
+    border-bottom: none;
+}
+
+.table-vinos .vino-id{
+    color: var(--color-grey-light);
+    font-size: .85rem;
+}
+
+.table-vinos .vino-nombre{
+    color: var(--color-cream);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    transition: color .25s var(--ease);
+}
+
+.table-vinos tbody tr:hover .vino-nombre{
+    color: var(--color-gold-light);
+}
+
+.badge-categoria{
+    display: inline-block;
+    padding: .3rem .8rem;
+    border: 1px solid rgba(196,163,103,.35);
+    border-radius: 50px;
+    color: var(--color-gold-light);
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    transition: border-color .25s var(--ease), background .25s var(--ease);
+}
+
+.table-vinos tbody tr:hover .badge-categoria{
+    border-color: var(--color-gold);
+    background: rgba(196,163,103,.08);
+}
+
+.precio-tag{
+    color: var(--color-gold);
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.stock-badge{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.4rem;
+    padding: .25rem .65rem;
+    border-radius: 50px;
+    font-size: .85rem;
+    font-weight: 600;
+    transition: transform .25s var(--ease);
+}
+
+.table-vinos tbody tr:hover .stock-badge{
+    transform: scale(1.08);
+}
+
+.stock-ok{
+    background: rgba(109,191,126,.12);
+    color: #6dbf7e;
+}
+
+.stock-bajo{
+    background: rgba(196,163,103,.15);
+    color: var(--color-gold);
+}
+
+.stock-agotado{
+    background: rgba(224,128,128,.12);
+    color: #e08080;
+}
+
+.acciones-grupo{
+    display: flex;
+    gap: .5rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.btn-accion{
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .45rem .9rem;
+    border-radius: 50px;
+    font-size: .8rem;
+    font-family: var(--font-body);
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: none;
+    transition: transform .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease);
+}
+
+.btn-accion i{
+    font-size: .85rem;
+    transition: transform .25s var(--ease);
+}
+
+.btn-editar{
+    border-color: rgba(196,163,103,.4);
+    color: var(--color-gold-light);
+}
+
+.btn-editar:hover{
+    background: var(--color-gold);
+    border-color: var(--color-gold);
+    color: var(--color-wine);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.btn-editar:hover i{
+    transform: rotate(-12deg);
+}
+
+.btn-eliminar{
+    border-color: rgba(224,128,128,.35);
+    color: #e08080;
+}
+
+.btn-eliminar:hover{
+    background: #e08080;
+    border-color: #e08080;
+    color: var(--color-wine);
+    transform: translateY(-2px);
+}
+
+.btn-eliminar:hover i{
+    transform: rotate(8deg) scale(1.1);
+}
+
+.vinos-empty{
+    padding: 2.5rem 1rem;
+    color: var(--color-grey-light);
+    font-style: italic;
+    text-align: center;
+    opacity: .7;
+}
+
+.btn-volver{
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.btn-volver i{
+    transition: transform .25s var(--ease);
+}
+
+.btn-volver:hover i{
+    transform: translateX(-4px);
+}
+
+/* ===== MODAL: CONFIRMAR ELIMINACIÓN ===== */
+
+.vinito-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(15,10,8,.65);
+    backdrop-filter: blur(3px);
+    z-index: 1200;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s var(--ease), visibility .3s var(--ease);
+}
+
+.vinito-overlay.active{
+    opacity: 1;
+    visibility: visible;
+}
+
+.vinito-modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    max-width: 420px;
+    background: #1a1009;
+    border: 1px solid rgba(196,163,103,.25);
+    border-radius: 18px;
+    padding: 2rem;
+    text-align: center;
+    z-index: 1210;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%,-50%) scale(.9);
+    transition: opacity .3s var(--ease), visibility .3s var(--ease), transform .3s var(--ease);
+    box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+
+.vinito-modal.active{
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%,-50%) scale(1);
+}
+
+.vinito-modal-icon{
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(224,128,128,.12);
+    color: #e08080;
+    font-size: 1.6rem;
+}
+
+.vinito-modal h3{
+    font-family: var(--font-display);
+    color: var(--color-cream);
+    margin-bottom: .5rem;
+}
+
+.vinito-modal p{
+    color: var(--color-grey-light);
+    font-size: .92rem;
+    margin-bottom: 1.5rem;
+}
+
+.vinito-modal-actions{
+    display: flex;
+    gap: .75rem;
+    justify-content: center;
+}
+
+.vinito-modal-actions .btn-hero-outline,
+.vinito-modal-actions .btn-confirm-eliminar{
+    flex: 1;
+    justify-content: center;
+}
+
+.btn-confirm-eliminar{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e08080;
+    color: var(--color-wine) !important;
+    border: 1px solid #e08080;
+    padding: 13px 28px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.btn-confirm-eliminar:hover{
+    background-color: #c95f5f;
+    border-color: #c95f5f;
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+/* ===== TABLA RESPONSIVE (TARJETAS EN MÓVIL) ===== */
+@media (max-width: 767px){
+
+    .vinos-header{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .vinos-header .btn-hero-primary{
+        width: 100%;
+        justify-content: center;
+    }
+
+    .table-panel{
+        padding: 1rem;
+    }
+
+    .table-vinos thead{
+        display: none;
+    }
+
+    .table-vinos,
+    .table-vinos tbody,
+    .table-vinos tr,
+    .table-vinos td{
+        display: block;
+        width: 100%;
+    }
+
+    .table-vinos tbody tr{
+        margin-bottom: 1rem;
+        border: 1px solid rgba(196,163,103,.12);
+        border-radius: 14px;
+        padding: .25rem 1rem;
+        background: rgba(255,255,255,.015);
+    }
+
+    .table-vinos tbody tr:last-child{
+        margin-bottom: 0;
+    }
+
+    .table-vinos td{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding: .65rem 0;
+        border-bottom: 1px solid rgba(255,255,255,.05);
+        text-align: right;
+    }
+
+    .table-vinos tr td:last-child{
+        border-bottom: none;
+    }
+
+    .table-vinos td::before{
+        content: attr(data-label);
+        color: #C4A367;
+        text-transform: uppercase;
+        font-size: .7rem;
+        letter-spacing: 1.5px;
+        text-align: left;
+        flex-shrink: 0;
+    }
+
+    .table-vinos td.text-end{
+        justify-content: flex-end;
+    }
+
+    .table-vinos td.text-end::before{
+        display: none;
+    }
+
+    .acciones-grupo{
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+/* ===== FORMULARIO DE VINO ===== */
+
+.form-panel{
+    background:#1a1009;
+    border:1px solid rgba(196,163,103,.15);
+    border-radius:18px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: adminFadeInUp .6s var(--ease) .1s both;
+}
+
+.form-section{
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    opacity: 0;
+    animation: adminFadeInUp .5s var(--ease) forwards;
+}
+
+.form-section:nth-of-type(1){ animation-delay: .15s; }
+.form-section:nth-of-type(2){ animation-delay: .22s; }
+.form-section:nth-of-type(3){ animation-delay: .29s; }
+.form-section:nth-of-type(4){ animation-delay: .36s; }
+.form-section:nth-of-type(5){ animation-delay: .43s; }
+.form-section:nth-of-type(6){ animation-delay: .50s; }
+.form-section:nth-of-type(7){ animation-delay: .57s; }
+
+.form-section:last-of-type{
+    margin-bottom: 1.5rem;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.form-section-title{
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    color: var(--color-gold);
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.15rem;
+    margin-bottom: 1.25rem;
+}
+
+.form-section-title i{
+    font-size: 1rem;
+    color: var(--color-gold-light);
+}
+
+.form-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.25rem;
+}
+
+.form-grid-2{ grid-template-columns: repeat(2, 1fr); }
+.form-grid-3{ grid-template-columns: repeat(3, 1fr); }
+
+.form-group{
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.form-group.full{
+    grid-column: 1 / -1;
+}
+
+.form-group .form-label-custom{
+    transition: color .25s var(--ease);
+}
+
+.form-group:focus-within .form-label-custom{
+    color: var(--color-gold-light);
+}
+
+.admin-content textarea.form-control-custom{
+    resize: vertical;
+    min-height: 100px;
+}
+
+.admin-content select.form-control-custom{
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23C4A367' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 2.5rem !important;
+}
+
+.admin-content select.form-control-custom option{
+    background: var(--color-bg-card);
+    color: var(--color-cream);
+}
+
+.admin-content input[type="date"],
+.admin-content input[type="number"]{
+    color-scheme: dark;
+}
+
+.form-actions{
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: .5rem;
+}
+
+.form-actions button{
+    border: none;
+    cursor: pointer;
+}
+
+.btn-hero-primary.btn-loading{
+    pointer-events: none;
+    opacity: .85;
+    position: relative;
+    color: transparent !important;
+}
+
+.btn-hero-primary.btn-loading i{
+    opacity: 0;
+}
+
+.btn-hero-primary.btn-loading::after{
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(245,245,237,.35);
+    border-top-color: var(--color-cream);
+    border-radius: 50%;
+    animation: spin .65s linear infinite;
+}
+
+@media (max-width: 575px){
+
+    .form-panel{
+        padding: 1.25rem;
+    }
+
+    .form-grid-2,
+    .form-grid-3{
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions{
+        flex-direction: column;
+    }
+
+    .form-actions a,
+    .form-actions button{
+        width: 100%;
+        justify-content: center;
     }
 }
 

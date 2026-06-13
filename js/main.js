@@ -114,6 +114,46 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // ── PANEL ADMIN: MODAL DE CONFIRMACIÓN (ELIMINAR VINO) ───
+    const deleteModal     = document.getElementById('deleteModal');
+    const deleteOverlay   = document.getElementById('deleteOverlay');
+    const deleteNombreEl  = document.getElementById('deleteModalNombre');
+    const deleteConfirmar = document.getElementById('deleteConfirmar');
+    const deleteCancelar  = document.getElementById('deleteCancelar');
+
+    if (deleteModal && deleteOverlay && deleteConfirmar) {
+        const abrirModalEliminar = (nombre, href) => {
+            if (deleteNombreEl) deleteNombreEl.textContent = nombre;
+            deleteConfirmar.setAttribute('href', href);
+            deleteModal.classList.add('active');
+            deleteOverlay.classList.add('active');
+            document.body.classList.add('admin-nav-open');
+        };
+
+        const cerrarModalEliminar = () => {
+            deleteModal.classList.remove('active');
+            deleteOverlay.classList.remove('active');
+            document.body.classList.remove('admin-nav-open');
+        };
+
+        document.querySelectorAll('.btn-eliminar').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const nombre = btn.dataset.nombre || 'este vino';
+                const href   = btn.dataset.href || '#';
+                abrirModalEliminar(nombre, href);
+            });
+        });
+
+        if (deleteCancelar) deleteCancelar.addEventListener('click', cerrarModalEliminar);
+        deleteOverlay.addEventListener('click', cerrarModalEliminar);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && deleteModal.classList.contains('active')) {
+                cerrarModalEliminar();
+            }
+        });
+    }
+
     // ── PANEL ADMIN: MENÚ HAMBURGUESA (RESPONSIVE) ───────────
     const adminToggle  = document.getElementById('adminToggle');
     const adminSidebar = document.getElementById('adminSidebar');

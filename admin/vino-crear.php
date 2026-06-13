@@ -8,6 +8,7 @@ require_once '../classes/Vino.php';
 require_once '../classes/Categoria.php';
 
 $categorias = Categoria::todas();
+
 $error = $_GET['error'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -48,121 +49,237 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<div class="container py-5">
+<div class="admin-layout">
 
-    <h1 class="mb-4">Nuevo vino</h1>
+    <button type="button" class="admin-toggle" id="adminToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="adminSidebar">
+        <i class="bi bi-list"></i>
+    </button>
 
-    <?php if ($error === 'anio_cosecha'): ?>
-        <div class="alert alert-danger">
-            Debes completar el año de cosecha antes de guardar.
-        </div>
-    <?php elseif ($error === 'temperatura_servicio'): ?>
-        <div class="alert alert-danger">
-            Debes completar la temperatura de servicio antes de guardar.
-        </div>
-    <?php endif; ?>
+    <div class="admin-overlay" id="adminOverlay"></div>
 
-    <form method="POST">
+    <aside class="admin-sidebar" id="adminSidebar">
 
-        <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" name="nombre" class="form-control" required>
+        <div class="navbar-brand d-flex justify-content-start">
+            <a href="index.php"><img src="../assets/img/logo.png" alt="Vinito Club" id="logoImg"></a>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Descripción</label>
-            <textarea name="descripcion" class="form-control" rows="4" required></textarea>
-        </div>
+        <nav class="admin-nav">
 
-        <div class="row">
+            <h6>GENERAL</h6>
 
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Precio</label>
-                <input type="number" step="0.01" name="precio" class="form-control" required>
+            <a href="index.php">Dashboard</a>
+            <a href="vinos.php">Vinos</a>
+            <h6>SISTEMA</h6>
+
+            <a href="logout.php">Cerrar sesión</a>
+        </nav>
+
+    </aside>
+
+    <main class="admin-content">
+
+        <header class="admin-header vinos-header">
+            <div>
+                <p class="section-label"> — NUEVO INGRESO AL CATÁLOGO — </p>
+                <h1 class="section-title">Agregar <em>vino</em></h1>
             </div>
 
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Stock</label>
-                <input type="number" name="stock" class="form-control" min="0" required>
+            <a href="vinos.php" class="btn-hero-outline btn-volver">
+                <i class="bi bi-arrow-left"></i>&nbsp; Volver
+            </a>
+        </header>
+
+        <?php if ($error === 'anio_cosecha'): ?>
+            <div class="alert-vinito alert-vinito--error">
+                <i class="bi bi-exclamation-triangle"></i>
+                Debes completar el año de cosecha antes de guardar.
             </div>
-
-            <div class="col-md-4 mb-3">
-                <label class="form-label">Volumen (ml)</label>
-                <input type="number" name="volumen_ml" min="0" class="form-control" required>
+        <?php elseif ($error === 'temperatura_servicio'): ?>
+            <div class="alert-vinito alert-vinito--error">
+                <i class="bi bi-exclamation-triangle"></i>
+                Debes completar la temperatura de servicio antes de guardar.
             </div>
+        <?php endif; ?>
 
-        </div>
+        <section class="form-panel">
 
-        <div class="mb-3">
-            <label class="form-label">Imagen</label>
-            <input type="text" name="imagen" class="form-control" placeholder="URL de la imagen" required>
-        </div>
+            <form method="POST">
 
-        <div class="row">
+                <!-- ── INFORMACIÓN GENERAL ─────────────────────── -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="bi bi-info-circle"></i> Información general</h3>
 
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Bodega</label>
-                <input type="text" name="bodega" class="form-control" required>
-            </div>
+                    <div class="form-grid">
 
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Región</label>
-                <input type="text" name="region" class="form-control" required>
-            </div>
+                        <div class="form-group full">
+                            <label class="form-label-custom">Nombre</label>
+                            <input type="text" name="nombre" class="form-control-custom" required>
+                        </div>
 
-        </div>
+                        <div class="form-group full">
+                            <label class="form-label-custom">Descripción</label>
+                            <textarea name="descripcion" class="form-control-custom" rows="4" required></textarea>
+                        </div>
 
-        <div class="mb-3">
-            <label class="form-label">Año cosecha</label>
-            <input type="date" name="anio_cosecha" class="form-control" required>
-        </div>
+                    </div>
+                </div>
 
-        <div class="mb-3">
-            <label class="form-label">Temperatura servicio</label>
-            <input type="number" name="temperatura_servicio" class="form-control" min="0" required>
-        </div>
+                <!-- ── PRECIO Y STOCK ───────────────────────────── -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="bi bi-cash-coin"></i> Precio y stock</h3>
 
-        <div class="mb-3">
-            <label class="form-label">Categoría</label>
+                    <div class="form-grid form-grid-3">
 
-            <select name="categoria_id" class="form-select" required>
+                        <div class="form-group">
+                            <label class="form-label-custom">Precio</label>
+                            <input type="number" step="0.01" name="precio" class="form-control-custom" required>
+                        </div>
 
-                <?php foreach ($categorias as $categoria): ?>
+                        <div class="form-group">
+                            <label class="form-label-custom">Stock</label>
+                            <input type="number" name="stock" class="form-control-custom" min="0" required>
+                        </div>
 
-                    <option value="<?= $categoria->getId() ?>">
-                        <?= htmlspecialchars($categoria->getNombre()) ?>
-                    </option>
+                        <div class="form-group">
+                            <label class="form-label-custom">Volumen (ml)</label>
+                            <input type="number" name="volumen_ml" min="0" class="form-control-custom" required>
+                        </div>
 
-                <?php endforeach; ?>
+                    </div>
+                </div>
 
-            </select>
+                <!-- ── IMAGEN ───────────────────────────────────── -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="bi bi-image"></i> Imagen</h3>
 
-        </div>
+                    <div class="form-grid">
 
-        <div class="mb-3">
-            <label class="form-label">Maridaje</label>
-            <textarea name="maridaje" class="form-control" rows="3"></textarea>
-        </div>
+                        <div class="form-group full">
+                            <label class="form-label-custom">URL de la imagen</label>
+                            <input type="text" name="imagen" class="form-control-custom" placeholder="ruta-del-vino" required>
+                        </div>
 
-        <div class="mb-3">
-            <label class="form-label">Destacado</label>
+                    </div>
+                </div>
 
-            <select name="destacado" class="form-select">
-                <option value="1">Sí</option>
-                <option value="0">No</option>
-            </select>
+                <!-- ── ORIGEN ───────────────────────────────────── -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="bi bi-geo-alt"></i> Origen</h3>
 
-        </div>
+                    <div class="form-grid form-grid-2">
 
-        <button type="submit" class="btn btn-success">
-            Crear vino
-        </button>
+                        <div class="form-group">
+                            <label class="form-label-custom">Bodega</label>
+                            <input type="text" name="bodega" class="form-control-custom" required>
+                        </div>
 
-        <a href="vinos.php" class="btn btn-secondary">
-            Cancelar
-        </a>
+                        <div class="form-group">
+                            <label class="form-label-custom">Región</label>
+                            <input type="text" name="region" class="form-control-custom" required>
+                        </div>
 
-    </form>
+                    </div>
+                </div>
 
+                <!-- ── DETALLES TÉCNICOS ────────────────────────── -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="bi bi-thermometer-half"></i> Detalles técnicos</h3>
+
+                    <div class="form-grid form-grid-2">
+
+                        <div class="form-group">
+                            <label class="form-label-custom">Año cosecha</label>
+                            <input
+                                type="date"
+                                name="anio_cosecha"
+                                class="form-control-custom <?= $error === 'anio_cosecha' ? 'is-invalid-custom' : '' ?>"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label-custom">Temperatura servicio (°C)</label>
+                            <input
+                                type="number"
+                                name="temperatura_servicio"
+                                class="form-control-custom <?= $error === 'temperatura_servicio' ? 'is-invalid-custom' : '' ?>"
+                                min="0"
+                                required
+                            >
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ── CLASIFICACIÓN ────────────────────────────── -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="bi bi-tags"></i> Clasificación</h3>
+
+                    <div class="form-grid form-grid-2">
+
+                        <div class="form-group">
+                            <label class="form-label-custom">Categoría</label>
+
+                            <select name="categoria_id" class="form-control-custom" required>
+
+                                <?php foreach ($categorias as $categoria): ?>
+
+                                    <option value="<?= $categoria->getId() ?>">
+                                        <?= htmlspecialchars($categoria->getNombre()) ?>
+                                    </option>
+
+                                <?php endforeach; ?>
+
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label-custom">Destacado</label>
+
+                            <select name="destacado" class="form-control-custom">
+                                <option value="1">Sí</option>
+                                <option value="0">No</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ── MARIDAJE ─────────────────────────────────── -->
+                <div class="form-section">
+                    <h3 class="form-section-title"><i class="bi bi-egg-fried"></i> Maridaje</h3>
+
+                    <div class="form-grid">
+
+                        <div class="form-group full">
+                            <label class="form-label-custom">Sugerencias de maridaje</label>
+                            <textarea name="maridaje" class="form-control-custom" rows="3"></textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ── ACCIONES ─────────────────────────────────── -->
+                <div class="form-actions">
+
+                    <button type="submit" class="btn-hero-primary">
+                        Crear vino &nbsp;<i class="bi bi-check2"></i>
+                    </button>
+
+                    <a href="vinos.php" class="btn-hero-outline">
+                        Cancelar
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
 </div>
+
 <?php require_once 'includes/footer-admin.php'; ?>
+</div>
+</html>

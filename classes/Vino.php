@@ -244,7 +244,6 @@ class Vino
         );
 
         $stmt->execute([$this->id_vino]);
-
         return $stmt->fetchAll();
     }
 
