@@ -30,73 +30,140 @@ switch ($seccion) {
 
     case 'vinos':
 
-    require_once '../classes/Conexion.php';
-    require_once '../classes/Vino.php';
+        require_once '../classes/Conexion.php';
+        require_once '../classes/Vino.php';
 
-    $vinos = Vino::catalogo_completo();
+        $vinos = Vino::catalogo_completo();
 
-    require_once 'vistas/vinos.php';
+        require_once 'vistas/vinos.php';
 
-    break;
+        break;
 
     case 'vino-crear':
 
-    require_once '../classes/Conexion.php';
-    require_once '../classes/Vino.php';
-    require_once '../classes/Categoria.php';
-    require_once '../classes/Varietal.php';
+        require_once '../classes/Conexion.php';
+        require_once '../classes/Vino.php';
+        require_once '../classes/Categoria.php';
+        require_once '../classes/Varietal.php';
 
-    $categorias = Categoria::todas();
-    $varietales = Varietal::todos();
+        $categorias = Categoria::todas();
+        $varietales = Varietal::todos();
 
-    $error = $_GET['error'] ?? '';
+        $error = $_GET['error'] ?? '';
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        // POR AHORA NO MOVEMOS EL POST
-        // lo dejamos en vino-crear.php
+            $anioCosecha = trim($_POST['anio_cosecha'] ?? '');
+            $temperaturaServicio = trim($_POST['temperatura_servicio'] ?? '');
 
-    }
+            if ($anioCosecha === '') {
+                header('Location: index.php?sec=vino-crear&error=anio_cosecha');
+                exit;
+            }
 
-    require_once 'vistas/vino-crear.php';
+            if ($temperaturaServicio === '') {
+                header('Location: index.php?sec=vino-crear&error=temperatura_servicio');
+                exit;
+            }
 
-    break;
+            $vino = new Vino();
+
+            $vino->setNombre($_POST['nombre']);
+            $vino->setDescripcion($_POST['descripcion']);
+            $vino->setPrecio((float)$_POST['precio']);
+            $vino->setStock((int)$_POST['stock']);
+            $vino->setImagen($_POST['imagen']);
+            $vino->setAnioCosecha($anioCosecha);
+            $vino->setVolumenMl((int)$_POST['volumen_ml']);
+            $vino->setTemperaturaServicio((int)$temperaturaServicio);
+            $vino->setBodega($_POST['bodega']);
+            $vino->setCategoriaId((int)$_POST['categoria_id']);
+            $vino->setMaridaje($_POST['maridaje']);
+            $vino->setDestacado((int)$_POST['destacado']);
+            $vino->setRegion($_POST['region']);
+            $vino->setVarietalId((int)$_POST['varietal_id']);
+
+            $vino->crear();
+
+            header('Location: index.php?sec=vinos');
+            exit;
+        }
+
+        require_once 'vistas/vino-crear.php';
+
+        break;
 
     case 'vino-editar':
 
-    require_once '../classes/Conexion.php';
-    require_once '../classes/Vino.php';
-    require_once '../classes/Categoria.php';
-    require_once '../classes/Varietal.php';
+        require_once '../classes/Conexion.php';
+        require_once '../classes/Vino.php';
+        require_once '../classes/Categoria.php';
+        require_once '../classes/Varietal.php';
 
-    $id = $_GET['id'] ?? null;
+        $id = $_GET['id'] ?? null;
 
-    if (!$id) {
-        header('Location: index.php?sec=vinos');
-        exit;
-    }
+        if (!$id) {
+            header('Location: index.php?sec=vinos');
+            exit;
+        }
 
-    $vino = Vino::vino_por_id((int)$id);
+        $vino = Vino::vino_por_id((int)$id);
 
-    if (!$vino) {
-        header('Location: index.php?sec=vinos');
-        exit;
-    }
+        if (!$vino) {
+            header('Location: index.php?sec=vinos');
+            exit;
+        }
 
-    $categorias = Categoria::todas();
-    $varietales = Varietal::todos();
+        $categorias = Categoria::todas();
+        $varietales = Varietal::todos();
 
-    $varietalesActuales = $vino->getVarietales();
+        $varietalesActuales = $vino->getVarietales();
 
-    $varietalActualId = !empty($varietalesActuales)
-        ? $varietalesActuales[0]->getIdVarietal()
-        : null;
+        $varietalActualId = !empty($varietalesActuales)
+            ? $varietalesActuales[0]->getIdVarietal()
+            : null;
 
-    $error = $_GET['error'] ?? '';
+        $error = $_GET['error'] ?? '';
 
-    require_once 'vistas/vino-editar.php';
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    break;
+            $anioCosecha = trim($_POST['anio_cosecha'] ?? '');
+            $temperaturaServicio = trim($_POST['temperatura_servicio'] ?? '');
+
+            if ($anioCosecha === '') {
+                header('Location: index.php?sec=vino-editar&id=' . (int)$id . '&error=anio_cosecha');
+                exit;
+            }
+
+            if ($temperaturaServicio === '') {
+                header('Location: index.php?sec=vino-editar&id=' . (int)$id . '&error=temperatura_servicio');
+                exit;
+            }
+
+            $vino->setNombre($_POST['nombre']);
+            $vino->setDescripcion($_POST['descripcion']);
+            $vino->setPrecio((float)$_POST['precio']);
+            $vino->setStock((int)$_POST['stock']);
+            $vino->setImagen($_POST['imagen']);
+            $vino->setAnioCosecha($anioCosecha);
+            $vino->setVolumenMl((int)$_POST['volumen_ml']);
+            $vino->setTemperaturaServicio((int)$temperaturaServicio);
+            $vino->setBodega($_POST['bodega']);
+            $vino->setCategoriaId((int)$_POST['categoria_id']);
+            $vino->setVarietalId((int)$_POST['varietal_id']);
+            $vino->setMaridaje($_POST['maridaje']);
+            $vino->setDestacado((int)$_POST['destacado']);
+            $vino->setRegion($_POST['region']);
+
+            $vino->editar();
+
+            header('Location: index.php?sec=vinos');
+            exit;
+        }
+
+        require_once 'vistas/vino-editar.php';
+
+        break;
 
     default:
         require_once 'vistas/dashboard.php';
