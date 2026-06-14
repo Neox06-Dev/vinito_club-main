@@ -19,7 +19,7 @@ if (
     $_SESSION['nombre'] = $usuario->getNombre();
     $_SESSION['rol'] = $usuario->getRol();
 
-    header('Location: index.php');
+    header('Location: index.php?sec=dashboard');
     exit;
 }
 

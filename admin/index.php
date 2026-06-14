@@ -166,7 +166,8 @@ switch ($seccion) {
         break;
 
     default:
-        require_once 'vistas/dashboard.php';
+        header('Location: index.php?sec=dashboard');
+        exit;
 }
 
 require_once 'includes/footer-admin.php';
