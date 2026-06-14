@@ -16,8 +16,8 @@
 
             <h6>GENERAL</h6>
 
-            <a href="index.php">Dashboard</a>
-            <a href="vinos.php">Vinos</a>
+            <a href="index.php?sec=dashboard">Dashboard</a>
+            <a href="index.php?sec=vinos">Vinos</a>
             <h6>SISTEMA</h6>
 
             <a href="logout.php">Cerrar sesión</a>
@@ -33,7 +33,7 @@
                 <h1 class="section-title">Administrar <em>vinos</em></h1>
             </div>
 
-            <a href="vino-crear.php" class="btn-hero-primary">
+            <a href="index.php?sec=vino-crear" class="btn-hero-primary">
                 Nuevo vino &nbsp;<i class="bi bi-plus"></i>
             </a>
         </header>
@@ -98,7 +98,7 @@
                                     <div class="acciones-grupo">
 
                                         <a
-                                            href="vino-editar.php?id=<?= $vino->getIdVino() ?>"
+                                            href="index.php?sec=vino-editar&id=<?= $vino->getIdVino() ?>"
                                             class="btn-accion btn-editar"
                                             title="Editar"
                                         >

@@ -16,8 +16,8 @@
 
             <h6>GENERAL</h6>
 
-            <a href="index.php?sec=dashboard">Dashboard</a>
-            <a href="index.php?sec=vinos">Vinos</a>
+            <a href="index.php">Dashboard</a>
+            <a href="vinos.php">Vinos</a>
             <h6>SISTEMA</h6>
 
             <a href="logout.php">Cerrar sesión</a>
@@ -29,13 +29,9 @@
 
         <header class="admin-header vinos-header">
             <div>
-                <p class="section-label"> — NUEVO INGRESO AL CATÁLOGO — </p>
-                <h1 class="section-title">Agregar <em>vino</em></h1>
+                <p class="section-label"> — EDITANDO <?= htmlspecialchars(mb_strtoupper($vino->getNombre())) ?> — </p>
+                <h1 class="section-title">Editar <em>vino</em></h1>
             </div>
-
-            <a href="index.php?sec=vinos" class="btn-hero-outline btn-volver">
-                <i class="bi bi-arrow-left"></i>&nbsp; Volver
-            </a>
         </header>
 
         <?php if ($error === 'anio_cosecha'): ?>
@@ -62,12 +58,21 @@
 
                         <div class="form-group full">
                             <label class="form-label-custom">Nombre</label>
-                            <input type="text" name="nombre" class="form-control-custom" required>
+                            <input
+                                type="text"
+                                name="nombre"
+                                class="form-control-custom"
+                                value="<?= htmlspecialchars($vino->getNombre()) ?>"
+                                required>
                         </div>
 
                         <div class="form-group full">
                             <label class="form-label-custom">Descripción</label>
-                            <textarea name="descripcion" class="form-control-custom" rows="4" required></textarea>
+                            <textarea
+                                name="descripcion"
+                                class="form-control-custom"
+                                rows="4"
+                                required><?= htmlspecialchars($vino->getDescripcion()) ?></textarea>
                         </div>
 
                     </div>
@@ -81,17 +86,35 @@
 
                         <div class="form-group">
                             <label class="form-label-custom">Precio</label>
-                            <input type="number" step="0.01" name="precio" class="form-control-custom" required>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="precio"
+                                class="form-control-custom"
+                                value="<?= $vino->getPrecio() ?>"
+                                required>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label-custom">Stock</label>
-                            <input type="number" name="stock" class="form-control-custom" min="0" required>
+                            <input
+                                type="number"
+                                name="stock"
+                                class="form-control-custom"
+                                value="<?= $vino->getStock() ?>"
+                                min="0"
+                                required>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label-custom">Volumen (ml)</label>
-                            <input type="number" name="volumen_ml" min="0" class="form-control-custom" required>
+                            <input
+                                type="number"
+                                name="volumen_ml"
+                                class="form-control-custom"
+                                min="0"
+                                value="<?= $vino->getVolumenMl() ?>"
+                                required>
                         </div>
 
                     </div>
@@ -105,7 +128,13 @@
 
                         <div class="form-group full">
                             <label class="form-label-custom">URL de la imagen</label>
-                            <input type="text" name="imagen" class="form-control-custom" placeholder="ruta-del-vino" required>
+                            <input
+                                type="text"
+                                name="imagen"
+                                class="form-control-custom"
+                                value="<?= htmlspecialchars($vino->getImagen()) ?>"
+                                placeholder="https://..."
+                                required>
                         </div>
 
                     </div>
@@ -119,12 +148,22 @@
 
                         <div class="form-group">
                             <label class="form-label-custom">Bodega</label>
-                            <input type="text" name="bodega" class="form-control-custom" required>
+                            <input
+                                type="text"
+                                name="bodega"
+                                class="form-control-custom"
+                                value="<?= htmlspecialchars($vino->getBodega()) ?>"
+                                required>
                         </div>
 
                         <div class="form-group">
                             <label class="form-label-custom">Región</label>
-                            <input type="text" name="region" class="form-control-custom" required>
+                            <input
+                                type="text"
+                                name="region"
+                                class="form-control-custom"
+                                value="<?= htmlspecialchars($vino->getRegion()) ?>"
+                                required>
                         </div>
 
                     </div>
@@ -142,8 +181,8 @@
                                 type="date"
                                 name="anio_cosecha"
                                 class="form-control-custom <?= $error === 'anio_cosecha' ? 'is-invalid-custom' : '' ?>"
-                                required
-                            >
+                                value="<?= htmlspecialchars($vino->getAnioCosecha()) ?>"
+                                required>
                         </div>
 
                         <div class="form-group">
@@ -153,8 +192,8 @@
                                 name="temperatura_servicio"
                                 class="form-control-custom <?= $error === 'temperatura_servicio' ? 'is-invalid-custom' : '' ?>"
                                 min="0"
-                                required
-                            >
+                                value="<?= htmlspecialchars((string)$vino->getTemperaturaServicio()) ?>"
+                                required>
                         </div>
 
                     </div>
@@ -173,7 +212,9 @@
 
                                 <?php foreach ($categorias as $categoria): ?>
 
-                                    <option value="<?= $categoria->getId() ?>">
+                                    <option
+                                        value="<?= $categoria->getId() ?>"
+                                        <?= $categoria->getId() == $vino->getCategoriaId() ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($categoria->getNombre()) ?>
                                     </option>
 
@@ -181,38 +222,25 @@
 
                             </select>
                         </div>
-
-                        <div class="form-group">
-                            <label class="form-label-custom">Destacado</label>
-
-                            <select name="destacado" class="form-control-custom">
-                                <option value="1">Sí</option>
-                                <option value="0">No</option>
-                            </select>
-
-                        </div>
                         
-
                         <div class="form-group">
 
-                            <label for="varietal_id" class="form-label-custom">
+                            <label class="form-label-custom">
                                 Varietal
                             </label>
 
                             <select
                                 name="varietal_id"
-                                id="varietal_id"
                                 class="form-control-custom"
                                 required
                             >
 
-                                <option value="">
-                                    Seleccionar varietal
-                                </option>
-
                                 <?php foreach ($varietales as $varietal): ?>
 
-                                    <option value="<?= $varietal->getIdVarietal() ?>">
+                                    <option
+                                        value="<?= $varietal->getIdVarietal() ?>"
+                                        <?= $varietal->getIdVarietal() == $varietalActualId ? 'selected' : '' ?>
+                                    >
                                         <?= htmlspecialchars($varietal->getNombre()) ?>
                                     </option>
 
@@ -221,6 +249,21 @@
                             </select>
 
                         </div>
+
+                        <div class="form-group">
+                            <label class="form-label-custom">Destacado</label>
+
+                            <select name="destacado" class="form-control-custom" required>
+                                <option value="1" <?= $vino->getDestacado() ? 'selected' : '' ?>>
+                                    Sí
+                                </option>
+                                <option value="0" <?= !$vino->getDestacado() ? 'selected' : '' ?>>
+                                    No
+                                </option>
+                            </select>
+
+                        </div>
+
                     </div>
                 </div>
 
@@ -232,7 +275,11 @@
 
                         <div class="form-group full">
                             <label class="form-label-custom">Sugerencias de maridaje</label>
-                            <textarea name="maridaje" class="form-control-custom" rows="3"></textarea>
+                            <textarea
+                                name="maridaje"
+                                class="form-control-custom"
+                                rows="3"
+                                required><?= htmlspecialchars($vino->getMaridaje()) ?></textarea>
                         </div>
 
                     </div>
@@ -242,10 +289,10 @@
                 <div class="form-actions">
 
                     <button type="submit" class="btn-hero-primary">
-                        Crear vino &nbsp;<i class="bi bi-check2"></i>
+                        Guardar cambios &nbsp;<i class="bi bi-check2"></i>
                     </button>
 
-                    <a href="index.php?sec=vinos" class="btn-hero-outline">
+                    <a href="v" class="btn-hero-outline">
                         Cancelar
                     </a>
 

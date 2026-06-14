@@ -17,8 +17,8 @@
 
             <h6>GENERAL</h6>
 
-            <a href="index.php">Dashboard</a>
-            <a href="vinos.php">Vinos</a>
+            <a href="index.php?sec=dashboard">Dashboard</a>
+            <a href="index.php?sec=vinos">Vinos</a>
             <h6>SISTEMA</h6>
 
             <a href="logout.php">Cerrar sesión</a>
@@ -52,13 +52,13 @@
 
         </section>
 
-        <section class="quick-actions">
+        <section class="quick-actions">|
             <h3>Gestión rápida</h3>
             <div class="d-flex gap-3 flex-wrap mt-4">
-                <a href="vinos.php" class=" btn-hero-primary">
+                <a href="index.php?sec=vinos" class=" btn-hero-primary">
                     Ver catálogo &nbsp;<i class="bi bi-arrow-right"></i>
                 </a>
-                <a href="vino-crear.php" class=" btn-hero-outline">
+                <a href="index.php?sec=vino-crear" class=" btn-hero-outline">
                     Agregar vino &nbsp;<i class="bi bi-plus"></i>
                 </a>
             </div>
