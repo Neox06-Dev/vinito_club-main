@@ -19,6 +19,7 @@ class Vino
     private string $maridaje;
     private int $destacado;
     private string $region;
+    private ?int $varietal_id = null;
 
 
     // CONSTRUCTOR
@@ -287,21 +288,48 @@ class Vino
 
         $stmt = $conexion->prepare($query);
 
-        return $stmt->execute([
-            $this->nombre,
-            $this->descripcion,
-            $this->precio,
-            $this->stock,
-            $this->imagen,
-            $this->anio_cosecha,
-            $this->volumen_ml,
-            $this->temperatura_servicio,
-            $this->bodega,
-            $this->categoria_id,
-            $this->maridaje,
-            $this->destacado,
-            $this->region
+        $resultado = $stmt->execute([
+        $this->nombre,
+        $this->descripcion,
+        $this->precio,
+        $this->stock,
+        $this->imagen,
+        $this->anio_cosecha,
+        $this->volumen_ml,
+        $this->temperatura_servicio,
+        $this->bodega,
+        $this->categoria_id,
+        $this->maridaje,
+        $this->destacado,
+        $this->region
+    ]);
+
+        if (!$resultado) {
+            return false;
+        }
+
+        $idVino = $conexion->lastInsertId();
+
+        $queryVarietal = "
+            INSERT INTO vino_varietal
+            (
+                vino_id,
+                varietal_id
+            )
+            VALUES
+            (
+                ?, ?
+            )
+        ";
+
+        $stmtVarietal = $conexion->prepare($queryVarietal);
+
+        $stmtVarietal->execute([
+            $idVino,
+            $this->varietal_id
         ]);
+
+        return true;
     }
 
     public function editar(): bool
@@ -329,7 +357,7 @@ class Vino
 
         $stmt = $conexion->prepare($query);
 
-        return $stmt->execute([
+        $resultado = $stmt->execute([
             $this->nombre,
             $this->descripcion,
             $this->precio,
@@ -345,6 +373,25 @@ class Vino
             $this->region,
             $this->id_vino
         ]);
+
+        if (!$resultado) {
+            return false;
+        }
+
+        $queryVarietal = "
+            UPDATE vino_varietal
+            SET varietal_id = ?
+            WHERE vino_id = ?
+        ";
+
+        $stmtVarietal = $conexion->prepare($queryVarietal);
+
+        $stmtVarietal->execute([
+            $this->varietal_id,
+            $this->id_vino
+        ]);
+
+        return true;
     }
 
     public function eliminar(): bool
@@ -438,5 +485,10 @@ class Vino
     public function setRegion(string $region): void
     {
         $this->region = $region;
+    }
+
+    public function setVarietalId(int $varietal_id): void
+    {
+        $this->varietal_id = $varietal_id;
     }
 }

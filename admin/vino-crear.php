@@ -8,7 +8,7 @@ require_once '../classes/Vino.php';
 require_once '../classes/Categoria.php';
 
 $categorias = Categoria::todas();
-
+$varietales = Varietal::todos();
 $error = $_GET['error'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $vino->setMaridaje($_POST['maridaje']);
     $vino->setDestacado((int)$_POST['destacado']);
     $vino->setRegion($_POST['region']);
-
+    $vino->setVarietalId((int)$_POST['varietal_id']);
     $vino->crear();
 
     header('Location: vinos.php');
@@ -242,7 +242,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
 
                         </div>
+                        
 
+                        <div class="form-group">
+
+                            <label for="varietal_id" class="form-label-custom">
+                                Varietal
+                            </label>
+
+                            <select
+                                name="varietal_id"
+                                id="varietal_id"
+                                class="form-control-custom"
+                                required
+                            >
+
+                                <option value="">
+                                    Seleccionar varietal
+                                </option>
+
+                                <?php foreach ($varietales as $varietal): ?>
+
+                                    <option value="<?= $varietal->getIdVarietal() ?>">
+                                        <?= htmlspecialchars($varietal->getNombre()) ?>
+                                    </option>
+
+                                <?php endforeach; ?>
+
+                            </select>
+
+                        </div>
                     </div>
                 </div>
 

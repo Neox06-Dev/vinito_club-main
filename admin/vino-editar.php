@@ -6,6 +6,7 @@ require_once 'includes/header-admin.php';
 require_once '../classes/Conexion.php';
 require_once '../classes/Vino.php';
 require_once '../classes/Categoria.php';
+require_once '../classes/Varietal.php';
 
 $id = $_GET['id'] ?? null;
 
@@ -22,6 +23,14 @@ if (!$vino) {
 }
 
 $categorias = Categoria::todas();
+$varietales = Varietal::todos();
+
+$varietalesActuales = $vino->getVarietales();
+
+$varietalActualId = !empty($varietalesActuales)
+    ? $varietalesActuales[0]->getIdVarietal()
+    : null;
+
 $error = $_GET['error'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -49,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $vino->setTemperaturaServicio((int)$temperaturaServicio);
     $vino->setBodega($_POST['bodega']);
     $vino->setCategoriaId((int)$_POST['categoria_id']);
+    $vino->setVarietalId((int)$_POST['varietal_id']);
     $vino->setMaridaje($_POST['maridaje']);
     $vino->setDestacado((int)$_POST['destacado']);
     $vino->setRegion($_POST['region']);
@@ -283,8 +293,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             </select>
                         </div>
-
                         
+                        <div class="form-group">
+
+                            <label class="form-label-custom">
+                                Varietal
+                            </label>
+
+                            <select
+                                name="varietal_id"
+                                class="form-control-custom"
+                                required
+                            >
+
+                                <?php foreach ($varietales as $varietal): ?>
+
+                                    <option
+                                        value="<?= $varietal->getIdVarietal() ?>"
+                                        <?= $varietal->getIdVarietal() == $varietalActualId ? 'selected' : '' ?>
+                                    >
+                                        <?= htmlspecialchars($varietal->getNombre()) ?>
+                                    </option>
+
+                                <?php endforeach; ?>
+
+                            </select>
+
+                        </div>
 
                         <div class="form-group">
                             <label class="form-label-custom">Destacado</label>

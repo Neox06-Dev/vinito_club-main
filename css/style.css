@@ -166,6 +166,9 @@ img { max-width: 100%; display: block; }
 }
 
 .bi-bag:hover { color: var(--color-gold-light); }
+.bi-tiktok:hover { color: var(--color-gold-light); }
+.bi-instagram:hover { color: var(--color-gold-light); }
+.bi-facebook:hover { color: var(--color-gold-light); }
 
 .admin-icon i {
     font-size: 1.5rem;

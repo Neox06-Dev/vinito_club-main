@@ -51,4 +51,8 @@ class Varietal
         return $this->nombre;
     }
     
+    public function getIdVarietal(): int
+    {
+        return $this->id_varietal;
+    }
 }
