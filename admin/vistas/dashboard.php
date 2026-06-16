@@ -10,7 +10,7 @@
     <aside class="admin-sidebar" id="adminSidebar">
 
         <div class="navbar-brand d-flex justify-content-start">
-            <a href="index.php"><img src="../assets/img/logo.png" alt="Vinito Club" id="logoImg"></a>
+            <a href="index.php?sec=dashboard"><img src="../assets/img/logo.png" alt="Vinito Club" id="logoImg"></a>
         </div>
 
         <nav class="admin-nav">
@@ -52,7 +52,7 @@
 
         </section>
 
-        <section class="quick-actions">|
+        <section class="quick-actions">
             <h3>Gestión rápida</h3>
             <div class="d-flex gap-3 flex-wrap mt-4">
                 <a href="index.php?sec=vinos" class=" btn-hero-primary">

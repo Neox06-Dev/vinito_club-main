@@ -23,5 +23,5 @@ if (
     exit;
 }
 
-header('Location: login.php?error=credenciales');
+header('Location: index.php?sec=login&error=credenciales');
 exit;

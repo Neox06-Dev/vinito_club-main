@@ -1,16 +1,24 @@
 <?php
-
-require_once 'includes/auth.php';
 require_once 'includes/functions.php';
-require_once 'includes/header-admin.php';
 
 $seccion = $_GET['sec'] ?? 'dashboard';
 
-if (!in_array($seccion, admin_secciones_validas())) {
-    $seccion = 'dashboard';
+if ($seccion !== 'login') {
+    require_once 'includes/auth.php';
 }
 
+require_once 'includes/header-admin.php';
+
 switch ($seccion) {
+
+    case 'login':
+
+        $error = $_GET['error'] ?? '';
+        $success = $_GET['success'] ?? '';
+
+        require_once 'vistas/login.php';
+
+        break;
 
     case 'dashboard':
 

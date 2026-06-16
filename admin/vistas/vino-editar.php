@@ -9,15 +9,15 @@
     <aside class="admin-sidebar" id="adminSidebar">
 
         <div class="navbar-brand d-flex justify-content-start">
-            <a href="index.php"><img src="../assets/img/logo.png" alt="Vinito Club" id="logoImg"></a>
+            <a href="index.php?sec=dashboard"><img src="../assets/img/logo.png" alt="Vinito Club" id="logoImg"></a>
         </div>
 
         <nav class="admin-nav">
 
             <h6>GENERAL</h6>
 
-            <a href="index.php">Dashboard</a>
-            <a href="vinos.php">Vinos</a>
+            <a href="index.php?sec=dashboard">Dashboard</a>
+            <a href="index.php?sec=vinos">Vinos</a>
             <h6>SISTEMA</h6>
 
             <a href="logout.php">Cerrar sesión</a>
@@ -292,7 +292,7 @@
                         Guardar cambios &nbsp;<i class="bi bi-check2"></i>
                     </button>
 
-                    <a href="v" class="btn-hero-outline">
+                    <a href="index.php?sec=vinos" class="btn-hero-outline">
                         Cancelar
                     </a>
 
