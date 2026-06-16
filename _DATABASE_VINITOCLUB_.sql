@@ -2,10 +2,10 @@
 -- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 08-06-2026 a las 21:18:10
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Servidor: localhost:3306
+-- Tiempo de generación: 16-06-2026 a las 13:02:02
+-- Versión del servidor: 8.4.3
+-- Versión de PHP: 8.5.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,8 +30,8 @@ USE `vinitoclub_bbdd`;
 --
 
 CREATE TABLE `categorias` (
-  `id_categoria` int(11) NOT NULL,
-  `nombre` varchar(50) NOT NULL
+  `id_categoria` int NOT NULL,
+  `nombre` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -52,11 +52,11 @@ INSERT INTO `categorias` (`id_categoria`, `nombre`) VALUES
 --
 
 CREATE TABLE `usuarios` (
-  `id_usuario` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `email` varchar(150) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `rol` enum('cliente','admin') NOT NULL DEFAULT 'cliente'
+  `id_usuario` int NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `rol` enum('cliente','admin') COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'cliente'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -73,8 +73,8 @@ INSERT INTO `usuarios` (`id_usuario`, `nombre`, `email`, `password`, `rol`) VALU
 --
 
 CREATE TABLE `varietales` (
-  `id_varietal` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL
+  `id_varietal` int NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -99,20 +99,20 @@ INSERT INTO `varietales` (`id_varietal`, `nombre`) VALUES
 --
 
 CREATE TABLE `vinos` (
-  `id_vino` int(11) NOT NULL,
-  `nombre` varchar(150) NOT NULL,
-  `descripcion` text NOT NULL,
+  `id_vino` int NOT NULL,
+  `nombre` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` text COLLATE utf8mb4_general_ci NOT NULL,
   `precio` decimal(10,2) NOT NULL,
-  `stock` int(11) NOT NULL,
-  `imagen` varchar(255) NOT NULL,
+  `stock` int NOT NULL,
+  `imagen` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `anio_cosecha` date NOT NULL,
-  `volumen_ml` int(11) NOT NULL,
-  `temperatura_servicio` int(11) NOT NULL,
-  `bodega` varchar(100) NOT NULL,
-  `categoria_id` int(11) NOT NULL,
-  `maridaje` varchar(255) NOT NULL,
+  `volumen_ml` int NOT NULL,
+  `temperatura_servicio` int NOT NULL,
+  `bodega` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `categoria_id` int NOT NULL,
+  `maridaje` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `destacado` tinyint(1) NOT NULL,
-  `region` varchar(100) NOT NULL
+  `region` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -120,7 +120,7 @@ CREATE TABLE `vinos` (
 --
 
 INSERT INTO `vinos` (`id_vino`, `nombre`, `descripcion`, `precio`, `stock`, `imagen`, `anio_cosecha`, `volumen_ml`, `temperatura_servicio`, `bodega`, `categoria_id`, `maridaje`, `destacado`, `region`) VALUES
-(1, 'Camino del Valle', 'Un Malbec de carácter profundo, con aromas a frutas negras maduras, violetas y especias suaves. En boca es estructurado, con taninos firmes y un final prolongado que evoca la tierra mendocina.', 18900.00, 42, 'camino-del-valle.png', '2019-03-15', 750, 16, 'Zuccardi', 1, 'Carnes rojas, estofados, quesos curados', 1, 'Mendoza'),
+(1, 'Camino del Valle', 'Un Malbec de carácter profundo, con aromas a frutas negras maduras, violetas y especias suaves. En boca es estructurado, con taninos firmes y un final prolongado que evoca la tierra mendocina.', 18900.00, 45, 'camino-del-valle.png', '2019-03-15', 750, 16, 'Zuccardi', 1, 'Carnes rojas, estofados, quesos curados', 1, 'Mendoza'),
 (2, 'Cuvée Riche', 'Chardonnay fresco y expresivo, con notas de durazno, pera y un delicado toque de vainilla. Fermentado parcialmente en roble francés, logra equilibrio entre frescura y complejidad.', 14500.00, 35, 'cuvee-riche.png', '2021-02-10', 750, 10, 'Chandon', 2, 'Pescados, mariscos, pasta con crema', 1, 'Tupungato'),
 (3, 'Stella Rosa', 'Rosé elegante y sutil, con aromas de frutilla, frambuesa y pétalos de rosa. Seco y refrescante, ideal para el aperitivo o para acompañar platos mediterráneos.', 12800.00, 28, 'rosa-de-otono.png', '2022-01-20', 750, 9, 'Achaval Ferrer', 3, 'Ensaladas, salmón, quesos frescos', 1, 'Valle de Uco'),
 (4, 'Gran Espumante Brut Nature', 'Elaborado por el método champenoise, este espumante de burbuja fina y persistente ofrece notas de brioche, manzana verde y cítricos. Sin azúcar añadida, es seco y mineral.', 22500.00, 18, 'brut-nature.png', '2020-11-05', 750, 8, 'Crotta', 4, 'Ostras, caviar, sushi, aperitivos', 1, 'San Rafael'),
@@ -134,7 +134,10 @@ INSERT INTO `vinos` (`id_vino`, `nombre`, `descripcion`, `precio`, `stock`, `ima
 (12, 'Extra Brut Prestige', 'El lujo en una copa. Elaborado con método tradicional champenoise, este espumante premium presenta aromas de levadura, tostados, manzana golden y frutos secos. Burbuja cremosa e inagotable.', 28900.00, 10, 'brut-prestige.png', '2020-08-20', 750, 7, 'Baron B', 4, 'Celebraciones, ostras, canapés de lujo', 1, 'Champagne, Mendoza'),
 (13, 'Malbec Clásico', 'El Malbec cotidiano por excelencia. Frutal, amable y versátil. Aromas a ciruela y mora con un toque de vainilla. Taninos suaves y final agradable. El vino de todos los días.', 7900.00, 80, 'malbec-clasico.png', '2022-03-20', 750, 16, 'Trapiche', 1, 'Pastas, pizza, carnes a la parrilla', 0, 'Mendoza'),
 (14, 'Pinot Noir', 'Estilo alsaciano poco común en Argentina. Aromas ahumados, melocotón, jengibre y flores blancas. Textura untuosa y acidez refrescante. Un blanco que sorprende y enamora.', 15300.00, 20, 'pinot-noir.png', '2022-02-28', 750, 11, 'Zuccardi', 2, 'Carne de cerdo, curry suave, pasta al salmón', 0, 'Patagonia'),
-(15, 'Los Haroldos Gran Corte', 'La cima de la vitivinicultura argentina. Blend icónico de Catena Zapata con 5 años de crianza en roble francés. Complejidad extraordinaria: cassis, chocolate amargo, cedro y tabaco. Vino de colección.', 48000.00, 5, 'haroldos-gran-corte.png', '2017-04-10', 750, 18, 'Catena Zapata', 1, 'Rib eye, ossobuco, quesos muy añejos', 0, 'Mendoza');
+(15, 'Los Haroldos Gran Corte', 'La cima de la vitivinicultura argentina. Blend icónico de Catena Zapata con 5 años de crianza en roble francés. Complejidad extraordinaria: cassis, chocolate amargo, cedro y tabaco. Vino de colección.', 48000.00, 5, 'haroldos-gran-corte.png', '2017-04-10', 750, 18, 'Catena Zapata', 1, 'Rib eye, ossobuco, quesos muy añejos', 0, 'Mendoza'),
+(21, 'San Nicolas Wines', 'Descubrí la elegancia del San Nicolás Wines, el vino ícono de la bodega Catena Zapata. Elaborado con una exclusiva composición de Pinot Noir provenientes de viñedos de Valle de Uco, este tinto seco ofrece una experiencia única', 74800.00, 32, 'vino-nicolas.webp', '2021-05-15', 750, 16, 'Catena Zapata', 1, 'Risottos de hongos, pastas con salsa boloñesa, cocina mediterránea con hierbas.', 1, 'Valle de Uco'),
+(22, 'P.S García', 'Un vino que desafía lo convencional. El Petit Verdot de P.S. García nace en el histórico valle del Itata, donde la brisa del Pacífico y los suelos graníticos dan vida a un tinto de carácter vibrante y personalidad única.', 25000.00, 14, 'ps-garcia.png', '2013-07-01', 750, 18, ' Viña P.S. García', 1, 'Carnes rojas, platos especiados, quesos curados', 1, 'Valle del Itata'),
+(23, 'Colomé Estate Torrontes', 'El Colomé Estate Torrontés es la expresión más pura del blanco argentino de altura. Proveniente de los viñedos más altos del mundo, en el Valle Calchaquí (Salta), este vino combina frescura, elegancia y una intensidad aromática inconfundible.', 15830.00, 8, 'colome.webp', '2023-03-22', 750, 9, 'Colomé', 2, 'Pescados, mariscos, sushi, ensaladas frescas y quesos suaves.', 1, 'Valle Calchaquí');
 
 -- --------------------------------------------------------
 
@@ -143,8 +146,8 @@ INSERT INTO `vinos` (`id_vino`, `nombre`, `descripcion`, `precio`, `stock`, `ima
 --
 
 CREATE TABLE `vino_varietal` (
-  `vino_id` int(11) NOT NULL,
-  `varietal_id` int(11) NOT NULL
+  `vino_id` int NOT NULL,
+  `varietal_id` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -153,23 +156,23 @@ CREATE TABLE `vino_varietal` (
 
 INSERT INTO `vino_varietal` (`vino_id`, `varietal_id`) VALUES
 (1, 1),
-(2, 4),
-(3, 5),
-(4, 4),
 (5, 1),
-(5, 2),
-(5, 3),
-(6, 7),
-(7, 6),
-(8, 8),
-(9, 9),
-(10, 7),
 (11, 1),
-(12, 4),
 (13, 1),
-(14, 5),
 (15, 1),
-(15, 2);
+(22, 3),
+(2, 4),
+(4, 4),
+(12, 4),
+(3, 5),
+(14, 5),
+(21, 5),
+(7, 6),
+(6, 7),
+(10, 7),
+(23, 7),
+(8, 8),
+(9, 9);
 
 --
 -- Índices para tablas volcadas
@@ -216,25 +219,25 @@ ALTER TABLE `vino_varietal`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_categoria` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_usuario` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `varietales`
 --
 ALTER TABLE `varietales`
-  MODIFY `id_varietal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_varietal` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `vinos`
 --
 ALTER TABLE `vinos`
-  MODIFY `id_vino` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_vino` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Restricciones para tablas volcadas
