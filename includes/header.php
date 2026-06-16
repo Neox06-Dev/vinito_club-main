@@ -39,7 +39,7 @@ $seccion_actual = $_GET['seccion'] ?? 'inicio';
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg vinito-navbar sticky-top" id="mainNav">
         <div class="container">
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="index.php?seccion=inicio">
                 <img src="assets/img/logo.png" alt="Vinito Club Logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
