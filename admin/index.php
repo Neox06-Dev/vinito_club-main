@@ -80,7 +80,17 @@ switch ($seccion) {
             $vino->setDescripcion($_POST['descripcion']);
             $vino->setPrecio((float)$_POST['precio']);
             $vino->setStock((int)$_POST['stock']);
-            $vino->setImagen($_POST['imagen']);
+            $nombreImagen = null;
+            if (!empty($_FILES['imagen']['name'])) {
+
+                $nombreImagen = uniqid() . '-' . basename($_FILES['imagen']['name']);
+
+                move_uploaded_file(
+                    $_FILES['imagen']['tmp_name'],
+                    '../assets/img/productos/' . $nombreImagen
+                );
+            }
+            $vino->setImagen($nombreImagen);
             $vino->setAnioCosecha($anioCosecha);
             $vino->setVolumenMl((int)$_POST['volumen_ml']);
             $vino->setTemperaturaServicio((int)$temperaturaServicio);
@@ -152,7 +162,27 @@ switch ($seccion) {
             $vino->setDescripcion($_POST['descripcion']);
             $vino->setPrecio((float)$_POST['precio']);
             $vino->setStock((int)$_POST['stock']);
-            $vino->setImagen($_POST['imagen']);
+            $nombreImagen = $vino->getImagen();
+            if (!empty($_FILES['imagen']['name'])) {
+
+                $imagenVieja = '../assets/img/productos/' . $vino->getImagen();
+
+                if (
+                    file_exists($imagenVieja)
+                    && is_file($imagenVieja)
+                ) {
+                    unlink($imagenVieja);
+                }
+
+                $nombreImagen = uniqid() . '-' . basename($_FILES['imagen']['name']);
+
+                move_uploaded_file(
+                    $_FILES['imagen']['tmp_name'],
+                    '../assets/img/productos/' . $nombreImagen
+                );
+            }
+            
+            $vino->setImagen($nombreImagen);
             $vino->setAnioCosecha($anioCosecha);
             $vino->setVolumenMl((int)$_POST['volumen_ml']);
             $vino->setTemperaturaServicio((int)$temperaturaServicio);

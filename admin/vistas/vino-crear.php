@@ -52,7 +52,7 @@
 
         <section class="form-panel">
 
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
 
                 <!-- ── INFORMACIÓN GENERAL ─────────────────────── -->
                 <div class="form-section">
@@ -104,8 +104,8 @@
                     <div class="form-grid">
 
                         <div class="form-group full">
-                            <label class="form-label-custom">URL de la imagen</label>
-                            <input type="text" name="imagen" class="form-control-custom" placeholder="ruta-del-vino" required>
+                            <label class="form-label-custom">Imagen del vino</label>
+                            <input type="file" name="imagen" class="form-control-custom" accept=".jpg,.jpeg,.png,.webp" required>
                         </div>
 
                     </div>
