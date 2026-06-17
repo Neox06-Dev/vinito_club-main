@@ -128,7 +128,7 @@
 
                         <div class="form-group full">
                             <label class="form-label-custom">Imagen del vino</label>
-                            <p class="mb-2"> Imagen actual: <strong><?= htmlspecialchars($vino->getImagen()) ?></strong></p>
+                            <p class="mb-2 hero-sub"> Imagen actual: <strong><?= htmlspecialchars($vino->getImagen()) ?></strong></p>
                             <input type="file" name="imagen" class="form-control-custom" accept=".jpg,.jpeg,.png,.webp">
                         </div>
 
