@@ -32,10 +32,6 @@
                 <p class="section-label"> — NUEVO INGRESO AL CATÁLOGO — </p>
                 <h1 class="section-title">Agregar <em>vino</em></h1>
             </div>
-
-            <a href="index.php?sec=vinos" class="btn-hero-outline btn-volver">
-                <i class="bi bi-arrow-left"></i>&nbsp; Volver
-            </a>
         </header>
 
         <?php if ($error === 'anio_cosecha'): ?>
