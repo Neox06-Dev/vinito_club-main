@@ -42,11 +42,23 @@ $seccion_actual = $_GET['seccion'] ?? 'inicio';
             <a class="navbar-brand" href="index.php?seccion=inicio">
                 <img src="assets/img/logo.png" alt="Vinito Club Logo">
             </a>
+            <div class="d-flex align-items-center gap-2 order-lg-3 ms-auto me-3">
+                <div class="navbar-icons cart-icon">
+                    <a href="#" class="nav-icon-link" title="Carrito">
+                        <i class="bi bi-bag"></i>
+                    </a>
+                </div>
+                <div class="navbar-icons admin-icon">
+                    <a href="admin/login.php" class="nav-icon-link" title="Panel de Administración">
+                        <i class="bi bi-person"></i>
+                    </a>
+                </div>
+            </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navMenu">
-                <ul class="navbar-nav mx-auto gap-1">
+            <div class="collapse navbar-collapse order-lg-2 flex-lg-fill" id="navMenu">
+                <ul class="navbar-nav mx-auto gap-2">
                     <li class="nav-item">
                         <a class="nav-link <?= $seccion_actual === 'inicio' ? 'active' : '' ?>" href="index.php?seccion=inicio">Inicio</a>
                     </li>
@@ -60,17 +72,6 @@ $seccion_actual = $_GET['seccion'] ?? 'inicio';
                         <a class="nav-link <?= $seccion_actual === 'contacto' ? 'active' : '' ?>" href="index.php?seccion=contacto">Contacto</a>
                     </li>
                 </ul>
-                <div class="navbar-icons cart-icon">
-                    <a href="#" class="nav-icon-link" title="Carrito">
-                        <i class="bi bi-bag"></i>
-                    </a>
-                </div>
-
-                <div class="navbar-icons ps-2 admin-icon">
-                    <a href="admin/login.php" class="nav-icon-link" title="Panel de Administración">
-                        <i class="bi bi-person"></i>
-                    </a>
-                </div>
             </div>
         </div>
     </nav>

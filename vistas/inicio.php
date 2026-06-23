@@ -12,7 +12,7 @@ $destacados = array_filter($productos, fn($p) => $p->getDestacado());
     </picture>
     <div class="hero-overlay"></div>
     <div class="container hero-content">
-        <div class="row align-items-center min-vh-section">
+        <div class="row align-items-center min-vh-section ms-1">
             <div class="col-lg-6">
                 <p class="hero-eyebrow">Bodegas boutique · Selección curada</p>
                 <h1 class="hero-title">Descubrí vinos<br><em>sin complicarte</em></h1>
