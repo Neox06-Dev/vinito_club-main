@@ -57,7 +57,7 @@ $footerBase = $footerBase ?? '';
         <hr class="footer-divider">
         <div class="row align-items-center">
             <div class="col-md-6">
-                <p class="footer-copy">© 2026 Vinito Club. Todos los derechos reservados.</p>
+                <p class="footer-copy">&copy; <?= date('Y') ?> Vinito Club. Todos los derechos reservados.</p>
             </div>
             <div class="col-md-6 text-md-end">
                 <p class="footer-copy">Escuela Davinci - Desarrollo Web - Nicolás González</p>
