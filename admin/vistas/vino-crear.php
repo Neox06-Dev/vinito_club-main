@@ -1,3 +1,9 @@
+<?php
+/** @var Categoria[] $categorias */
+/** @var Varietal[] $varietales */
+/** @var string $error */
+?>
+
 <div class="admin-layout">
 
     <button type="button" class="admin-toggle" id="adminToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="adminSidebar">

@@ -1,3 +1,9 @@
+<?php
+/** @var int $totalVinos */
+/** @var int $totalCategorias */
+/** @var int $totalVarietales */
+/** @var array $ultimosVinos */
+?>
 
 <div class="admin-layout">
 
