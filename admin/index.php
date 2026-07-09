@@ -230,13 +230,13 @@ switch ($seccion) {
     case 'categorias':
 
         require_once '../classes/Categoria.php';
-        
+
         $categorias = Categoria::todas();
 
         require_once 'vistas/categorias.php';
 
         break;
-    
+
     case 'categoria-crear':
 
         require_once '../classes/Categoria.php';
@@ -292,8 +292,8 @@ switch ($seccion) {
 
         require_once 'vistas/categoria-editar.php';
 
-        break;  
-    
+        break;
+
     case 'categoria-eliminar':
 
         require_once '../classes/Categoria.php';
@@ -302,17 +302,114 @@ switch ($seccion) {
 
         $categoria = Categoria::porId($id);
 
+        if (!$categoria) {
+            header('Location: index.php?sec=categorias');
+            exit;
+        }
+
         if (!$categoria->eliminar()) {
 
             header(
                 'Location: index.php?sec=categorias&error=' .
-                urlencode($categoria->getError())
+                    urlencode($categoria->getError())
             );
 
             exit;
         }
 
         header('Location: index.php?sec=categorias');
+        exit;
+
+    case 'regiones':
+
+        require_once '../classes/Region.php';
+
+        $regiones = Region::todas();
+
+        require_once 'vistas/regiones.php';
+
+        break;
+
+    case 'region-crear':
+
+        require_once '../classes/Region.php';
+
+        $error = '';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $region = new Region();
+
+            $region->setNombre($_POST['nombre']);
+
+            if ($region->crear()) {
+
+                header('Location: index.php?sec=regiones');
+                exit;
+            }
+
+            $error = $region->getError();
+        }
+
+        require_once 'vistas/region-crear.php';
+
+        break;
+
+    case 'region-editar':
+
+        require_once '../classes/Region.php';
+
+        $id = (int)($_GET['id'] ?? 0);
+
+        $region = Region::porId($id);
+
+        if (!$region) {
+            header('Location: index.php?sec=regiones');
+            exit;
+        }
+
+        $error = '';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $region->setNombre($_POST['nombre']);
+
+            if ($region->editar()) {
+
+                header('Location: index.php?sec=regiones');
+                exit;
+            }
+
+            $error = $region->getError();
+        }
+
+        require_once 'vistas/region-editar.php';
+
+        break;
+
+    case 'region-eliminar':
+        require_once '../classes/Region.php';
+
+        $id = (int)($_GET['id'] ?? 0);
+
+        $region = Region::porId($id);
+
+        if (!$region) {
+            header('Location: index.php?sec=regiones');
+            exit;
+        }
+
+        if (!$region->eliminar()) {
+
+            header(
+                'Location: index.php?sec=regiones&error=' .
+                    urlencode($region->getError())
+            );
+
+            exit;
+        }
+
+        header('Location: index.php?sec=regiones');
         exit;
 
     default:
