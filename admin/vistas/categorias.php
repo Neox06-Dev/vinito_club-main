@@ -21,7 +21,6 @@
             <a href="index.php?sec=categorias">Categorías</a>
             <a href="index.php?sec=regiones">Regiones</a>
             <a href="index.php?sec=varietales">Varietales</a>
-            
             <h6>SISTEMA</h6>
 
             <a href="logout.php">Cerrar sesión</a>
@@ -34,11 +33,11 @@
         <header class="admin-header vinos-header">
             <div>
                 <p class="section-label"> — GESTIÓN DE CATÁLOGO — </p>
-                <h1 class="section-title">Administrar <em>vinos</em></h1>
+                <h1 class="section-title">Administrar <em>Categorías</em></h1>
             </div>
 
-            <a href="index.php?sec=vino-crear" class="btn-hero-primary">
-                Nuevo vino &nbsp;<i class="bi bi-plus"></i>
+            <a href="index.php?sec=categoria-crear" class="btn-hero-primary">
+                Nueva categoría &nbsp;<i class="bi bi-plus"></i>
             </a>
         </header>
 
@@ -49,60 +48,33 @@
                         <tr>
                             <th>ID</th>
                             <th>Nombre</th>
-                            <th>Bodega</th>
-                            <th>Categoría</th>
-                            <th>Precio</th>
-                            <th>Stock</th>
                             <th class="text-end">Acciones</th>
                         </tr>
                     </thead>
 
                     <tbody>
 
-                    <?php if (empty($vinos)): ?>
+                    <?php if (empty($categorias)): ?>
 
                         <tr>
-                            <td colspan="7" class="vinos-empty">No hay vinos cargados todavía.</td>
+                            <td colspan="7" class="vinos-empty">No hay categorías cargadas todavía.</td>
                         </tr>
 
                     <?php else: ?>
 
-                        <?php foreach ($vinos as $i => $vino): ?>
+                        <?php foreach ($categorias as $i => $categoria): ?>
 
-                            <?php $stock = $vino->getStock(); ?>
-                            <?php
-                                if ($stock <= 0) {
-                                    $stockClass = 'stock-agotado';
-                                } elseif ($stock <= 5) {
-                                    $stockClass = 'stock-bajo';
-                                } else {
-                                    $stockClass = 'stock-ok';
-                                }
-                            ?>
+                            <tr>
 
-                            <tr style="animation-delay: <?= ($i * 0.05) + 0.15 ?>s">
+                                <td data-label="ID" class="vino-id">#<?= $categoria->getId() ?></td>
 
-                                <td data-label="ID" class="vino-id">#<?= $vino->getIdVino() ?></td>
-
-                                <td data-label="Nombre" class="vino-nombre"><?= htmlspecialchars($vino->getNombre()) ?></td>
-
-                                <td data-label="Bodega"><?= htmlspecialchars($vino->getBodega()) ?></td>
-
-                                <td data-label="Categoría">
-                                    <span class="badge-categoria"><?= htmlspecialchars($vino->getCategoriaLabel()) ?></span>
-                                </td>
-
-                                <td data-label="Precio" class="precio-tag"><?= $vino->getPrecioFormateado() ?></td>
-
-                                <td data-label="Stock">
-                                    <span class="stock-badge <?= $stockClass ?>"><?= $stock ?></span>
-                                </td>
+                                <td data-label="Nombre" class="vino-nombre"><?= htmlspecialchars($categoria->getNombre()) ?></td>
 
                                 <td data-label="Acciones" class="text-end">
                                     <div class="acciones-grupo">
 
                                         <a
-                                            href="index.php?sec=vino-editar&id=<?= $vino->getIdVino() ?>"
+                                            href="index.php?sec=categoria-editar&id=<?= $categoria->getId() ?>"
                                             class="btn-accion btn-editar"
                                             title="Editar"
                                         >
@@ -112,8 +84,8 @@
                                         <button
                                             type="button"
                                             class="btn-accion btn-eliminar"
-                                            data-href="vino-eliminar.php?id=<?= $vino->getIdVino() ?>"
-                                            data-nombre="<?= htmlspecialchars($vino->getNombre()) ?>"
+                                            data-href="index.php?sec=categoria-eliminar&id=<?= $categoria->getId() ?>"
+                                            data-nombre="<?= htmlspecialchars($categoria->getNombre()) ?>"
                                             title="Eliminar"
                                         >
                                             <i class="bi bi-trash"></i> Eliminar
@@ -140,7 +112,7 @@
 <div class="vinito-overlay" id="deleteOverlay"></div>
 <div class="vinito-modal" id="deleteModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
     <div class="vinito-modal-icon"><i class="bi bi-exclamation-triangle"></i></div>
-    <h3 id="deleteModalTitle">¿Eliminar vino?</h3>
+    <h3 id="deleteModalTitle">¿Eliminar categoría?</h3>
     <p>Estás a punto de eliminar <strong id="deleteModalNombre"></strong> del catálogo. Esta acción no se puede deshacer.</p>
     <div class="vinito-modal-actions">
         <button type="button" class="btn-hero-outline" id="deleteCancelar">Cancelar</button>

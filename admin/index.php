@@ -227,6 +227,94 @@ switch ($seccion) {
 
         break;
 
+    case 'categorias':
+
+        require_once '../classes/Categoria.php';
+        
+        $categorias = Categoria::todas();
+
+        require_once 'vistas/categorias.php';
+
+        break;
+    
+    case 'categoria-crear':
+
+        require_once '../classes/Categoria.php';
+
+        $error = '';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $categoria = new Categoria();
+
+            $categoria->setNombre($_POST['nombre']);
+
+            if ($categoria->crear()) {
+
+                header('Location: index.php?sec=categorias');
+                exit;
+            }
+
+            $error = $categoria->getError();
+        }
+
+        require_once 'vistas/categoria-crear.php';
+
+        break;
+
+    case 'categoria-editar':
+
+        require_once '../classes/Categoria.php';
+
+        $id = (int)($_GET['id'] ?? 0);
+
+        $categoria = Categoria::porId($id);
+
+        if (!$categoria) {
+            header('Location: index.php?sec=categorias');
+            exit;
+        }
+
+        $error = '';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $categoria->setNombre($_POST['nombre']);
+
+            if ($categoria->editar()) {
+
+                header('Location: index.php?sec=categorias');
+                exit;
+            }
+
+            $error = $categoria->getError();
+        }
+
+        require_once 'vistas/categoria-editar.php';
+
+        break;  
+    
+    case 'categoria-eliminar':
+
+        require_once '../classes/Categoria.php';
+
+        $id = (int)($_GET['id'] ?? 0);
+
+        $categoria = Categoria::porId($id);
+
+        if (!$categoria->eliminar()) {
+
+            header(
+                'Location: index.php?sec=categorias&error=' .
+                urlencode($categoria->getError())
+            );
+
+            exit;
+        }
+
+        header('Location: index.php?sec=categorias');
+        exit;
+
     default:
         header('Location: index.php?sec=dashboard');
         exit;

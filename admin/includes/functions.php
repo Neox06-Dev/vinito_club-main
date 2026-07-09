@@ -6,6 +6,8 @@ function admin_secciones_validas(): array
         'login',
         'dashboard',
         'vinos',
+        'categorias',
+        'regiones',
         'vino-crear',
         'vino-editar'
     ];

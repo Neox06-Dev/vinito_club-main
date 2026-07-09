@@ -26,6 +26,10 @@
 
             <a href="index.php?sec=dashboard">Dashboard</a>
             <a href="index.php?sec=vinos">Vinos</a>
+            <a href="index.php?sec=categorias">Categorías</a>
+            <a href="index.php?sec=regiones">Regiones</a>
+            <a href="index.php?sec=varietales">Varietales</a>
+            
             <h6>SISTEMA</h6>
 
             <a href="logout.php">Cerrar sesión</a>
