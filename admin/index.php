@@ -231,6 +231,8 @@ switch ($seccion) {
 
         require_once '../classes/Categoria.php';
 
+        $error = $_GET['error'] ?? '';
+
         $categorias = Categoria::todas();
 
         require_once 'vistas/categorias.php';
@@ -324,6 +326,8 @@ switch ($seccion) {
 
         require_once '../classes/Region.php';
 
+        $error = $_GET['error'] ?? '';
+
         $regiones = Region::todas();
 
         require_once 'vistas/regiones.php';
@@ -410,6 +414,96 @@ switch ($seccion) {
         }
 
         header('Location: index.php?sec=regiones');
+        exit;
+
+    case 'varietales':
+        require_once '../classes/Varietal.php';
+
+        $error = $_GET['error'] ?? '';
+
+        $varietales = Varietal::todas();
+
+        require_once 'vistas/varietales.php';
+
+        break;
+    
+    case 'varietal-crear':
+        require_once '../classes/Varietal.php';
+        $error = '';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $varietal = new Varietal();
+
+            $varietal->setNombre($_POST['nombre']);
+
+            if ($varietal->crear()) {
+
+                header('Location: index.php?sec=varietales');
+                exit;
+            }
+
+            $error = $varietal->getError();
+        }
+
+        require_once 'vistas/varietal-crear.php';
+
+        break;
+
+    case 'varietal-editar':
+        require_once '../classes/Varietal.php';
+
+        $id = (int)($_GET['id'] ?? 0);
+
+        $varietal = Varietal::porId($id);
+
+        if (!$varietal) {
+            header('Location: index.php?sec=varietales');
+            exit;
+        }
+
+        $error = '';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $varietal->setNombre($_POST['nombre']);
+
+            if ($varietal->editar()) {
+
+                header('Location: index.php?sec=varietales');
+                exit;
+            }
+
+            $error = $varietal->getError();
+        }
+
+        require_once 'vistas/varietal-editar.php';
+
+        break;
+
+    case 'varietal-eliminar':
+        require_once '../classes/Varietal.php';
+
+        $id = (int)($_GET['id'] ?? 0);
+
+        $varietal = Varietal::porId($id);
+
+        if (!$varietal) {
+            header('Location: index.php?sec=varietales');
+            exit;
+        }
+
+        if (!$varietal->eliminar()) {
+
+            header(
+                'Location: index.php?sec=varietales&error=' .
+                    urlencode($varietal->getError())
+            );
+
+            exit;
+        }
+
+        header('Location: index.php?sec=varietales');
         exit;
 
     default:

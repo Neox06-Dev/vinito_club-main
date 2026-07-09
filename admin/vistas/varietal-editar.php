@@ -40,7 +40,7 @@
         <header class="admin-header vinos-header">
             <div>
                 <p class="section-label"> — EDICIÓN DE CATÁLOGO — </p>
-                <h1 class="section-title">Editar <em>Región</em></h1>
+                <h1 class="section-title">Editar <em>varietal</em></h1>
             </div>
         </header>
 
@@ -68,7 +68,7 @@
                                 name="nombre"
                                 class="form-control-custom"
                                 required
-                                value="<?= htmlspecialchars($region->getNombre()) ?>">
+                                value="<?= htmlspecialchars($varietal->getNombre()) ?>">
                         </div>
 
                     </div>

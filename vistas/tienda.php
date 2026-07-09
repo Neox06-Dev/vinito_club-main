@@ -129,25 +129,28 @@ function filtroUrl(string $param, string $valor): string
             <aside class="col-lg-2 col-md-3 tienda-sidebar">
                 <div class="filtros-panel">
 
-                    <!-- TIPO DE VINO -->
+                    <!-- CATEGORÍAS -->
                     <div class="filtro-grupo">
-                        <h6 class="filtro-titulo">TIPO DE VINO</h6>
+                        <h6 class="filtro-titulo">CATEGORÍA</h6>
                         <div class="filtro-pills">
                             <?php
-                            $categorias = [
-                                'todos' => 'Todos',
-                                'tinto' => 'Tinto',
-                                'blanco' => 'Blanco',
-                                'rosé' => 'Rosé',
-                                'espumante' => 'Espumante',
-                                'dulce' => 'Dulce'
-                            ];
-                            foreach ($categorias as $val => $label):
-                                $activo = $filtro_categoria === $val ? 'active' : '';
+                            $categorias = Categoria::todas();
                             ?>
-                                <a href="<?= filtroUrl('categoria', $val) ?>" class="pill-btn <?= $activo ?>">
-                                    <?= $label ?>
+                            <a href="<?= filtroUrl('categoria', 'todos') ?>"
+                            class="pill-btn <?= $filtro_categoria === 'todos' ? 'active' : '' ?>">
+                                Todas
+                            </a>
+
+                            <?php foreach ($categorias as $categoria): ?>
+
+                                <a
+                                    href="<?= filtroUrl('categoria', strtolower($categoria->getNombre())) ?>"
+                                    class="pill-btn <?= strtolower($categoria->getNombre()) === $filtro_categoria ? 'active' : '' ?>">
+
+                                    <?= htmlspecialchars($categoria->getNombre()) ?>
+
                                 </a>
+
                             <?php endforeach; ?>
                         </div>
                     </div>

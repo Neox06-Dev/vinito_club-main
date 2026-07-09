@@ -1,6 +1,5 @@
 <?php
 
-/** @var Categoria $categoria */
 /** @var string $error */
 ?>
 
@@ -27,7 +26,6 @@
             <a href="index.php?sec=categorias">Categorías</a>
             <a href="index.php?sec=regiones">Regiones</a>
             <a href="index.php?sec=varietales">Varietales</a>
-
             <h6>SISTEMA</h6>
 
             <a href="logout.php">Cerrar sesión</a>
@@ -39,8 +37,8 @@
 
         <header class="admin-header vinos-header">
             <div>
-                <p class="section-label"> — EDICIÓN DE CATÁLOGO — </p>
-                <h1 class="section-title">Editar <em>Región</em></h1>
+                <p class="section-label"> — NUEVO INGRESO AL CATÁLOGO — </p>
+                <h1 class="section-title">Agregar <em>varietal</em></h1>
             </div>
         </header>
 
@@ -68,7 +66,7 @@
                                 name="nombre"
                                 class="form-control-custom"
                                 required
-                                value="<?= htmlspecialchars($region->getNombre()) ?>">
+                                value="<?= htmlspecialchars($_POST['nombre'] ?? '') ?>">
                         </div>
 
                     </div>

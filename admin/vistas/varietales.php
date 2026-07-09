@@ -33,11 +33,11 @@
         <header class="admin-header vinos-header">
             <div>
                 <p class="section-label"> — GESTIÓN DE CATÁLOGO — </p>
-                <h1 class="section-title">Administrar <em>Regiones</em></h1>
+                <h1 class="section-title">Administrar <em>varietales</em></h1>
             </div>
 
-            <a href="index.php?sec=region-crear" class="btn-hero-primary">
-                Nueva región &nbsp;<i class="bi bi-plus"></i>
+            <a href="index.php?sec=varietal-crear" class="btn-hero-primary">
+                Nuevo varietal &nbsp;<i class="bi bi-plus"></i>
             </a>
         </header>
 
@@ -61,27 +61,27 @@
 
                     <tbody>
 
-                    <?php if (empty($regiones)): ?>
+                    <?php if (empty($varietales)): ?>
 
                         <tr>
-                            <td colspan="7" class="vinos-empty">No hay regiones cargadas todavía.</td>
+                            <td colspan="7" class="vinos-empty">No hay varietales cargados todavía.</td>
                         </tr>
 
                     <?php else: ?>
 
-                        <?php foreach ($regiones as $i => $region): ?>
+                        <?php foreach ($varietales as $i => $varietal): ?>
 
                             <tr>
 
-                                <td data-label="ID" class="vino-id">#<?= $region->getId() ?></td>
+                                <td data-label="ID" class="vino-id">#<?= $varietal->getId() ?></td>
 
-                                <td data-label="Nombre" class="vino-nombre"><?= htmlspecialchars($region->getNombre()) ?></td>
+                                <td data-label="Nombre" class="vino-nombre"><?= htmlspecialchars($varietal->getNombre()) ?></td>
 
                                 <td data-label="Acciones" class="text-end">
                                     <div class="acciones-grupo">
 
                                         <a
-                                            href="index.php?sec=region-editar&id=<?= $region->getId() ?>"
+                                            href="index.php?sec=varietal-editar&id=<?= $varietal->getId() ?>"
                                             class="btn-accion btn-editar"
                                             title="Editar"
                                         >
@@ -91,8 +91,8 @@
                                         <button
                                             type="button"
                                             class="btn-accion btn-eliminar"
-                                            data-href="index.php?sec=region-eliminar&id=<?= $region->getId() ?>"
-                                            data-nombre="<?= htmlspecialchars($region->getNombre()) ?>"
+                                            data-href="index.php?sec=varietal-eliminar&id=<?= $varietal->getId() ?>"
+                                            data-nombre="<?= htmlspecialchars($varietal->getNombre()) ?>"
                                             title="Eliminar"
                                         >
                                             <i class="bi bi-trash"></i> Eliminar
@@ -119,7 +119,7 @@
 <div class="vinito-overlay" id="deleteOverlay"></div>
 <div class="vinito-modal" id="deleteModal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
     <div class="vinito-modal-icon"><i class="bi bi-exclamation-triangle"></i></div>
-    <h3 id="deleteModalTitle">¿Eliminar región?</h3>
+    <h3 id="deleteModalTitle">¿Eliminar varietal?</h3>
     <p>Estás a punto de eliminar <strong id="deleteModalNombre"></strong> del catálogo. Esta acción no se puede deshacer.</p>
     <div class="vinito-modal-actions">
         <button type="button" class="btn-hero-outline" id="deleteCancelar">Cancelar</button>

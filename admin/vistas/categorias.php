@@ -33,13 +33,20 @@
         <header class="admin-header vinos-header">
             <div>
                 <p class="section-label"> — GESTIÓN DE CATÁLOGO — </p>
-                <h1 class="section-title">Administrar <em>Categorías</em></h1>
+                <h1 class="section-title">Administrar <em>categorías</em></h1>
             </div>
 
             <a href="index.php?sec=categoria-crear" class="btn-hero-primary">
                 Nueva categoría &nbsp;<i class="bi bi-plus"></i>
             </a>
         </header>
+
+        <?php if (!empty($error)): ?>
+            <div class="alert-vinito alert-vinito--error">
+                <i class="bi bi-exclamation-triangle"></i>
+                <?= htmlspecialchars($error) ?>
+            </div>
+        <?php endif; ?>
 
         <section class="table-panel">
             <div class="table-responsive">
