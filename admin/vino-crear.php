@@ -9,7 +9,8 @@ require_once '../classes/Categoria.php';
 require_once '../classes/Varietal.php';
 
 $categorias = Categoria::todas();
-$varietales = Varietal::todos();
+$varietales = Varietal::todas();
+$regiones = Region::todas();
 $error = $_GET['error'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $vino->setCategoriaId((int)$_POST['categoria_id']);
     $vino->setMaridaje($_POST['maridaje']);
     $vino->setDestacado((int)$_POST['destacado']);
-    $vino->setRegion($_POST['region']);
+    $vino->setRegionId((int)$_POST['region_id']);
     $vino->setVarietalId((int)$_POST['varietal_id']);
     $vino->crear();
 

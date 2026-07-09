@@ -1,4 +1,5 @@
 <?php
+
 /** @var Vino $vino */
 /** @var Categoria[] $categorias */
 /** @var Varietal[] $varietales */
@@ -51,6 +52,11 @@
             <div class="alert-vinito alert-vinito--error">
                 <i class="bi bi-exclamation-triangle"></i>
                 Debes completar la temperatura de servicio antes de guardar.
+            </div>
+        <?php elseif ($error === 'region_id'): ?>
+            <div class="alert-vinito alert-vinito--error">
+                <i class="bi bi-exclamation-triangle"></i>
+                Debes seleccionar una región válida antes de guardar.
             </div>
         <?php endif; ?>
 
@@ -161,12 +167,17 @@
 
                         <div class="form-group">
                             <label class="form-label-custom">Región</label>
-                            <input
-                                type="text"
-                                name="region"
-                                class="form-control-custom"
-                                value="<?= htmlspecialchars($vino->getRegion()) ?>"
-                                required>
+                            <?php $regionSeleccionadaId = $vino->getRegion()?->getId(); ?>
+                            <select name="region_id" class="form-control-custom">
+                                <option value="">Seleccionar región</option>
+                                <?php foreach (Region::todas() as $region): ?>
+                                    <option
+                                        value="<?= $region->getId() ?>"
+                                        <?= $regionSeleccionadaId === $region->getId() ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($region->getNombre()) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
 
                     </div>
@@ -225,7 +236,7 @@
 
                             </select>
                         </div>
-                        
+
                         <div class="form-group">
 
                             <label class="form-label-custom">
@@ -235,15 +246,13 @@
                             <select
                                 name="varietal_id"
                                 class="form-control-custom"
-                                required
-                            >
+                                required>
 
                                 <?php foreach ($varietales as $varietal): ?>
 
                                     <option
-                                        value="<?= $varietal->getIdVarietal() ?>"
-                                        <?= $varietal->getIdVarietal() == $varietalActualId ? 'selected' : '' ?>
-                                    >
+                                        value="<?= $varietal->getId() ?>"
+                                        <?= $varietal->getId() == $varietalActualId ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($varietal->getNombre()) ?>
                                     </option>
 

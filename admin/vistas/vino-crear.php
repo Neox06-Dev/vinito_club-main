@@ -1,5 +1,7 @@
 <?php
+
 /** @var Categoria[] $categorias */
+/** @var Region[] $regiones */
 /** @var Varietal[] $varietales */
 /** @var string $error */
 ?>
@@ -49,6 +51,11 @@
             <div class="alert-vinito alert-vinito--error">
                 <i class="bi bi-exclamation-triangle"></i>
                 Debes completar la temperatura de servicio antes de guardar.
+            </div>
+        <?php elseif ($error === 'region_id'): ?>
+            <div class="alert-vinito alert-vinito--error">
+                <i class="bi bi-exclamation-triangle"></i>
+                Debes seleccionar una región válida antes de guardar.
             </div>
         <?php endif; ?>
 
@@ -126,7 +133,14 @@
 
                         <div class="form-group">
                             <label class="form-label-custom">Región</label>
-                            <input type="text" name="region" class="form-control-custom" required>
+                            <select name="region_id" class="form-control-custom" required>
+                                <option value="">Seleccionar región</option>
+                                <?php foreach ($regiones as $region): ?>
+                                    <option value="<?= $region->getId() ?>">
+                                        <?= htmlspecialchars($region->getNombre()) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
 
                     </div>
@@ -144,8 +158,7 @@
                                 type="date"
                                 name="anio_cosecha"
                                 class="form-control-custom <?= $error === 'anio_cosecha' ? 'is-invalid-custom' : '' ?>"
-                                required
-                            >
+                                required>
                         </div>
 
                         <div class="form-group">
@@ -155,8 +168,7 @@
                                 name="temperatura_servicio"
                                 class="form-control-custom <?= $error === 'temperatura_servicio' ? 'is-invalid-custom' : '' ?>"
                                 min="0"
-                                required
-                            >
+                                required>
                         </div>
 
                     </div>
@@ -193,7 +205,7 @@
                             </select>
 
                         </div>
-                        
+
 
                         <div class="form-group">
 
@@ -205,8 +217,7 @@
                                 name="varietal_id"
                                 id="varietal_id"
                                 class="form-control-custom"
-                                required
-                            >
+                                required>
 
                                 <option value="">
                                     Seleccionar varietal
@@ -214,7 +225,7 @@
 
                                 <?php foreach ($varietales as $varietal): ?>
 
-                                    <option value="<?= $varietal->getIdVarietal() ?>">
+                                    <option value="<?= $varietal->getId() ?>">
                                         <?= htmlspecialchars($varietal->getNombre()) ?>
                                     </option>
 

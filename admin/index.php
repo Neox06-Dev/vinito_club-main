@@ -28,7 +28,7 @@ switch ($seccion) {
 
         $totalVinos = count(Vino::catalogo_completo());
         $totalCategorias = count(Categoria::todas());
-        $totalVarietales = count(Varietal::todos());
+        $totalVarietales = count(Varietal::todas());
 
         $ultimosVinos = Vino::ultimos();
 
@@ -53,9 +53,11 @@ switch ($seccion) {
         require_once '../classes/Vino.php';
         require_once '../classes/Categoria.php';
         require_once '../classes/Varietal.php';
+        require_once '../classes/Region.php';
 
         $categorias = Categoria::todas();
-        $varietales = Varietal::todos();
+        $regiones = Region::todas();
+        $varietales = Varietal::todas();
 
         $error = $_GET['error'] ?? '';
 
@@ -71,6 +73,13 @@ switch ($seccion) {
 
             if ($temperaturaServicio === '') {
                 header('Location: index.php?sec=vino-crear&error=temperatura_servicio');
+                exit;
+            }
+
+            $regionId = (int)($_POST['region_id'] ?? 0);
+
+            if ($regionId <= 0 || Region::porId($regionId) === null) {
+                header('Location: index.php?sec=vino-crear&error=region_id');
                 exit;
             }
 
@@ -98,10 +107,13 @@ switch ($seccion) {
             $vino->setCategoriaId((int)$_POST['categoria_id']);
             $vino->setMaridaje($_POST['maridaje']);
             $vino->setDestacado((int)$_POST['destacado']);
-            $vino->setRegion($_POST['region']);
+            $vino->setRegionId($regionId);
             $vino->setVarietalId((int)$_POST['varietal_id']);
 
-            $vino->crear();
+            if (!$vino->crear()) {
+                header('Location: index.php?sec=vino-crear&error=region_id');
+                exit;
+            }
 
             header('Location: index.php?sec=vinos');
             exit;
@@ -117,6 +129,7 @@ switch ($seccion) {
         require_once '../classes/Vino.php';
         require_once '../classes/Categoria.php';
         require_once '../classes/Varietal.php';
+        require_once '../classes/Region.php';
 
         $id = $_GET['id'] ?? null;
 
@@ -133,12 +146,13 @@ switch ($seccion) {
         }
 
         $categorias = Categoria::todas();
-        $varietales = Varietal::todos();
+        $regiones = Region::todas();
+        $varietales = Varietal::todas();
 
         $varietalesActuales = $vino->getVarietales();
 
         $varietalActualId = !empty($varietalesActuales)
-            ? $varietalesActuales[0]->getIdVarietal()
+            ? $varietalesActuales[0]->getId()
             : null;
 
         $error = $_GET['error'] ?? '';
@@ -155,6 +169,13 @@ switch ($seccion) {
 
             if ($temperaturaServicio === '') {
                 header('Location: index.php?sec=vino-editar&id=' . (int)$id . '&error=temperatura_servicio');
+                exit;
+            }
+
+            $regionId = (int)($_POST['region_id'] ?? 0);
+
+            if ($regionId <= 0 || Region::porId($regionId) === null) {
+                header('Location: index.php?sec=vino-editar&id=' . (int)$id . '&error=region_id');
                 exit;
             }
 
@@ -181,7 +202,7 @@ switch ($seccion) {
                     '../assets/img/productos/' . $nombreImagen
                 );
             }
-            
+
             $vino->setImagen($nombreImagen);
             $vino->setAnioCosecha($anioCosecha);
             $vino->setVolumenMl((int)$_POST['volumen_ml']);
@@ -191,9 +212,12 @@ switch ($seccion) {
             $vino->setVarietalId((int)$_POST['varietal_id']);
             $vino->setMaridaje($_POST['maridaje']);
             $vino->setDestacado((int)$_POST['destacado']);
-            $vino->setRegion($_POST['region']);
+            $vino->setRegionId($regionId);
 
-            $vino->editar();
+            if (!$vino->editar()) {
+                header('Location: index.php?sec=vino-editar&id=' . (int)$id . '&error=region_id');
+                exit;
+            }
 
             header('Location: index.php?sec=vinos');
             exit;

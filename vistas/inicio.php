@@ -137,7 +137,7 @@ $destacados = array_filter($productos, fn($p) => $p->getDestacado());
                                 
                             </div>
                             <div class="product-card-body">
-                                <p class="product-meta"><?= htmlspecialchars($p->getRegion()) ?> · <?= $p->getAnio() ?></p>
+                                <p class="product-meta"><?= htmlspecialchars($p->getRegionNombre()) ?> · <?= $p->getAnio() ?></p>
                                 <h3 class="product-name"><?= htmlspecialchars($p->getNombre()) ?></h3>
                                 <?php $varietales = $p->getVarietales();?>
 

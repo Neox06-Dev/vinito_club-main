@@ -22,7 +22,7 @@ $productos = array_filter($todos, function ($p) use ($filtro_categoria, $filtro_
     // Región
     if (
         $filtro_region !== 'todos'
-        && $p->getRegion() !== $filtro_region
+        && $p->getRegionNombre() !== $filtro_region
     ) {
         return false;
     }
@@ -90,7 +90,7 @@ usort($productos, function ($a, $b) use ($ordenar) {
 });
 
 // Valores únicos para los filtros (siempre sobre el total)
-$regiones  = array_unique(array_map(fn($p) => $p->getRegion(),   $todos));
+$regiones  = array_unique(array_map(fn($p) => $p->getRegionNombre(), $todos));
 $varietales = [];
 
 foreach ($todos as $vino) {
@@ -152,9 +152,9 @@ function filtroUrl(string $param, string $valor): string
                         </div>
                     </div>
 
-                    <!-- ORIGEN -->
+                    <!-- REGIÓN -->
                     <div class="filtro-grupo">
-                        <h6 class="filtro-titulo">ORIGEN</h6>
+                        <h6 class="filtro-titulo">REGIÓN</h6>
                         <div class="filtro-pills">
                             <a href="<?= filtroUrl('region', 'todos') ?>"
                                 class="pill-btn <?= $filtro_region === 'todos' ? 'active' : '' ?>">Todas</a>
@@ -167,9 +167,9 @@ function filtroUrl(string $param, string $valor): string
                         </div>
                     </div>
 
-                    <!-- VARIEDAD -->
+                    <!-- VARIETAL -->
                     <div class="filtro-grupo">
-                        <h6 class="filtro-titulo">VARIEDAD</h6>
+                        <h6 class="filtro-titulo">VARIETAL</h6>
                         <div class="filtro-pills">
                             <a href="<?= filtroUrl('varietal', 'todos') ?>"
                                 class="pill-btn <?= $filtro_varietal === 'todos' ? 'active' : '' ?>">Todas</a>
@@ -282,7 +282,7 @@ function filtroUrl(string $param, string $valor): string
                                         <div class="product-card-body">
 
                                             <p class="product-meta">
-                                                <?= htmlspecialchars($p->getRegion()) ?> · <?= $p->getAnio() ?>
+                                                <?= htmlspecialchars($p->getRegionNombre()) ?> · <?= $p->getAnio() ?>
                                             </p>
 
                                             <h3 class="product-name">

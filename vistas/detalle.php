@@ -50,7 +50,7 @@ $categoriaClase = match ($categoriaClase) {
             <div class="col-lg-7">
                 <p class="detalle-meta">
                     <strong><?= htmlspecialchars($producto->getBodega()) ?></strong>
-                    &nbsp;·&nbsp; <?= htmlspecialchars($producto->getRegion()) ?>
+                    &nbsp;·&nbsp; <?= htmlspecialchars($producto->getRegionNombre()) ?>
                     &nbsp;·&nbsp; Cosecha <?= $producto->getAnio() ?>
                 </p>
 
@@ -95,7 +95,7 @@ $categoriaClase = match ($categoriaClase) {
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Región</span>
-                        <span class="spec-val"><?= htmlspecialchars($producto->getRegion()) ?></span>
+                        <span class="spec-val"><?= htmlspecialchars($producto->getRegionNombre()) ?></span>
                     </div>
                     <div class="spec-item">
                         <span class="spec-label">Año de cosecha</span>
@@ -166,7 +166,7 @@ $categoriaClase = match ($categoriaClase) {
                                         </span>
                                     </div>
                                     <div class="product-card-body">
-                                        <p class="product-meta"><?= htmlspecialchars($r->getRegion()) ?> · <?= $r->getAnio() ?></p>
+                                        <p class="product-meta"><?= htmlspecialchars($r->getRegionNombre()) ?> · <?= $r->getAnio() ?></p>
                                         <h3 class="product-name"><?= htmlspecialchars($r->getNombre()) ?></h3>
                                         <p class="product-varietal"><?= htmlspecialchars($r->getVarietales()[0]->getNombre()) ?></p>
                                         <div class="product-card-footer">

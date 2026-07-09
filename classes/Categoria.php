@@ -5,12 +5,19 @@ class Categoria
 {
     private int $id_categoria;
     private string $nombre;
+    private string $error = '';
 
     public static function todas(): array
     {
         $conexion = (new Conexion())->getConexion();
 
-        $query = "SELECT * FROM categorias";
+        $query = "
+            SELECT
+                id_categoria,
+                nombre
+            FROM categorias
+            ORDER BY nombre
+        ";
 
         $PDOStatement = $conexion->prepare($query);
 
@@ -28,8 +35,13 @@ class Categoria
     {
         $conexion = (new Conexion())->getConexion();
 
-        $query = "SELECT * FROM categorias
-            WHERE id_categoria = ?";
+        $query = "
+            SELECT
+                id_categoria,
+                nombre
+            FROM categorias
+            WHERE id_categoria = :id_categoria
+        ";
 
         $PDOStatement = $conexion->prepare($query);
 
@@ -38,23 +50,143 @@ class Categoria
             self::class
         );
 
-        $PDOStatement->execute([$id]);
+        $PDOStatement->execute([
+            ':id_categoria' => $id
+        ]);
 
-        $resultado = $PDOStatement->fetch();
-
-        return $resultado ?: null;
+        return $PDOStatement->fetch() ?: null;
     }
 
-    // Getters
+
+    public static function existeNombre(string $nombre): bool
+    {
+        $conexion = (new Conexion())->getConexion();
+
+        $query = "
+            SELECT COUNT(*) 
+            FROM categorias
+            WHERE LOWER(nombre) = LOWER(:nombre)
+        ";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->execute([
+            ':nombre' => trim($nombre)
+        ]);
+
+        return (bool) $stmt->fetchColumn();
+    }
+
+    public function crear(): bool
+    {
+        if (self::existeNombre($this->nombre)) {
+            $this->error = 'La categoría ya existe.';
+            return false;
+        }
+
+        $conexion = (new Conexion())->getConexion();
+
+        $query = "
+            INSERT INTO categorias (
+                nombre
+            )
+            VALUES (
+                :nombre
+            )
+        ";
+
+        $stmt = $conexion->prepare($query);
+
+        return $stmt->execute([
+            ':nombre' => $this->nombre
+        ]);
+    }
+
+    public function editar(): bool
+    {
+        $conexion = (new Conexion())->getConexion();
+
+        $queryExiste = "
+            SELECT COUNT(*)
+            FROM categorias
+            WHERE LOWER(nombre) = LOWER(:nombre)
+            AND id_categoria <> :id_categoria
+        ";
+
+        $stmtExiste = $conexion->prepare($queryExiste);
+
+        $stmtExiste->execute([
+            ':nombre' => trim($this->nombre),
+            ':id_categoria' => $this->id_categoria
+        ]);
+
+        if ($stmtExiste->fetchColumn() > 0) {
+            $this->error = 'Ya existe una categoría con ese nombre.';
+            return false;
+        }
+
+        $query = "
+            UPDATE categorias
+            SET nombre = :nombre
+            WHERE id_categoria = :id_categoria
+        ";
+
+        $stmt = $conexion->prepare($query);
+
+        return $stmt->execute([
+            ':nombre' => trim($this->nombre),
+            ':id_categoria' => $this->id_categoria
+        ]);
+    }
+
+    public function eliminar(): bool
+    {
+        $conexion = (new Conexion())->getConexion();
+
+        $query = "
+            SELECT COUNT(*)
+            FROM vinos
+            WHERE categoria_id = :id_categoria
+        ";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->execute([
+            ':id_categoria' => $this->id_categoria
+        ]);
+
+        if ($stmt->fetchColumn() > 0) {
+            $this->error = 'No se puede eliminar porque existen vinos asociados.';
+            return false;
+        }
+
+        $query = "
+            DELETE FROM categorias
+            WHERE id_categoria = :id_categoria
+        ";
+
+        $stmt = $conexion->prepare($query);
+
+        return $stmt->execute([
+            ':id_categoria' => $this->id_categoria
+        ]);
+    }
+
+    // GETTERS
+
+    public function getId(): int
+    {
+        return $this->id_categoria;
+    }
 
     public function getNombre(): string
     {
         return $this->nombre;
     }
 
-    public function getId(): int
+    public function getError(): string
     {
-        return $this->id_categoria;
+        return $this->error;
     }
 
     public function getClaseCss(): string
@@ -68,4 +200,11 @@ class Categoria
             default => 'badge-especial'
         };
     }
+
+    //SETTERS
+    public function setNombre(string $nombre): void
+    {
+        $this->nombre = trim($nombre);
+    }
+    
 }

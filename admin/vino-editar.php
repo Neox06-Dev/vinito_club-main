@@ -23,14 +23,14 @@ if (!$vino) {
 }
 
 $categorias = Categoria::todas();
-$varietales = Varietal::todos();
+$varietales = Varietal::todas();
+$regiones = Region::todas();
 
 $varietalesActuales = $vino->getVarietales();
 
 $varietalActualId = !empty($varietalesActuales)
-    ? $varietalesActuales[0]->getIdVarietal()
+    ? $varietalesActuales[0]->getId()
     : null;
-
 $error = $_GET['error'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $vino->setVarietalId((int)$_POST['varietal_id']);
     $vino->setMaridaje($_POST['maridaje']);
     $vino->setDestacado((int)$_POST['destacado']);
-    $vino->setRegion($_POST['region']);
+    $vino->setRegionId((int)$_POST['region_id']);
     $vino->editar();
 
     header('Location: vinos.php');

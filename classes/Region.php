@@ -1,9 +1,9 @@
 <?php
 require_once 'Conexion.php';
 
-class Varietal
+class Region
 {
-    private int $id_varietal;
+    private int $id_region;
     private string $nombre;
     private string $error = '';
 
@@ -13,9 +13,9 @@ class Varietal
 
         $query = "
             SELECT
-                id_varietal,
+                id_region,
                 nombre
-            FROM varietales
+            FROM regiones
             ORDER BY nombre
         ";
 
@@ -31,16 +31,16 @@ class Varietal
         return $PDOStatement->fetchAll();
     }
 
-    public static function porId(int $id): ?Varietal
+    public static function porId(int $id): ?Region
     {
         $conexion = (new Conexion())->getConexion();
 
         $query = "
             SELECT
-                id_varietal,
+                id_region,
                 nombre
-            FROM varietales
-            WHERE id_varietal = :id_varietal
+            FROM regiones
+            WHERE id_region = :id_region
         ";
 
         $PDOStatement = $conexion->prepare($query);
@@ -51,7 +51,7 @@ class Varietal
         );
 
         $PDOStatement->execute([
-            ':id_varietal' => $id
+            ':id_region' => $id
         ]);
 
         return $PDOStatement->fetch() ?: null;
@@ -64,7 +64,7 @@ class Varietal
 
         $query = "
             SELECT COUNT(*) 
-            FROM varietales
+            FROM regiones
             WHERE LOWER(nombre) = LOWER(:nombre)
         ";
 
@@ -80,14 +80,14 @@ class Varietal
     public function crear(): bool
     {
         if (self::existeNombre($this->nombre)) {
-            $this->error = 'El varietal ya existe.';
+            $this->error = 'La región ya existe.';
             return false;
         }
 
         $conexion = (new Conexion())->getConexion();
 
         $query = "
-            INSERT INTO varietales (
+            INSERT INTO regiones (
                 nombre
             )
             VALUES (
@@ -108,34 +108,34 @@ class Varietal
 
         $queryExiste = "
             SELECT COUNT(*)
-            FROM varietales
+            FROM regiones
             WHERE LOWER(nombre) = LOWER(:nombre)
-            AND id_varietal <> :id_varietal
+            AND id_region <> :id_region
         ";
 
         $stmtExiste = $conexion->prepare($queryExiste);
 
         $stmtExiste->execute([
             ':nombre' => trim($this->nombre),
-            ':id_varietal' => $this->id_varietal
+            ':id_region' => $this->id_region
         ]);
 
         if ($stmtExiste->fetchColumn() > 0) {
-            $this->error = 'Ya existe un varietal con ese nombre.';
+            $this->error = 'Ya existe una región con ese nombre.';
             return false;
         }
 
         $query = "
-            UPDATE varietales
+            UPDATE regiones
             SET nombre = :nombre
-            WHERE id_varietal = :id_varietal
+            WHERE id_region = :id_region
         ";
 
         $stmt = $conexion->prepare($query);
 
         return $stmt->execute([
             ':nombre' => trim($this->nombre),
-            ':id_varietal' => $this->id_varietal
+            ':id_region' => $this->id_region
         ]);
     }
 
@@ -145,14 +145,14 @@ class Varietal
 
         $query = "
             SELECT COUNT(*)
-            FROM vino_varietal
-            WHERE varietal_id = :id_varietal
+            FROM vinos
+            WHERE region_id = :id_region
         ";
 
         $stmt = $conexion->prepare($query);
 
         $stmt->execute([
-            ':id_varietal' => $this->id_varietal
+            ':id_region' => $this->id_region
         ]);
 
         if ($stmt->fetchColumn() > 0) {
@@ -161,14 +161,14 @@ class Varietal
         }
 
         $query = "
-            DELETE FROM varietales
-            WHERE id_varietal = :id_varietal
+            DELETE FROM regiones
+            WHERE id_region = :id_region
         ";
 
         $stmt = $conexion->prepare($query);
 
         return $stmt->execute([
-            ':id_varietal' => $this->id_varietal
+            ':id_region' => $this->id_region
         ]);
     }
 
@@ -176,7 +176,7 @@ class Varietal
 
     public function getId(): int
     {
-        return $this->id_varietal;
+        return $this->id_region;
     }
 
     public function getNombre(): string
@@ -194,4 +194,5 @@ class Varietal
     {
         $this->nombre = trim($nombre);
     }
+    
 }

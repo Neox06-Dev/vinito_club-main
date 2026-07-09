@@ -2,6 +2,7 @@
 require_once 'Categoria.php';
 require_once 'Conexion.php';
 require_once 'Varietal.php';
+require_once 'Region.php';
 
 class Vino
 {
@@ -18,7 +19,7 @@ class Vino
     private int $categoria_id;
     private string $maridaje;
     private int $destacado;
-    private string $region;
+    private int $region_id;
     private ?int $varietal_id = null;
 
 
@@ -37,9 +38,8 @@ class Vino
         int $categoria_id = 0,
         string $maridaje = '',
         int $destacado = 0,
-        string $region = ''
-    )
-    {
+        int $region_id = 0
+    ) {
         $this->id_vino = $id_vino ?? 0;
         $this->nombre = $nombre;
         $this->descripcion = $descripcion;
@@ -53,7 +53,7 @@ class Vino
         $this->categoria_id = $categoria_id;
         $this->maridaje = $maridaje;
         $this->destacado = $destacado;
-        $this->region = $region;
+        $this->region_id = $region_id;
     }
 
     // MÉTODOS DE CONSULTA
@@ -61,39 +61,74 @@ class Vino
     {
         $conexion = (new Conexion())->getConexion();
 
-        $query = "SELECT * FROM vinos";
+        $query = "
+            SELECT
+                id_vino,
+                nombre,
+                descripcion,
+                precio,
+                stock,
+                imagen,
+                anio_cosecha,
+                volumen_ml,
+                temperatura_servicio,
+                bodega,
+                categoria_id,
+                region_id,
+                maridaje,
+                destacado
+            FROM vinos
+            ORDER BY nombre
+        ";
 
-        $PDOStatement = $conexion->prepare($query);
+        $stmt = $conexion->prepare($query);
 
-        $PDOStatement->setFetchMode(
+        $stmt->setFetchMode(
             PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
             self::class
         );
 
-        $PDOStatement->execute();
+        $stmt->execute();
 
-        return $PDOStatement->fetchAll();
+        return $stmt->fetchAll();
     }
 
     public static function vino_por_id(int $id): ?Vino
     {
         $conexion = (new Conexion())->getConexion();
 
-        $query = "SELECT * FROM vinos
-            WHERE id_vino = ?";
+        $query = "
+            SELECT
+                id_vino,
+                nombre,
+                descripcion,
+                precio,
+                stock,
+                imagen,
+                anio_cosecha,
+                volumen_ml,
+                temperatura_servicio,
+                bodega,
+                categoria_id,
+                region_id,
+                maridaje,
+                destacado
+            FROM vinos
+            WHERE id_vino = :id_vino
+        ";
 
-        $PDOStatement = $conexion->prepare($query);
+        $stmt = $conexion->prepare($query);
 
-        $PDOStatement->setFetchMode(
+        $stmt->setFetchMode(
             PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
             self::class
         );
 
-        $PDOStatement->execute([$id]);
+        $stmt->execute([
+            ':id_vino' => $id
+        ]);
 
-        $resultado = $PDOStatement->fetch();
-
-        return $resultado ?: null;
+        return $stmt->fetch() ?: null;
     }
 
     public static function ultimos(int $limite = 4): array
@@ -183,15 +218,20 @@ class Vino
     {
         return $this->bodega;
     }
-    
+
     public function getCategoria(): ?Categoria
     {
         return Categoria::porId($this->categoria_id);
     }
-    
+
     public function getCategoriaId(): int
     {
         return $this->categoria_id;
+    }
+
+    public function getRegionId(): int
+    {
+        return $this->region_id;
     }
 
     public function getCategoriaLabel(): string
@@ -202,8 +242,8 @@ class Vino
             ? $categoria->getNombre()
             : 'Sin categoría';
     }
-    
-    
+
+
     public function getMaridaje(): string
     {
         return $this->maridaje;
@@ -214,9 +254,18 @@ class Vino
         return $this->destacado;
     }
 
-    public function getRegion(): string
+    public function getRegion(): ?Region
     {
-        return $this->region;
+        return Region::porId($this->region_id);
+    }
+
+    public function getRegionNombre(): string
+    {
+        $region = $this->getRegion();
+
+        return $region
+            ? $region->getNombre()
+            : 'Sin región';
     }
 
 
@@ -263,46 +312,72 @@ class Vino
     {
         $conexion = (new Conexion())->getConexion();
 
+        if (Region::porId($this->region_id) === null) {
+            return false;
+        }
+
         $query = "
-            INSERT INTO vinos
-            (
-                nombre,
-                descripcion,
-                precio,
-                stock,
-                imagen,
-                anio_cosecha,
-                volumen_ml,
-                temperatura_servicio,
-                bodega,
-                categoria_id,
-                maridaje,
-                destacado,
-                region
-            )
-            VALUES
-            (
-                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-            )
-        ";
+        INSERT INTO vinos (
+            nombre,
+            descripcion,
+            precio,
+            stock,
+            imagen,
+            anio_cosecha,
+            volumen_ml,
+            temperatura_servicio,
+            bodega,
+            categoria_id,
+            region_id,
+            maridaje,
+            destacado
+        )
+        VALUES (
+            :nombre,
+            :descripcion,
+            :precio,
+            :stock,
+            :imagen,
+            :anio_cosecha,
+            :volumen_ml,
+            :temperatura_servicio,
+            :bodega,
+            :categoria_id,
+            :region_id,
+            :maridaje,
+            :destacado
+        )
+    ";
 
         $stmt = $conexion->prepare($query);
 
         $resultado = $stmt->execute([
-        $this->nombre,
-        $this->descripcion,
-        $this->precio,
-        $this->stock,
-        $this->imagen,
-        $this->anio_cosecha,
-        $this->volumen_ml,
-        $this->temperatura_servicio,
-        $this->bodega,
-        $this->categoria_id,
-        $this->maridaje,
-        $this->destacado,
-        $this->region
-    ]);
+
+            // Información principal
+            ':nombre' => $this->nombre,
+            ':descripcion' => $this->descripcion,
+
+            // Precio y stock
+            ':precio' => $this->precio,
+            ':stock' => $this->stock,
+
+            // Imagen
+            ':imagen' => $this->imagen,
+
+            // Características
+            ':anio_cosecha' => $this->anio_cosecha,
+            ':volumen_ml' => $this->volumen_ml,
+            ':temperatura_servicio' => $this->temperatura_servicio,
+
+            // Relaciones
+            ':bodega' => $this->bodega,
+            ':categoria_id' => $this->categoria_id,
+            ':region_id' => $this->region_id,
+
+            // Extras
+            ':maridaje' => $this->maridaje,
+            ':destacado' => $this->destacado
+        ]);
 
         if (!$resultado) {
             return false;
@@ -311,22 +386,21 @@ class Vino
         $idVino = $conexion->lastInsertId();
 
         $queryVarietal = "
-            INSERT INTO vino_varietal
-            (
+            INSERT INTO vino_varietal (
                 vino_id,
                 varietal_id
             )
-            VALUES
-            (
-                ?, ?
+            VALUES (
+                :vino_id,
+                :varietal_id
             )
         ";
 
         $stmtVarietal = $conexion->prepare($queryVarietal);
 
         $stmtVarietal->execute([
-            $idVino,
-            $this->varietal_id
+            ':vino_id' => $idVino,
+            ':varietal_id' => $this->varietal_id
         ]);
 
         return true;
@@ -336,42 +410,60 @@ class Vino
     {
         $conexion = (new Conexion())->getConexion();
 
+        if (Region::porId($this->region_id) === null) {
+            return false;
+        }
+
         $query = "
             UPDATE vinos
             SET
-                nombre = ?,
-                descripcion = ?,
-                precio = ?,
-                stock = ?,
-                imagen = ?,
-                anio_cosecha = ?,
-                volumen_ml = ?,
-                temperatura_servicio = ?,
-                bodega = ?,
-                categoria_id = ?,
-                maridaje = ?,
-                destacado = ?,
-                region = ?
-            WHERE id_vino = ?
+                nombre = :nombre,
+                descripcion = :descripcion,
+                precio = :precio,
+                stock = :stock,
+                imagen = :imagen,
+                anio_cosecha = :anio_cosecha,
+                volumen_ml = :volumen_ml,
+                temperatura_servicio = :temperatura_servicio,
+                bodega = :bodega,
+                categoria_id = :categoria_id,
+                region_id = :region_id,
+                maridaje = :maridaje,
+                destacado = :destacado
+            WHERE id_vino = :id_vino
         ";
 
         $stmt = $conexion->prepare($query);
 
         $resultado = $stmt->execute([
-            $this->nombre,
-            $this->descripcion,
-            $this->precio,
-            $this->stock,
-            $this->imagen,
-            $this->anio_cosecha,
-            $this->volumen_ml,
-            $this->temperatura_servicio,
-            $this->bodega,
-            $this->categoria_id,
-            $this->maridaje,
-            $this->destacado,
-            $this->region,
-            $this->id_vino
+
+            // Información principal
+            ':nombre' => $this->nombre,
+            ':descripcion' => $this->descripcion,
+
+            // Precio y stock
+            ':precio' => $this->precio,
+            ':stock' => $this->stock,
+
+            // Imagen
+            ':imagen' => $this->imagen,
+
+            // Características
+            ':anio_cosecha' => $this->anio_cosecha,
+            ':volumen_ml' => $this->volumen_ml,
+            ':temperatura_servicio' => $this->temperatura_servicio,
+
+            // Relaciones
+            ':bodega' => $this->bodega,
+            ':categoria_id' => $this->categoria_id,
+            ':region_id' => $this->region_id,
+
+            // Extras
+            ':maridaje' => $this->maridaje,
+            ':destacado' => $this->destacado,
+
+            // Id
+            ':id_vino' => $this->id_vino
         ]);
 
         if (!$resultado) {
@@ -380,15 +472,16 @@ class Vino
 
         $queryVarietal = "
             UPDATE vino_varietal
-            SET varietal_id = ?
-            WHERE vino_id = ?
+            SET
+                varietal_id = :varietal_id
+            WHERE vino_id = :vino_id
         ";
 
         $stmtVarietal = $conexion->prepare($queryVarietal);
 
         $stmtVarietal->execute([
-            $this->varietal_id,
-            $this->id_vino
+            ':varietal_id' => $this->varietal_id,
+            ':vino_id' => $this->id_vino
         ]);
 
         return true;
@@ -482,9 +575,9 @@ class Vino
         $this->destacado = $destacado;
     }
 
-    public function setRegion(string $region): void
+    public function setRegionId(int $region_id): void
     {
-        $this->region = $region;
+        $this->region_id = $region_id;
     }
 
     public function setVarietalId(int $varietal_id): void
