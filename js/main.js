@@ -47,21 +47,92 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── AGREGAR AL CARRITO (simulado) ────────────────────────
-    document.querySelectorAll('.product-agregar').forEach(btn => {
+    // ── AGREGAR AL CARRITO (AJAX) ────────────────────────────
+    const carritoToastEl = document.getElementById('carritoToast');
+    const carritoToastTitle = document.getElementById('carritoToastTitle');
+    const carritoToastBody = document.getElementById('carritoToastBody');
+    const carritoToastIcon = document.getElementById('carritoToastIcon');
+    const cartCountEl = document.getElementById('cartCount');
+
+    const carritoToast = carritoToastEl && window.bootstrap
+        ? bootstrap.Toast.getOrCreateInstance(carritoToastEl, { autohide: true, delay: 2400 })
+        : null;
+
+    const mostrarToast = (mensaje, tipo = 'success') => {
+        if (!carritoToastEl || !carritoToastBody || !carritoToastTitle || !carritoToastIcon) {
+            return;
+        }
+
+        carritoToastEl.classList.remove('toast-success', 'toast-error');
+        carritoToastEl.classList.add(tipo === 'error' ? 'toast-error' : 'toast-success');
+        carritoToastIcon.className = tipo === 'error'
+            ? 'bi bi-exclamation-triangle-fill me-2'
+            : 'bi bi-bag-check-fill me-2';
+        carritoToastTitle.textContent = tipo === 'error'
+            ? 'No se pudo agregar'
+            : 'Producto agregado';
+        carritoToastBody.textContent = mensaje;
+
+        carritoToast?.show();
+    };
+
+    const actualizarContadorCarrito = (count) => {
+        if (!cartCountEl) return;
+
+        cartCountEl.textContent = String(count);
+        cartCountEl.classList.toggle('is-empty', count <= 0);
+    };
+
+    const ejecutarAgregarCarrito = async (btn) => {
+        const idVino = btn.dataset.id;
+
+        if (!idVino || btn.dataset.loading === '1') {
+            return;
+        }
+
+        // Bloqueo simple contra doble clic mientras viaja la petición,
+        // sin tocar el contenido ni el aspecto del botón.
+        btn.dataset.loading = '1';
+
+        try {
+            const response = await fetch('acciones/carrito/agregar.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                body: new URLSearchParams({ id: idVino }).toString()
+            });
+
+            const data = await response.json().catch(() => null);
+
+            if (!response.ok || !data || !data.success) {
+                throw new Error((data && data.message) || 'No se pudo agregar el producto.');
+            }
+
+            actualizarContadorCarrito(Number(data.count) || 0);
+            mostrarToast(data.message || 'Producto agregado al carrito.');
+        } catch (error) {
+            mostrarToast(error.message || 'No se pudo agregar el producto.', 'error');
+        } finally {
+            delete btn.dataset.loading;
+        }
+    };
+
+    document.querySelectorAll('.js-agregar-carrito').forEach(btn => {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
-            const card = this.closest('.product-card');
-            const nombre = card.querySelector('.product-name');
-            if (nombre) {
-                this.textContent = '✓ Agregado';
-                this.style.color = '#6dbf7e';
-                setTimeout(() => {
-                    this.innerHTML = 'AGREGAR <i class="bi bi-plus"></i>';
-                    this.style.color = '';
-                }, 2000);
-            }
+            e.stopPropagation();
+            ejecutarAgregarCarrito(this);
         });
+
+        if (btn.getAttribute('role') === 'button') {
+            btn.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    ejecutarAgregarCarrito(this);
+                }
+            });
+        }
     });
 
     // ── PANEL ADMIN: CONTADORES ANIMADOS ─────────────────────

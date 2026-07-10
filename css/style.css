@@ -158,6 +158,37 @@ img { max-width: 100%; display: block; }
 }
 .nav-icon-link:hover { color: var(--color-gold); }
 
+.cart-icon-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    min-height: 2rem;
+}
+
+.cart-count-badge {
+    position: absolute;
+    top: -7px;
+    right: -10px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--color-gold);
+    color: var(--color-wine-dark);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    box-shadow: 0 0 0 2px rgba(10,6,4,0.95);
+}
+
+.cart-count-badge.is-empty {
+    opacity: 0;
+    transform: scale(0.6);
+}
+
 .navbar-toggler {
     border-color: var(--color-border);
 }
@@ -691,19 +722,72 @@ img { max-width: 100%; display: block; }
     color: var(--color-gold);
 }
 .product-agregar {
+    cursor: pointer;
+    user-select: none;
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: var(--color-wine);
+    color: var(--color-cream);
     transition: var(--transition);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 4px;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(96,22,33,0.18);
+    border: 1px solid rgba(196,163,103,0.18);
+    min-width: 52px;
 }
 .product-card:hover .product-agregar {
     color: var(--color-gold);
-    gap: 8px;
+    border-color: rgba(196,163,103,0.35);
+    background: rgba(96,22,33,0.28);
+}
+
+.product-agregar i {
+    font-size: 1rem;
+}
+
+.vinito-toast-container {
+    z-index: 1080;
+}
+
+.vinito-toast {
+    background: rgba(26,16,9,0.98);
+    border: 1px solid var(--color-border);
+    color: var(--color-cream);
+    box-shadow: 0 18px 45px rgba(0,0,0,0.35);
+    overflow: hidden;
+}
+
+.vinito-toast.toast-success {
+    border-color: rgba(109,191,126,0.35);
+    box-shadow: 0 18px 45px rgba(109,191,126,0.12), 0 18px 45px rgba(0,0,0,0.35);
+}
+
+.vinito-toast.toast-error {
+    border-color: rgba(191,109,109,0.35);
+    box-shadow: 0 18px 45px rgba(191,109,109,0.12), 0 18px 45px rgba(0,0,0,0.35);
+}
+
+.vinito-toast .toast-header {
+    background: transparent;
+    color: var(--color-white);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.vinito-toast .toast-body {
+    color: var(--color-cream);
+}
+
+.vinito-toast.toast-success #carritoToastIcon {
+    color: #6dbf7e;
+}
+
+.vinito-toast.toast-error #carritoToastIcon {
+    color: #bf6d6d;
 }
 
 /* ── TIENDA ─────────────────────────────────────────────────── */

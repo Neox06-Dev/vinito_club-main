@@ -16,7 +16,7 @@ class Categoria
                 id_categoria,
                 nombre
             FROM categorias
-            ORDER BY nombre
+            ORDER BY id_categoria DESC
         ";
 
         $PDOStatement = $conexion->prepare($query);

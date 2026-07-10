@@ -134,12 +134,12 @@ $destacados = array_filter($productos, fn($p) => $p->getDestacado());
                                 <span class="product-badge <?= $categoria->getClaseCss() ?>">
                                     <?= htmlspecialchars($categoria->getNombre()) ?>
                                 </span>
-                                
+
                             </div>
                             <div class="product-card-body">
                                 <p class="product-meta"><?= htmlspecialchars($p->getRegionNombre()) ?> · <?= $p->getAnio() ?></p>
                                 <h3 class="product-name"><?= htmlspecialchars($p->getNombre()) ?></h3>
-                                <?php $varietales = $p->getVarietales();?>
+                                <?php $varietales = $p->getVarietales(); ?>
 
                                 <p class="product-varietal">
                                     <?= !empty($varietales)
@@ -148,7 +148,14 @@ $destacados = array_filter($productos, fn($p) => $p->getDestacado());
                                 </p>
                                 <div class="product-card-footer">
                                     <span class="product-price"><?= $p->getPrecioFormateado() ?></span>
-                                    <span class="product-agregar">AGREGAR <i class="bi bi-plus"></i></span>
+                                    <span
+                                        class="product-agregar js-agregar-carrito"
+                                        role="button"
+                                        tabindex="0"
+                                        data-id="<?= $p->getIdVino() ?>"
+                                        aria-label="Agregar al carrito">
+                                        <i class="bi bi-bag-plus"></i>
+                                    </span>
                                 </div>
                             </div>
                         </a>

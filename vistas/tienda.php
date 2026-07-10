@@ -137,7 +137,7 @@ function filtroUrl(string $param, string $valor): string
                             $categorias = Categoria::todas();
                             ?>
                             <a href="<?= filtroUrl('categoria', 'todos') ?>"
-                            class="pill-btn <?= $filtro_categoria === 'todos' ? 'active' : '' ?>">
+                                class="pill-btn <?= $filtro_categoria === 'todos' ? 'active' : '' ?>">
                                 Todas
                             </a>
 
@@ -300,15 +300,18 @@ function filtroUrl(string $param, string $valor): string
                                                     : 'Sin varietal'; ?>
                                             </p>
 
-
-
                                             <div class="product-card-footer">
                                                 <span class="product-price">
                                                     <?= $p->getPrecioFormateado() ?>
                                                 </span>
 
-                                                <span class="product-agregar">
-                                                    AGREGAR <i class="bi bi-plus"></i>
+                                                <span
+                                                    class="product-agregar js-agregar-carrito"
+                                                    role="button"
+                                                    tabindex="0"
+                                                    data-id="<?= $p->getIdVino() ?>"
+                                                    aria-label="Agregar al carrito">
+                                                    <i class="bi bi-bag-plus"></i>
                                                 </span>
                                             </div>
 

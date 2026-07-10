@@ -16,7 +16,7 @@ if (!$producto) {
 
 // Productos relacionados (misma categoría, distintos id, máx 3)
 $relacionados = array_filter(Vino::catalogo_completo(), fn($p) => $p->getCategoriaId() === $producto->getCategoriaId() && $p->getIdVino() !== $producto->getIdVino());
-$relacionados = array_slice(array_values($relacionados), 0,3);
+$relacionados = array_slice(array_values($relacionados), 0, 3);
 
 $categoriaClase = strtolower($producto->getCategoriaLabel());
 $categoriaClase = match ($categoriaClase) {
@@ -57,8 +57,8 @@ $categoriaClase = match ($categoriaClase) {
                 <h1 class="detalle-title">
                     <?= htmlspecialchars($producto->getNombre()) ?>
                 </h1>
-                <?php $varietales = $producto->getVarietales();?>
-                
+                <?php $varietales = $producto->getVarietales(); ?>
+
                 <p class="detalle-varietal">
                     <?= !empty($varietales)
                         ? htmlspecialchars($varietales[0]->getNombre())
@@ -118,10 +118,9 @@ $categoriaClase = match ($categoriaClase) {
                 <!-- ACCIONES -->
                 <div class="detalle-acciones d-flex gap-3 flex-wrap">
                     <?php if ($producto->estaEnStock()): ?>
-                        <button class="btn btn-hero-primary btn-detalle-comprar"
+                        <button class="btn btn-hero-primary btn-detalle-comprar js-agregar-carrito"
                             type="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#carritoModal">
+                            data-id="<?= $producto->getIdVino() ?>">
                             <i class="bi bi-bag-plus"></i> &nbsp; Agregar al carrito
                         </button>
                     <?php else: ?>
@@ -149,16 +148,16 @@ $categoriaClase = match ($categoriaClase) {
                                             class="product-card-img">
 
                                         <?php
-                                            $categoria = $r->getCategoria();
+                                        $categoria = $r->getCategoria();
 
-                                            $claseBadge = match ($categoria->getNombre()) {
-                                                'Tinto'      => 'tinto',
-                                                'Blanco'     => 'blanco',
-                                                'Rosé'       => 'rose',
-                                                'Espumante'  => 'espumante',
-                                                'Dulce'      => 'dulce',
-                                                default      => 'especial'
-                                            };
+                                        $claseBadge = match ($categoria->getNombre()) {
+                                            'Tinto'      => 'tinto',
+                                            'Blanco'     => 'blanco',
+                                            'Rosé'       => 'rose',
+                                            'Espumante'  => 'espumante',
+                                            'Dulce'      => 'dulce',
+                                            default      => 'especial'
+                                        };
                                         ?>
 
                                         <span class="product-badge badge-<?= $claseBadge ?>">
@@ -171,7 +170,14 @@ $categoriaClase = match ($categoriaClase) {
                                         <p class="product-varietal"><?= htmlspecialchars($r->getVarietales()[0]->getNombre()) ?></p>
                                         <div class="product-card-footer">
                                             <span class="product-price"><?= $r->getPrecioFormateado() ?></span>
-                                            <span class="product-agregar">AGREGAR <i class="bi bi-plus"></i></span>
+                                            <span
+                                                class="product-agregar js-agregar-carrito"
+                                                role="button"
+                                                tabindex="0"
+                                                data-id="<?= $r->getIdVino() ?>"
+                                                aria-label="Agregar al carrito">
+                                                <i class="bi bi-bag-plus"></i>
+                                            </span>
                                         </div>
                                     </div>
                                 </a>
@@ -184,21 +190,3 @@ $categoriaClase = match ($categoriaClase) {
 
     </div>
 </section>
-
-<div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="carritoModalLabel">Carrito actualizado</h3>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body text-center">
-                ¡Se ha agregado el producto al carrito!
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-hero-outline" data-bs-dismiss="modal">Seguir mirando</button>
-                <a href="index.php?seccion=tienda" class="btn btn-hero-primary">Ir a la tienda</a>
-            </div>
-        </div>
-    </div>
-</div>

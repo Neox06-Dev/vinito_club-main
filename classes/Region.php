@@ -16,7 +16,7 @@ class Region
                 id_region,
                 nombre
             FROM regiones
-            ORDER BY nombre
+            ORDER BY id_region DESC
         ";
 
         $PDOStatement = $conexion->prepare($query);

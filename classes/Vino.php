@@ -78,7 +78,7 @@ class Vino
                 maridaje,
                 destacado
             FROM vinos
-            ORDER BY nombre
+            ORDER BY id_vino DESC
         ";
 
         $stmt = $conexion->prepare($query);

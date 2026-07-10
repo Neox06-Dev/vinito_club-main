@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 // Secciones válidas
 $secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle'];
 $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'inicio';

@@ -16,7 +16,7 @@ class Varietal
                 id_varietal,
                 nombre
             FROM varietales
-            ORDER BY nombre
+            ORDER BY id_varietal DESC
         ";
 
         $PDOStatement = $conexion->prepare($query);

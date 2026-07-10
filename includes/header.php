@@ -1,8 +1,16 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once __DIR__ . '/../classes/Carrito.php';
+
 $seccion_actual = $_GET['seccion'] ?? 'inicio';
+$contador_carrito = Carrito::contarProductos();
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +24,7 @@ $seccion_actual = $_GET['seccion'] ?? 'inicio';
     <!-- Favicon -->
     <link rel="icon" href="assets/img/favicon.ico" type="image/x-icon">
 </head>
+
 <body>
     <!-- Barra de anuncios -->
     <div class="announcement-bar d-flex flex-column flex-md-row justify-content-md-around align-items-center gap-2">
@@ -44,8 +53,14 @@ $seccion_actual = $_GET['seccion'] ?? 'inicio';
             </a>
             <div class="d-flex align-items-center gap-2 order-lg-3 ms-auto me-3">
                 <div class="navbar-icons cart-icon">
-                    <a href="#" class="nav-icon-link" title="Carrito">
+                    <a href="index.php?seccion=tienda" class="nav-icon-link cart-icon-link" title="Carrito">
                         <i class="bi bi-bag"></i>
+                        <span
+                            class="cart-count-badge <?= $contador_carrito > 0 ? '' : 'is-empty' ?>"
+                            id="cartCount"
+                            aria-label="Productos en el carrito">
+                            <?= $contador_carrito ?>
+                        </span>
                     </a>
                 </div>
                 <div class="navbar-icons admin-icon">

@@ -66,6 +66,24 @@ $footerBase = $footerBase ?? '';
     </div>
 </footer>
 
+<div class="toast-container position-fixed top-0 end-0 p-3 vinito-toast-container">
+    <div
+        id="carritoToast"
+        class="toast vinito-toast"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true">
+        <div class="toast-header vinito-toast-header">
+            <i id="carritoToastIcon" class="bi bi-bag-check-fill me-2"></i>
+            <strong id="carritoToastTitle" class="me-auto">Producto agregado</strong>
+            <button type="button" class="btn-close btn-close-white ms-2" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+        </div>
+        <div id="carritoToastBody" class="toast-body">
+            El producto se agregó al carrito.
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="<?= $footerBase ?>js/main.js"></script>
 </body>
