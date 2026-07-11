@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../classes/Carrito.php';
 
 $seccion_actual = $_GET['seccion'] ?? 'inicio';
-$contador_carrito = Carrito::contarProductos();
+$contador_carrito = Carrito::obtenerCantidadProductos();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -53,7 +53,7 @@ $contador_carrito = Carrito::contarProductos();
             </a>
             <div class="d-flex align-items-center gap-2 order-lg-3 ms-auto me-3">
                 <div class="navbar-icons cart-icon">
-                    <a href="index.php?seccion=tienda" class="nav-icon-link cart-icon-link" title="Carrito">
+                    <a href="index.php?seccion=carrito" class="nav-icon-link cart-icon-link" title="Carrito">
                         <i class="bi bi-bag"></i>
                         <span
                             class="cart-count-badge <?= $contador_carrito > 0 ? '' : 'is-empty' ?>"

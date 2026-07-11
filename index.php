@@ -3,7 +3,7 @@
 session_start();
 
 // Secciones válidas
-$secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle'];
+$secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle', 'carrito'];
 $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'inicio';
 
 
@@ -39,6 +39,17 @@ require_once 'classes/Vino.php';
             break;
         case '404':
             require 'vistas/404.php';
+            break;
+
+        case 'carrito':
+            require_once 'classes/Carrito.php';
+
+            $productos = Carrito::obtenerProductos();
+            $cantidadProductos = Carrito::obtenerCantidadProductos();
+            $subtotal = Carrito::obtenerSubtotal();
+
+            require_once 'vistas/carrito.php';
+
             break;
     }
     ?>

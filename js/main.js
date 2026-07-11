@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error((data && data.message) || 'No se pudo agregar el producto.');
             }
 
-            actualizarContadorCarrito(Number(data.count) || 0);
+            actualizarContadorCarrito(Number(data.cantidad) || 0);
             mostrarToast(data.message || 'Producto agregado al carrito.');
         } catch (error) {
             mostrarToast(error.message || 'No se pudo agregar el producto.', 'error');
@@ -134,6 +134,143 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     });
+
+    // ── CARRITO: SUMAR / RESTAR / ELIMINAR / VACIAR ──────────
+    const carritoColumna     = document.getElementById('carritoColumnaProductos');
+    const resumenCantidadEl  = document.getElementById('resumenCantidad');
+    const resumenSubtotalEl  = document.getElementById('resumenSubtotal');
+    const resumenTotalEl     = document.getElementById('resumenTotal');
+    const vaciarCarritoBtn   = document.getElementById('vaciarCarrito');
+
+    const formatearPrecio = (valor) => {
+        return Math.round(Number(valor) || 0).toLocaleString('es-AR', { maximumFractionDigits: 0 });
+    };
+
+    const actualizarResumenCarrito = (cantidad, subtotal) => {
+        const cant = Number(cantidad) || 0;
+
+        if (resumenCantidadEl) {
+            resumenCantidadEl.textContent = `${cant} ${cant === 1 ? 'vino' : 'vinos'}`;
+        }
+        if (resumenSubtotalEl) {
+            resumenSubtotalEl.textContent = `$ ${formatearPrecio(subtotal)}`;
+        }
+        if (resumenTotalEl) {
+            resumenTotalEl.textContent = `$ ${formatearPrecio(subtotal)}`;
+        }
+
+        actualizarContadorCarrito(cant);
+    };
+
+    const mostrarCarritoVacio = () => {
+        if (!carritoColumna) return;
+
+        carritoColumna.innerHTML =
+            '<div class="carrito-empty text-center">' +
+                '<i class="bi bi-bag-x"></i>' +
+                '<h2>Tu carrito está vacío</h2>' +
+                '<p>Descubrí etiquetas únicas y empezá a armar tu selección.</p>' +
+                '<a href="index.php?seccion=tienda" class="btn-hero-primary">Explorar catálogo</a>' +
+            '</div>';
+    };
+
+    const llamarAccionCarrito = async (accion, idVino) => {
+        const response = await fetch(`acciones/carrito/${accion}.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: new URLSearchParams({ id: idVino }).toString()
+        });
+
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok || !data || !data.success) {
+            throw new Error((data && data.message) || 'No se pudo actualizar el carrito.');
+        }
+
+        return data;
+    };
+
+    if (carritoColumna) {
+        carritoColumna.addEventListener('click', async function (e) {
+            const btnMinus  = e.target.closest('.qty-minus');
+            const btnPlus   = e.target.closest('.qty-plus');
+            const btnRemove = e.target.closest('.carrito-item-remove');
+
+            const btn = btnMinus || btnPlus || btnRemove;
+            if (!btn || btn.dataset.loading === '1') return;
+
+            const item = btn.closest('.carrito-item');
+            if (!item) return;
+
+            const idVino = item.dataset.id;
+            if (!idVino) return;
+
+            btn.dataset.loading = '1';
+
+            const accion = btnMinus ? 'restar' : (btnRemove ? 'eliminar' : 'sumar');
+
+            try {
+                const data = await llamarAccionCarrito(accion, idVino);
+
+                if (accion === 'eliminar') {
+                    item.remove();
+                    mostrarToast('Producto eliminado del carrito.');
+                } else {
+                    const precio = Number(item.dataset.precio) || 0;
+                    let cantidadItem = (parseInt(item.dataset.cantidad, 10) || 0) + (accion === 'sumar' ? 1 : -1);
+
+                    if (cantidadItem <= 0) {
+                        item.remove();
+                        mostrarToast('Producto eliminado del carrito.');
+                    } else {
+                        item.dataset.cantidad = String(cantidadItem);
+
+                        const qtyValueEl = item.querySelector('.js-qty-value');
+                        if (qtyValueEl) qtyValueEl.textContent = String(cantidadItem);
+
+                        const subtotalItemEl = item.querySelector('.js-subtotal-item');
+                        if (subtotalItemEl) subtotalItemEl.textContent = `$ ${formatearPrecio(precio * cantidadItem)}`;
+                    }
+                }
+
+                actualizarResumenCarrito(data.cantidad, data.subtotal);
+
+                if (!carritoColumna.querySelector('.carrito-item')) {
+                    mostrarCarritoVacio();
+                }
+            } catch (error) {
+                mostrarToast(error.message || 'No se pudo actualizar el carrito.', 'error');
+            } finally {
+                delete btn.dataset.loading;
+            }
+        });
+    }
+
+    if (vaciarCarritoBtn) {
+        vaciarCarritoBtn.addEventListener('click', async function () {
+            if (vaciarCarritoBtn.dataset.loading === '1') return;
+
+            if (!carritoColumna || !carritoColumna.querySelector('.carrito-item')) {
+                return;
+            }
+
+            vaciarCarritoBtn.dataset.loading = '1';
+
+            try {
+                const data = await llamarAccionCarrito('vaciar', '0');
+
+                mostrarCarritoVacio();
+                actualizarResumenCarrito(data.cantidad, data.subtotal);
+                mostrarToast('Carrito vaciado.');
+            } catch (error) {
+                mostrarToast(error.message || 'No se pudo vaciar el carrito.', 'error');
+            } finally {
+                delete vaciarCarritoBtn.dataset.loading;
+            }
+        });
+    }
 
     // ── PANEL ADMIN: CONTADORES ANIMADOS ─────────────────────
     const statNumbers = document.querySelectorAll('.stat-card h2');

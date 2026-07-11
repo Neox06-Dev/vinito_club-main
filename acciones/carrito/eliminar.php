@@ -16,13 +16,10 @@ if (!$idVino) {
     exit;
 }
 
-$success = Carrito::agregar($idVino);
+$success = Carrito::eliminar($idVino);
 
 echo json_encode([
-    'success'   => $success,
-    'message'   => $success
-        ? 'Producto agregado al carrito.'
-        : 'No se pudo agregar el producto.',
-    'cantidad'  => Carrito::obtenerCantidadProductos(),
-    'subtotal'  => Carrito::obtenerSubtotal()
+    'success'  => $success,
+    'cantidad' => Carrito::obtenerCantidadProductos(),
+    'subtotal' => Carrito::obtenerSubtotal()
 ]);
