@@ -1193,7 +1193,7 @@ img { max-width: 100%; display: block; }
 .contacto-info-panel,
 .procesar-resumen,
 .modal-content {
-    background: var(--color-bg-card);
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
 }
@@ -1233,7 +1233,7 @@ img { max-width: 100%; display: block; }
 }
 .contacto-info-val {
     font-size: 14px;
-    color: var(--color-cream);
+    color: var(--color-grey-light);
     margin: 0;
     line-height: 1.6;
 }
@@ -2458,76 +2458,6 @@ body.admin-nav-open{
     overflow: hidden;
 }
 
-@media (max-width: 991px){
-
-    .admin-toggle{
-        display: flex;
-    }
-
-    .admin-sidebar{
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        width: 280px;
-        max-width: 80vw;
-        z-index: 1050;
-        overflow-y: auto;
-        transform: translateX(-105%);
-        transition: transform .4s var(--ease);
-        box-shadow: 14px 0 40px rgba(0,0,0,.5);
-        animation: none;
-        opacity: 1;
-    }
-
-    .admin-sidebar.active{
-        transform: translateX(0);
-    }
-
-    .admin-content{
-        padding: 5.5rem 1.5rem 2rem;
-    }
-
-    .admin-header h1{
-        font-size: 2.1rem;
-    }
-
-    .stats-grid{
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 575px){
-
-    .admin-content{
-        padding: 5rem 1rem 1.5rem;
-    }
-
-    .admin-header h1{
-        font-size: 1.7rem;
-    }
-
-    .stats-grid{
-        grid-template-columns: 1fr;
-    }
-
-    .quick-actions .d-flex{
-        flex-direction: column;
-    }
-
-    .quick-actions .d-flex a{
-        width: 100%;
-        text-align: center;
-        justify-content: center;
-        display: flex;
-    }
-
-    .admin-toggle{
-        top: .75rem;
-        left: .75rem;
-    }
-}
-
 /* ===== TABLA DE VINOS ===== */
 
 .vinos-header{
@@ -3163,204 +3093,6 @@ body.admin-nav-open{
 
 }
 
-/* ===== TABLA RESPONSIVE (TARJETAS EN MÓVIL) ===== */
-@media (max-width: 767px){
-
-    .vinos-header{
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .vinos-header .btn-hero-primary{
-        width: 100%;
-        justify-content: center;
-    }
-
-    .table-panel{
-        padding: 1rem;
-    }
-
-    .table-vinos thead{
-        display: none;
-    }
-
-    .table-vinos,
-    .table-vinos tbody,
-    .table-vinos tr,
-    .table-vinos td{
-        display: block;
-        width: 100%;
-    }
-
-    .table-vinos tbody tr{
-        margin-bottom: 1rem;
-        border: 1px solid rgba(196,163,103,.12);
-        border-radius: 14px;
-        padding: .25rem 1rem;
-        background: rgba(255,255,255,.015);
-    }
-
-    .table-vinos tbody tr:last-child{
-        margin-bottom: 0;
-    }
-
-    .table-vinos td{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        padding: .65rem 0;
-        border-bottom: 1px solid rgba(255,255,255,.05);
-        text-align: right;
-    }
-
-    .table-vinos tr td:last-child{
-        border-bottom: none;
-    }
-
-    .table-vinos td::before{
-        content: attr(data-label);
-        color: #C4A367;
-        text-transform: uppercase;
-        font-size: .7rem;
-        letter-spacing: 1.5px;
-        text-align: left;
-        flex-shrink: 0;
-    }
-
-    .table-vinos td.text-end{
-        justify-content: flex-end;
-    }
-
-    .table-vinos td.text-end::before{
-        display: none;
-    }
-
-    .acciones-grupo{
-        width: 100%;
-        justify-content: flex-end;
-    }
-    .carrito-header{
-
-        flex-direction:column;
-        align-items:flex-start;
-        gap:1.5rem;
-
-    }
-
-    .carrito-header a{
-
-        width:100%;
-        justify-content:center;
-
-    }
-
-    .carrito-item{
-
-        flex-direction:row;
-
-        align-items:flex-start;
-
-        text-align:left;
-
-        padding:1rem;
-
-        gap:1rem;
-
-    }
-
-    .carrito-item-img img{
-        width:76px;
-        height:100px;
-    }
-
-    .carrito-item-content{
-        width:auto;
-        flex:1;
-        min-width:0;
-        min-height:0;
-    }
-
-    .carrito-item-title{
-        font-size:1.05rem;
-    }
-
-    .carrito-item-meta{
-        font-size:.85rem;
-    }
-
-    .carrito-item-footer{
-
-        display:flex;
-
-        flex-wrap:wrap;
-
-        align-items:center;
-
-        justify-content:space-between;
-
-        gap:.75rem;
-
-        text-align:left;
-
-        margin-top:.75rem;
-
-    }
-
-    .carrito-item-precio,
-    .carrito-item-subtotal{
-        align-items:flex-start;
-    }
-
-    .carrito-item-cantidad{
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        width:fit-content;
-        margin:0;
-        padding:.35rem .65rem;
-        gap:.5rem;
-    }
-
-    .carrito-item-remove{
-
-        top:10px;
-        right:10px;
-
-        width:32px;
-        height:32px;
-        font-size:.9rem;
-
-    }
-
-    .carrito-resumen{
-
-        position:static;
-
-        margin-top:2rem;
-
-    }
-
-}
-
-@media (max-width: 420px){
-
-    .carrito-item-img img{
-        width:64px;
-        height:240px;
-    }
-
-    .carrito-item-footer{
-        gap:.5rem .75rem;
-    }
-
-    .carrito-item-precio strong,
-    .carrito-item-subtotal strong{
-        font-size:1rem;
-    }
-
-}
-
 /* ===== FORMULARIO DE VINO ===== */
 
 .form-panel{
@@ -3499,40 +3231,6 @@ body.admin-nav-open{
     animation: spin .65s linear infinite;
 }
 
-@media (max-width: 575px){
-
-    .form-panel{
-        padding: 1.25rem;
-    }
-
-    .form-grid-2,
-    .form-grid-3{
-        grid-template-columns: 1fr;
-    }
-
-    .form-actions{
-        flex-direction: column;
-    }
-
-    .form-actions a,
-    .form-actions button{
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-/* ── RESPONSIVE ──────────────────────────────────────────────── */
-@media (max-width: 480px) {
-    .login-card {
-        padding: 2.25rem 1.5rem;
-        border-radius: 16px;
-    }
-    .login-card::before {
-        margin: -2.25rem -1.5rem 2rem;
-    }
-    .login-title { font-size: 1.5rem; }
-}
-
 /* ── ACCESIBILIDAD ───────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
     .login-backdrop *,
@@ -3568,6 +3266,39 @@ body.admin-nav-open{
     .procesar-resumen { padding: 22px; }
     .carrito-layout {grid-template-columns: 1fr;}
     .carrito-resumen { position: static; }
+    .admin-toggle{ display: flex; }
+
+    .admin-sidebar{
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 280px;
+        max-width: 80vw;
+        z-index: 1050;
+        overflow-y: auto;
+        transform: translateX(-105%);
+        transition: transform .4s var(--ease);
+        box-shadow: 14px 0 40px rgba(0,0,0,.5);
+        animation: none;
+        opacity: 1;
+    }
+
+    .admin-sidebar.active{
+        transform: translateX(0);
+    }
+
+    .admin-content{
+        padding: 5.5rem 1.5rem 2rem;
+    }
+
+    .admin-header h1{
+        font-size: 2.1rem;
+    }
+
+    .stats-grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 767px) {
@@ -3591,6 +3322,180 @@ body.admin-nav-open{
         width: 100%;
         justify-content: center; 
     }
+
+    .btn-hero-primary,
+    .btn-hero-outline{
+        width: 90%;
+        justify-content: center;
+    }
+
+    .vinos-header{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .vinos-header .btn-hero-primary{
+        width: 100%;
+        justify-content: center;
+    }
+
+    .table-panel{
+        padding: 1rem;
+    }
+
+    .table-vinos thead{
+        display: none;
+    }
+
+    .table-vinos,
+    .table-vinos tbody,
+    .table-vinos tr,
+    .table-vinos td{
+        display: block;
+        width: 100%;
+    }
+
+    .table-vinos tbody tr{
+        margin-bottom: 1rem;
+        border: 1px solid rgba(196,163,103,.12);
+        border-radius: 14px;
+        padding: .25rem 1rem;
+        background: rgba(255,255,255,.015);
+    }
+
+    .table-vinos tbody tr:last-child{
+        margin-bottom: 0;
+    }
+
+    .table-vinos td{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding: .65rem 0;
+        border-bottom: 1px solid rgba(255,255,255,.05);
+        text-align: right;
+    }
+
+    .table-vinos tr td:last-child{
+        border-bottom: none;
+    }
+
+    .table-vinos td::before{
+        content: attr(data-label);
+        color: #C4A367;
+        text-transform: uppercase;
+        font-size: .7rem;
+        letter-spacing: 1.5px;
+        text-align: left;
+        flex-shrink: 0;
+    }
+
+    .table-vinos td.text-end{
+        justify-content: flex-end;
+    }
+
+    .table-vinos td.text-end::before{
+        display: none;
+    }
+
+    .acciones-grupo{
+        width: 100%;
+        justify-content: flex-end;
+    }
+    .carrito-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:1.5rem;
+    }
+
+    .carrito-header a{
+        width:100%;
+        justify-content:center;
+    }
+
+    .carrito-item{
+        flex-direction:row;
+        align-items:flex-start;
+        text-align:left;
+        padding:1rem;
+        gap:1rem;
+    }
+
+    .carrito-item-img img{
+        width: 72px;
+        height: 200px;
+    }
+
+    .carrito-item-content{
+        width:auto;
+        flex:1;
+        min-width:0;
+        min-height:0;
+    }
+
+    .carrito-item-title{
+        font-size:1.05rem;
+    }
+
+    .carrito-item-meta{
+        font-size:.85rem;
+    }
+
+    .carrito-item-footer{
+        display:flex;
+        flex-wrap:wrap;
+        align-items:center;
+        justify-content:space-between;
+        gap:.75rem;
+        text-align:left;
+        margin-top:.75rem;
+    }
+
+    .carrito-item-precio,
+    .carrito-item-subtotal{
+        align-items:flex-start;
+    }
+
+    .carrito-item-cantidad{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        width:fit-content;
+        margin:0;
+        padding:.35rem .65rem;
+        gap:.5rem;
+    }
+
+    .carrito-item-remove{
+        top:10px;
+        right:10px;
+        width:32px;
+        height:32px;
+        font-size:.9rem;
+    }
+
+    .carrito-resumen{
+        position:static;
+        margin-top:2rem;
+    }
+
+    .carrito-item-footer{
+        gap:.5rem .75rem;
+    }
+
+    .carrito-item-precio strong,
+    .carrito-item-subtotal strong{
+        font-size:1rem;
+    }
+
+    .btn-detalle-comprar,
+    .detalle-acciones .btn{
+        width:100%;
+        justify-content:center;
+    }
+
+
 
 }
 
@@ -3646,6 +3551,64 @@ body.admin-nav-open{
         width: 100%;
         justify-content: center;
     }
+
+    .admin-content{
+        padding: 5rem 1rem 1.5rem;
+    }
+
+    .admin-header h1{
+        font-size: 1.7rem;
+    }
+
+    .stats-grid{
+        grid-template-columns: 1fr;
+    }
+
+    .quick-actions .d-flex{
+        flex-direction: column;
+    }
+
+    .quick-actions .d-flex a{
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        display: flex;
+    }
+
+    .admin-toggle{
+        top: .75rem;
+        left: .75rem;
+    }
+
+    .form-panel{
+        padding: 1.25rem;
+    }
+
+    .form-grid-2,
+    .form-grid-3{
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions{
+        flex-direction: column;
+    }
+
+    .form-actions a,
+    .form-actions button{
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-card {
+        padding: 2.25rem 1.5rem;
+        border-radius: 16px;
+    }
+    .login-card::before {
+        margin: -2.25rem -1.5rem 2rem;
+    }
+    .login-title { font-size: 1.5rem; }
 }
 
 @media (max-width: 360px) {

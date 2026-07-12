@@ -59,7 +59,7 @@ if (!isset($productos)) {
 
                     ?>
 
-                    <article class="carrito-item" data-id="<?= $vino->getIdVino() ?>" data-precio="<?= $vino->getPrecio() ?>" data-cantidad="<?= $cantidad ?>">
+                    <article class="carrito-item mb-3" data-id="<?= $vino->getIdVino() ?>" data-precio="<?= $vino->getPrecio() ?>" data-cantidad="<?= $cantidad ?>">
 
                         <div class="carrito-item-img">
 
