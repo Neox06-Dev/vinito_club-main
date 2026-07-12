@@ -63,14 +63,30 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        carritoToastEl.classList.remove('toast-success', 'toast-error');
-        carritoToastEl.classList.add(tipo === 'error' ? 'toast-error' : 'toast-success');
-        carritoToastIcon.className = tipo === 'error'
-            ? 'bi bi-exclamation-triangle-fill me-2'
-            : 'bi bi-bag-check-fill me-2';
-        carritoToastTitle.textContent = tipo === 'error'
-            ? 'No se pudo agregar'
-            : 'Producto agregado';
+        const config = {
+            success: {
+                clase: 'toast-success',
+                icono: 'bi bi-bag-check-fill me-2',
+                titulo: 'Producto agregado'
+            },
+            removed: {
+                clase: 'toast-removed',
+                icono: 'bi bi-bag-x-fill me-2',
+                titulo: 'Producto eliminado'
+            },
+            error: {
+                clase: 'toast-error',
+                icono: 'bi bi-exclamation-triangle-fill me-2',
+                titulo: 'No se pudo completar'
+            }
+        };
+
+        const { clase, icono, titulo } = config[tipo] || config.success;
+
+        carritoToastEl.classList.remove('toast-success', 'toast-error', 'toast-removed');
+        carritoToastEl.classList.add(clase);
+        carritoToastIcon.className = icono;
+        carritoToastTitle.textContent = titulo;
         carritoToastBody.textContent = mensaje;
 
         carritoToast?.show();
@@ -216,14 +232,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (accion === 'eliminar') {
                     item.remove();
-                    mostrarToast('Producto eliminado del carrito.');
+                    mostrarToast('Producto eliminado del carrito.', 'removed');
                 } else {
                     const precio = Number(item.dataset.precio) || 0;
                     let cantidadItem = (parseInt(item.dataset.cantidad, 10) || 0) + (accion === 'sumar' ? 1 : -1);
 
                     if (cantidadItem <= 0) {
                         item.remove();
-                        mostrarToast('Producto eliminado del carrito.');
+                        mostrarToast('Producto eliminado del carrito.', 'removed');
                     } else {
                         item.dataset.cantidad = String(cantidadItem);
 
@@ -263,7 +279,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 mostrarCarritoVacio();
                 actualizarResumenCarrito(data.cantidad, data.subtotal);
-                mostrarToast('Carrito vaciado.');
+                mostrarToast('Carrito vaciado.', 'removed');
             } catch (error) {
                 mostrarToast(error.message || 'No se pudo vaciar el carrito.', 'error');
             } finally {
