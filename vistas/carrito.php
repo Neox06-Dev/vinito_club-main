@@ -9,12 +9,16 @@ if (!isset($productos)) {
     $productos = [];
 }
 
+$envioGratisDesde = 25000;
+$costoEnvioBase = 3500;
+
+$costoEnvio = ($subtotal > 0 && $subtotal < $envioGratisDesde) ? $costoEnvioBase : 0;
+$total = $subtotal + $costoEnvio;
+
 ?>
 
 <section class="carrito-page py-5">
-
     <div class="container">
-
         <!-- Header -->
         <header class="carrito-header d-flex justify-content-between align-items-center mb-5">
 
@@ -164,7 +168,6 @@ if (!isset($productos)) {
                             aria-label="Eliminar vino">
 
                             <i class="bi bi-x-lg"></i>
-
                         </button>
 
                     </article>
@@ -206,30 +209,36 @@ if (!isset($productos)) {
 
                         <span>Envío:</span>
 
-                        <span>Gratis</span>
+                        <span id="resumenEnvio"><?= $costoEnvio > 0 ? '$ ' . number_format($costoEnvio, 0, ',', '.') : 'Gratis' ?></span>
 
                     </div>
+
+                    <?php if ($costoEnvio > 0): ?>
+                    <p class="carrito-envio-nota" id="resumenEnvioNota">
+                        Te faltan $ <?= number_format($envioGratisDesde - $subtotal, 0, ',', '.') ?> para envío gratis
+                    </p>
+                    <?php else: ?>
+                    <p class="carrito-envio-nota carrito-envio-nota--gratis" id="resumenEnvioNota" <?= empty($productos) ? 'style="display:none;"' : '' ?>>
+                        <i class="bi bi-check-circle-fill"></i> Envío gratis
+                    </p>
+                    <?php endif; ?>
 
                     <hr>
 
                     <div class="carrito-summary-total product-price">
                         <span>Total:</span>
-                        <strong id="resumenTotal">$ <?= number_format($subtotal, 0, ',', '.') ?></strong>
+                        <strong id="resumenTotal">$ <?= number_format($total, 0, ',', '.') ?></strong>
                     </div>
 
                     <button
                         class="btn-hero-outline w-100 mt-3 align-items-center justify-content-center"
                         id="vaciarCarrito">
-
                         <i class="bi bi-trash3"></i>
-
                         Vaciar carrito
                     </button>
 
                     <button class="btn-hero-primary w-100 mt-4 align-items-center justify-content-center" id="finalizarCompra">
-
                         Finalizar compra
-
                     </button>
 
                 </div>

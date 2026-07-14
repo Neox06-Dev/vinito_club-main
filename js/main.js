@@ -155,8 +155,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const carritoColumna     = document.getElementById('carritoColumnaProductos');
     const resumenCantidadEl  = document.getElementById('resumenCantidad');
     const resumenSubtotalEl  = document.getElementById('resumenSubtotal');
+    const resumenEnvioEl     = document.getElementById('resumenEnvio');
+    const resumenEnvioNotaEl = document.getElementById('resumenEnvioNota');
     const resumenTotalEl     = document.getElementById('resumenTotal');
     const vaciarCarritoBtn   = document.getElementById('vaciarCarrito');
+
+    const ENVIO_GRATIS_DESDE = 25000;
+    const COSTO_ENVIO_BASE   = 3500;
 
     const formatearPrecio = (valor) => {
         return Math.round(Number(valor) || 0).toLocaleString('es-AR', { maximumFractionDigits: 0 });
@@ -164,15 +169,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const actualizarResumenCarrito = (cantidad, subtotal) => {
         const cant = Number(cantidad) || 0;
+        const sub  = Number(subtotal) || 0;
+        const costoEnvio = (sub > 0 && sub < ENVIO_GRATIS_DESDE) ? COSTO_ENVIO_BASE : 0;
+        const total = sub + costoEnvio;
 
         if (resumenCantidadEl) {
             resumenCantidadEl.textContent = `${cant} ${cant === 1 ? 'vino' : 'vinos'}`;
         }
         if (resumenSubtotalEl) {
-            resumenSubtotalEl.textContent = `$ ${formatearPrecio(subtotal)}`;
+            resumenSubtotalEl.textContent = `$ ${formatearPrecio(sub)}`;
+        }
+        if (resumenEnvioEl) {
+            resumenEnvioEl.textContent = costoEnvio > 0 ? `$ ${formatearPrecio(costoEnvio)}` : 'Gratis';
+        }
+        if (resumenEnvioNotaEl) {
+            if (sub <= 0) {
+                resumenEnvioNotaEl.style.display = 'none';
+            } else if (costoEnvio > 0) {
+                resumenEnvioNotaEl.style.display = '';
+                resumenEnvioNotaEl.className = 'carrito-envio-nota';
+                resumenEnvioNotaEl.textContent = `Te faltan $ ${formatearPrecio(ENVIO_GRATIS_DESDE - sub)} para envío gratis`;
+            } else {
+                resumenEnvioNotaEl.style.display = '';
+                resumenEnvioNotaEl.className = 'carrito-envio-nota carrito-envio-nota--gratis';
+                resumenEnvioNotaEl.innerHTML = '<i class="bi bi-check-circle-fill"></i> Envío gratis';
+            }
         }
         if (resumenTotalEl) {
-            resumenTotalEl.textContent = `$ ${formatearPrecio(subtotal)}`;
+            resumenTotalEl.textContent = `$ ${formatearPrecio(total)}`;
         }
 
         actualizarContadorCarrito(cant);

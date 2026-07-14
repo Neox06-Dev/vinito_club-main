@@ -88,6 +88,9 @@ img { max-width: 100%; display: block; }
     transition: var(--transition);
 }
 
+.bi-person { font-size: 1.4rem; }
+.bi-person:hover { color: var(--color-gold-light); }
+
 /*  NAVBAR  */
 .vinito-navbar {
     background-color: rgba(10, 6, 4, 0.97);
@@ -206,6 +209,55 @@ img { max-width: 100%; display: block; }
 }
 
 .admin-icon i:hover { color: var(--color-gold-light); }
+
+/* ==========================================================
+   HEADER - ACCESO USUARIO
+========================================================== */
+
+.account-dropdown .nav-icon-link {
+    color: var(--color-grey-light);
+    text-decoration: none;
+}
+
+.account-text {
+    font-size: .92rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.account-dropdown .dropdown-menu {
+    border: none;
+    border-radius: 14px;
+    overflow: hidden;
+    min-width: 220px;
+    padding: .5rem 0;
+    margin-top: .8rem;
+    background: var(--color-bg);
+}
+
+.account-dropdown .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .8rem 1.2rem;
+    transition: .2s;
+    color: var(--color-grey-light);
+}
+
+.account-dropdown .dropdown-item:hover {
+    background-color: var(--color-bg-card);
+    color: var(--color-gold-light);
+}
+
+.account-dropdown .dropdown-divider {
+    margin: .35rem 0;
+}
+
+.account-dropdown .bi-chevron-down {
+    font-size: .7rem;
+    opacity: .7;
+}
 
 /* ── TIPOGRAFÍA ─────────────────────────────────────────────── */
 .section-label {
@@ -2108,6 +2160,19 @@ body.login-page {
     100% { opacity: 1; transform: scale(1); }
 }
 
+/* ===== REGISTRO ===== */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1.25rem;
+}
+
+.form-grid .full-width{
+    grid-column:1 / -1;
+}
+
+
 /* ===== SIDEBAR ===== */
 
 .admin-sidebar{
@@ -3307,6 +3372,14 @@ body.admin-nav-open{
 
     .stats-grid{
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid .full-width{
+        grid-column:auto;
     }
 }
 

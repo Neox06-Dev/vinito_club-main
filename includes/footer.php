@@ -3,9 +3,16 @@
 */
 
 $footerBase = $footerBase ?? '';
+$seccion_actual = $_GET['seccion'] ?? 'inicio';
+$mostrarHeader = !in_array($seccion_actual, [
+    'login',
+    'registro'
+]);
 ?>
 
 <!-- FOOTER -->
+<?php if ($mostrarHeader): ?>
+
 <footer class="vinito-footer">
     <div class="container">
         <div class="row gy-4">
@@ -66,6 +73,8 @@ $footerBase = $footerBase ?? '';
     </div>
 </footer>
 
+<?php endif; ?>
+
 <div class="toast-container position-fixed top-0 end-0 p-3 vinito-toast-container">
     <div
         id="carritoToast"
@@ -86,6 +95,3 @@ $footerBase = $footerBase ?? '';
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="<?= $footerBase ?>js/main.js"></script>
-</body>
-
-</html>

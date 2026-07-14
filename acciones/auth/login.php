@@ -1,0 +1,51 @@
+<?php
+
+session_start();
+
+require_once '../../classes/Conexion.php';
+require_once '../../classes/Usuario.php';
+
+// Verificar que la petición sea POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: ../../index.php?seccion=login');
+    exit;
+}
+
+// Obtener y limpiar datos
+$email = trim(strtolower($_POST['email'] ?? ''));
+$password = $_POST['password'] ?? '';
+
+$login = trim($_POST['login']);
+
+$usuario = Usuario::buscarPorLogin($login);
+
+// Validar campos vacíos
+if ($login === '' || $password === '') {
+    header('Location: ../../index.php?seccion=login&error=campos');
+    exit;
+}
+
+// Buscar usuario
+$usuario = Usuario::buscarPorEmail($email);
+
+// Verificar usuario y contraseña
+if (!$usuario || !$usuario->verificarPassword($password)) {
+    header('Location: ../../index.php?seccion=login&error=credenciales');
+    exit;
+}
+
+// Verificar que sea un cliente
+if ($usuario->getRol() !== 'cliente') {
+    header('Location: ../../index.php?seccion=login&error=rol');
+    exit;
+}
+
+// Crear sesión
+$_SESSION['id_usuario'] = $usuario->getId();
+$_SESSION['nombre'] = $usuario->getNombre();
+$_SESSION['email'] = $usuario->getEmail();
+$_SESSION['rol'] = $usuario->getRol();
+
+// Redireccionar
+header('Location: ../../index.php');
+exit;
