@@ -59,6 +59,16 @@ $success = $_GET['success'] ?? '';
                 <i class="bi bi-shield-exclamation"></i>
                 <span>Tu sesión expiró. Por favor, volvé a ingresar.</span>
             </div>
+            <?php elseif ($error === 'campos'): ?>
+            <div class="alert-vinito alert-vinito--error" role="alert">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span>Completá tu email/nombre y contraseña para continuar.</span>
+            </div>
+            <?php elseif ($error === 'rol'): ?>
+            <div class="alert-vinito alert-vinito--error" role="alert">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span>Esta cuenta no tiene acceso como cliente.</span>
+            </div>
             <?php elseif ($success === 'logout'): ?>
             <div class="alert-vinito alert-vinito--success" role="alert">
                 <i class="bi bi-check-circle-fill"></i>
@@ -76,7 +86,7 @@ $success = $_GET['success'] ?? '';
             <form
                 class="login-form"
                 id="loginForm"
-                action="/acciones/auth/login.php"
+                action="acciones/auth/login.php"
                 method="POST"
                 novalidate
             >

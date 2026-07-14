@@ -82,9 +82,9 @@ $mostrarHeader = !in_array($seccion_actual, [
                             data-bs-toggle="dropdown"
                             aria-expanded="false">
 
-                            <i class="bi bi-person"></i>
+                            <i class="bi <?= $usuarioLogueado ? 'bi-person-fill' : 'bi-person' ?>"></i>
 
-                            <span class="account-text d-none d-lg-inline">
+                            <span class="account-text">
                                 <?= htmlspecialchars($textoAcceso) ?>
                             </span>
 
@@ -126,7 +126,7 @@ $mostrarHeader = !in_array($seccion_actual, [
                                     </a>
                                 </li>
 
-                                <li><hr class="dropdown-divider"></li>
+                                <li><hr class="dropdown-divider account-dropdown"></li>
 
                                 <li>
                                     <a class="dropdown-item text-danger" href="acciones/auth/logout.php">

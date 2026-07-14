@@ -72,8 +72,8 @@ class Usuario
 
         $query = "SELECT *
                 FROM usuarios
-                WHERE email = '$login'
-                OR nombre = '$login'
+                WHERE email = ?
+                OR nombre = ?
                 LIMIT 1";
 
         $stmt = $conexion->prepare($query);
@@ -83,7 +83,7 @@ class Usuario
             self::class
         );
 
-        $stmt->execute();
+        $stmt->execute([$login, $login]);
 
         $usuario = $stmt->fetch();
 

@@ -63,6 +63,31 @@ $success = $_GET['success'] ?? '';
                 <i class="bi bi-check-circle-fill"></i>
                 <span>Sesión cerrada correctamente.</span>
             </div>
+            <?php elseif ($error === 'campos'): ?>
+            <div class="alert-vinito alert-vinito--error" role="alert">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span>Completá todos los campos para continuar.</span>
+            </div>
+            <?php elseif ($error === 'email'): ?>
+            <div class="alert-vinito alert-vinito--error" role="alert">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span>Ingresá un email válido.</span>
+            </div>
+            <?php elseif ($error === 'password'): ?>
+            <div class="alert-vinito alert-vinito--error" role="alert">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span>Las contraseñas no coinciden. Volvé a ingresarlas.</span>
+            </div>
+            <?php elseif ($error === 'existe'): ?>
+            <div class="alert-vinito alert-vinito--error" role="alert">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span>Ya existe una cuenta registrada con ese email.</span>
+            </div>
+            <?php elseif ($error === 'registro'): ?>
+            <div class="alert-vinito alert-vinito--error" role="alert">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span>No se pudo completar el registro. Intentá nuevamente.</span>
+            </div>
             <?php endif; ?>
 
             <!-- Alerta JS (validación cliente) -->
@@ -75,7 +100,7 @@ $success = $_GET['success'] ?? '';
             <form
                 class="login-form"
                 id="registroForm"
-                action="/acciones/auth/registro.php"
+                action="acciones/auth/registro.php"
                 method="POST"
                 novalidate
             >
@@ -136,7 +161,6 @@ $success = $_GET['success'] ?? '';
                                 class="form-control"
                                 placeholder="Tu teléfono"
                                 autocomplete="tel"
-                                required
                                 aria-describedby="telefonoError"
                             >
                             <i class="bi bi-telephone" aria-hidden="true"></i>
@@ -204,7 +228,7 @@ $success = $_GET['success'] ?? '';
                         </div>
                         <p class="invalid-msg" id="password2Error" role="alert">
                             <i class="bi bi-x-circle-fill"></i>
-                            <span>La confirmación de la contraseña no puede estar vacía.</span>
+                            <span id="password2ErrorMsg">La confirmación de la contraseña no puede estar vacía.</span>
                         </p>
                     </div>
 

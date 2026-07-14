@@ -58,6 +58,10 @@ require_once 'classes/Vino.php';
         case 'registro':
             require_once 'vistas/registro.php';
             break;
+        
+        case 'mi-cuenta':
+            require_once 'vistas/mi-cuenta.php';
+            break;
     }
     ?>
 </main>

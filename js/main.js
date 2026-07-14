@@ -569,3 +569,154 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 6000);
     }
 })();
+
+// ── REGISTRO PAGE ─────────────────────────────────────────────
+(function () {
+    'use strict';
+
+    const form = document.getElementById('registroForm');
+    if (!form) return;
+
+    const nombreIn    = document.getElementById('nombre');
+    const nombreErr   = document.getElementById('nombreError');
+    const emailIn     = document.getElementById('email');
+    const emailErr    = document.getElementById('emailError');
+    const telefonoIn  = document.getElementById('telefono');
+    const telefonoErr = document.getElementById('telefonoError');
+    const passwordIn  = document.getElementById('password');
+    const passErr     = document.getElementById('passwordError');
+    const password2In = document.getElementById('password2');
+    const pass2Err    = document.getElementById('password2Error');
+    const pass2ErrMsg = document.getElementById('password2ErrorMsg');
+    const jsAlert     = document.getElementById('jsAlert');
+    const jsAlertMsg  = document.getElementById('jsAlertMsg');
+    const submitBtn   = document.getElementById('submitBtn');
+    const btnSpinner  = document.getElementById('btnSpinner');
+    const btnIcon     = document.getElementById('btnIcon');
+    const btnText     = document.getElementById('btnText');
+
+    // Togglear mostrar/ocultar contraseña (contraseña y confirmar contraseña)
+    [['togglePassword', 'password'], ['togglePassword2', 'password2']].forEach(([btnId, inputId]) => {
+        const btn   = document.getElementById(btnId);
+        const input = document.getElementById(inputId);
+        if (!btn || !input) return;
+
+        btn.addEventListener('click', function () {
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            btn.title = isPassword ? 'Ocultar contraseña' : 'Mostrar contraseña';
+            btn.setAttribute('aria-pressed', String(isPassword));
+        });
+    });
+
+    function showError(input, msgEl) {
+        input.classList.add('is-invalid-custom');
+        msgEl.classList.add('show');
+    }
+
+    function clearError(input, msgEl) {
+        input.classList.remove('is-invalid-custom');
+        msgEl.classList.remove('show');
+    }
+
+    function validarPassword2() {
+        if (!password2In.value) {
+            pass2ErrMsg.textContent = 'La confirmación de la contraseña no puede estar vacía.';
+            showError(password2In, pass2Err);
+            return false;
+        }
+        if (password2In.value !== passwordIn.value) {
+            pass2ErrMsg.textContent = 'Las contraseñas no coinciden.';
+            showError(password2In, pass2Err);
+            return false;
+        }
+        clearError(password2In, pass2Err);
+        return true;
+    }
+
+    // Limpieza / validación en tiempo real
+    if (nombreIn) {
+        nombreIn.addEventListener('input', function () {
+            if (this.value.trim().length >= 2) clearError(this, nombreErr);
+        });
+    }
+    if (emailIn) {
+        emailIn.addEventListener('input', function () {
+            if (this.validity.valid) clearError(this, emailErr);
+        });
+    }
+    if (telefonoIn) {
+        telefonoIn.addEventListener('input', function () {
+            if (this.value.trim().length >= 6) clearError(this, telefonoErr);
+        });
+    }
+    if (passwordIn) {
+        passwordIn.addEventListener('input', function () {
+            if (this.value.length >= 6) clearError(this, passErr);
+            // Si ya se había tocado la confirmación, revalidamos en vivo
+            if (password2In.value) validarPassword2();
+        });
+    }
+    if (password2In) {
+        password2In.addEventListener('input', validarPassword2);
+    }
+
+    form.addEventListener('submit', function (e) {
+        let valid = true;
+
+        if (!nombreIn.value.trim() || nombreIn.value.trim().length < 2) {
+            showError(nombreIn, nombreErr);
+            valid = false;
+        } else {
+            clearError(nombreIn, nombreErr);
+        }
+
+        if (!emailIn.value.trim() || !emailIn.validity.valid) {
+            showError(emailIn, emailErr);
+            valid = false;
+        } else {
+            clearError(emailIn, emailErr);
+        }
+
+        if (!telefonoIn.value.trim() || telefonoIn.value.trim().length < 6) {
+            showError(telefonoIn, telefonoErr);
+            valid = false;
+        } else {
+            clearError(telefonoIn, telefonoErr);
+        }
+
+        if (!passwordIn.value || passwordIn.value.length < 6) {
+            showError(passwordIn, passErr);
+            valid = false;
+        } else {
+            clearError(passwordIn, passErr);
+        }
+
+        if (!validarPassword2()) {
+            valid = false;
+        }
+
+        if (!valid) {
+            e.preventDefault();
+            jsAlertMsg.textContent = 'Por favor, revisá los campos marcados en rojo.';
+            jsAlert.style.display  = 'flex';
+            return;
+        }
+
+        jsAlert.style.display    = 'none';
+        btnSpinner.style.display = 'block';
+        btnIcon.style.display    = 'none';
+        btnText.textContent      = 'Creando cuenta…';
+        submitBtn.disabled       = true;
+    });
+
+    // Auto-ocultar alertas PHP después de 6s
+    const phpAlertRegistro = document.querySelector('.alert-vinito--error:not(#jsAlert), .alert-vinito--success');
+    if (phpAlertRegistro) {
+        setTimeout(function () {
+            phpAlertRegistro.style.transition = 'opacity 0.5s';
+            phpAlertRegistro.style.opacity    = '0';
+            setTimeout(function () { phpAlertRegistro.remove(); }, 500);
+        }, 6000);
+    }
+})();

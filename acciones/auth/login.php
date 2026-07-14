@@ -12,12 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 // Obtener y limpiar datos
-$email = trim(strtolower($_POST['email'] ?? ''));
 $password = $_POST['password'] ?? '';
-
-$login = trim($_POST['login']);
-
-$usuario = Usuario::buscarPorLogin($login);
+$login = trim($_POST['login'] ?? '');
 
 // Validar campos vacíos
 if ($login === '' || $password === '') {
@@ -25,8 +21,8 @@ if ($login === '' || $password === '') {
     exit;
 }
 
-// Buscar usuario
-$usuario = Usuario::buscarPorEmail($email);
+// Buscar usuario (por email o por nombre)
+$usuario = Usuario::buscarPorLogin($login);
 
 // Verificar usuario y contraseña
 if (!$usuario || !$usuario->verificarPassword($password)) {
