@@ -203,34 +203,34 @@ $success = $_GET['success'] ?? '';
                 </div>
 
                 <!-- Confirmar contraseña -->
-                    <div class="form-floating-custom full-width">
-                        <label for="password2" class="form-label-custom">Confirmar contraseña</label>
-                        <div class="input-icon-wrap password-wrap">
-                            <input
-                                type="password"
-                                id="password2"
-                                name="password2"
-                                placeholder="Confirmá tu contraseña"
-                                autocomplete="current-password"
-                                required
-                                aria-describedby="password2Error"
-                                class="form-control password-input"
-                            >
-                            <i class="bi bi-lock" aria-hidden="true"></i>
-                            <button
-                                type="button"
-                                class="password-toggle"
-                                id="togglePassword2"
-                                aria-label="Mostrar u ocultar contraseña"
-                                title="Mostrar contraseña"
-                            >
-                            </button>
-                        </div>
-                        <p class="invalid-msg" id="password2Error" role="alert">
-                            <i class="bi bi-x-circle-fill"></i>
-                            <span id="password2ErrorMsg">La confirmación de la contraseña no puede estar vacía.</span>
-                        </p>
+                <div class="form-floating-custom full-width">
+                    <label for="password2" class="form-label-custom">Confirmar contraseña</label>
+                    <div class="input-icon-wrap password-wrap">
+                        <input
+                            type="password"
+                            id="password2"
+                            name="password2"
+                            placeholder="Confirmá tu contraseña"
+                            autocomplete="current-password"
+                            required
+                            aria-describedby="password2Error"
+                            class="form-control password-input"
+                        >
+                        <i class="bi bi-lock" aria-hidden="true"></i>
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="togglePassword2"
+                            aria-label="Mostrar u ocultar contraseña"
+                            title="Mostrar contraseña"
+                        >
+                        </button>
                     </div>
+                    <p class="invalid-msg" id="password2Error" role="alert">
+                        <i class="bi bi-x-circle-fill"></i>
+                        <span id="password2ErrorMsg">La confirmación de la contraseña no puede estar vacía.</span>
+                    </p>
+                </div>
 
                 <!-- Recordarme -->
                 <div class="d-flex align-items-center gap-2 mb-3">

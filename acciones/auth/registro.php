@@ -22,7 +22,6 @@ $password2 = $_POST['password2'] ?? '';
 if (
     $nombre === '' ||
     $email === '' ||
-    $telefono === '' ||
     $password === '' ||
     $password2 === ''
 ) {

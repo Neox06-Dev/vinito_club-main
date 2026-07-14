@@ -647,7 +647,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     if (telefonoIn) {
         telefonoIn.addEventListener('input', function () {
-            if (this.value.trim().length >= 6) clearError(this, telefonoErr);
+
+            const telefono = this.value.trim();
+
+            if ( telefono === '' || telefono.length >= 6 ) {
+                clearError(this, telefonoErr);
+            }
+
         });
     }
     if (passwordIn) {
@@ -678,18 +684,29 @@ document.addEventListener('DOMContentLoaded', function () {
             clearError(emailIn, emailErr);
         }
 
-        if (!telefonoIn.value.trim() || telefonoIn.value.trim().length < 6) {
+        if (telefonoIn.value.trim() && telefonoIn.value.trim().length < 6) {
             showError(telefonoIn, telefonoErr);
             valid = false;
         } else {
             clearError(telefonoIn, telefonoErr);
         }
 
-        if (!passwordIn.value || passwordIn.value.length < 6) {
+        if (!passwordIn.value.trim()) {
+
+            passErr.textContent = 'Ingresá una contraseña.';
             showError(passwordIn, passErr);
             valid = false;
+
+        } else if (passwordIn.value.length < 6) {
+
+            passErr.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+            showError(passwordIn, passErr);
+            valid = false;
+
         } else {
+
             clearError(passwordIn, passErr);
+
         }
 
         if (!validarPassword2()) {
