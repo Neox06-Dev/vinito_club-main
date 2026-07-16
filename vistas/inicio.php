@@ -21,7 +21,9 @@ $destacados = array_filter($productos, fn($p) => $p->getDestacado());
                     <a href="index.php?seccion=tienda" class="btn btn-hero-primary">
                         Explorar vinos &nbsp;<i class="bi bi-arrow-right"></i>
                     </a>
-                    <a href="index.php?seccion=registro" class="btn btn-hero-outline">Unite al club</a>
+                    <a href="index.php?seccion=registro" class="btn btn-hero-outline">
+                        Unite al club
+                    </a>
                 </div>
             </div>
         </div>

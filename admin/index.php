@@ -1,7 +1,15 @@
 <?php
+
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 require_once 'includes/functions.php';
 
-$seccion = $_GET['sec'] ?? 'dashboard';
+$adminLogueado = isset($_SESSION['id_usuario']) && $_SESSION['rol'] === 'admin';
+
+// Si no especifican sección: raíz del admin -> login directo (si no hay sesión) o dashboard.
+$seccion = $_GET['sec'] ?? ($adminLogueado ? 'dashboard' : 'login');
 
 if ($seccion !== 'login') {
     require_once 'includes/auth.php';

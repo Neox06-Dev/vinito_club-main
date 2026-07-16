@@ -1,6 +1,6 @@
 <?php
-/** @var string $error */
-/** @var string $success */
+$error = $_GET['error'] ?? '';
+$success = $_GET['success'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -77,6 +77,16 @@
                 <i class="bi bi-shield-exclamation"></i>
                 <span>Tu sesión expiró. Por favor, volvé a ingresar.</span>
             </div>
+            <?php elseif ($error === 'campos'): ?>
+            <div class="alert-vinito alert-vinito--error" role="alert">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span>Completá tu usuario/email y contraseña para continuar.</span>
+            </div>
+            <?php elseif ($error === 'rol'): ?>
+            <div class="alert-vinito alert-vinito--error" role="alert">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span>Esta cuenta no tiene permisos de administrador.</span>
+            </div>
             <?php elseif ($success === 'logout'): ?>
             <div class="alert-vinito alert-vinito--success" role="alert">
                 <i class="bi bi-check-circle-fill"></i>
@@ -98,25 +108,25 @@
                 method="POST"
                 novalidate
             >
-                <!-- Email -->
+                <!-- Usuario o Email -->
                 <div class="form-floating-custom">
-                    <label for="email" class="form-label-custom">Email</label>
+                    <label for="login" class="form-label-custom">Usuario o email</label>
                     <div class="input-icon-wrap">
                         <input
-                            type="email"
-                            id="email"
-                            name="email"
+                            type="text"
+                            id="login"
+                            name="login"
                             class="form-control"
-                            placeholder="Tu email"
-                            autocomplete="email"
+                            placeholder="Tu usuario o email"
+                            autocomplete="username"
                             required
-                            aria-describedby="emailError"
+                            aria-describedby="loginError"
                         >
-                        <i class="bi bi-envelope" aria-hidden="true"></i>
+                        <i class="bi bi-person" aria-hidden="true"></i>
                     </div>
-                    <p class="invalid-msg" id="emailError" role="alert">
+                    <p class="invalid-msg" id="loginError" role="alert">
                         <i class="bi bi-x-circle-fill"></i>
-                        <span>Ingresá un email válido.</span>
+                        <span>Ingresá tu usuario o email.</span>
                     </p>
                 </div>
 

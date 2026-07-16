@@ -1,5 +1,30 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    // ── ACCOUNT DROPDOWN: ANIMACIÓN DE CIERRE ──────────
+    document.querySelectorAll('.account-dropdown').forEach(function (dropdown) {
+        const toggle = dropdown.querySelector('[data-bs-toggle="dropdown"]');
+        const menu   = dropdown.querySelector('.dropdown-menu');
+        if (!toggle || !menu || typeof bootstrap === 'undefined') return;
+
+        const instancia = bootstrap.Dropdown.getOrCreateInstance(toggle);
+
+        dropdown.addEventListener('hide.bs.dropdown', function (e) {
+            // Si ya está animando el cierre, dejamos que Bootstrap lo oculte de verdad
+            if (menu.classList.contains('closing')) {
+                menu.classList.remove('closing');
+                return;
+            }
+
+            e.preventDefault();
+            menu.classList.add('closing');
+
+            menu.addEventListener('animationend', function onEnd() {
+                menu.removeEventListener('animationend', onEnd);
+                instancia.hide();
+            }, { once: true });
+        });
+    });
+
     // ── NAVBAR SCROLL ─────────────────────────────────
     const navbar = document.getElementById('mainNav');
     if (navbar) {
@@ -734,6 +759,129 @@ document.addEventListener('DOMContentLoaded', function () {
             phpAlertRegistro.style.transition = 'opacity 0.5s';
             phpAlertRegistro.style.opacity    = '0';
             setTimeout(function () { phpAlertRegistro.remove(); }, 500);
+        }, 6000);
+    }
+})();
+
+// ── EDITAR PERFIL PAGE ──────────────────────────────────────────
+(function () {
+    'use strict';
+
+    const form = document.getElementById('editarPerfilForm');
+    if (!form) return;
+
+    const nombreIn    = document.getElementById('nombre');
+    const nombreErr   = document.getElementById('nombreError');
+    const emailIn     = document.getElementById('email');
+    const emailErr    = document.getElementById('emailError');
+    const telefonoIn  = document.getElementById('telefono');
+    const telefonoErr = document.getElementById('telefonoError');
+    const jsAlert     = document.getElementById('jsAlert');
+    const jsAlertMsg  = document.getElementById('jsAlertMsg');
+    const submitBtn   = document.getElementById('submitBtn');
+    const btnSpinner  = document.getElementById('btnSpinner');
+    const btnIcon     = document.getElementById('btnIcon');
+    const btnText     = document.getElementById('btnText');
+
+    // — Vista previa en vivo —
+    const previewAvatar   = document.getElementById('previewAvatar');
+    const previewNombre   = document.getElementById('previewNombre');
+    const previewEmail    = document.getElementById('previewEmail');
+    const previewTelefono = document.getElementById('previewTelefono');
+
+    function actualizarPreview() {
+        const nombre = nombreIn.value.trim();
+        const email = emailIn.value.trim();
+        const telefono = telefonoIn.value.trim();
+
+        if (previewNombre) previewNombre.textContent = nombre || 'Tu nombre';
+        if (previewAvatar) previewAvatar.textContent = nombre ? nombre.charAt(0).toUpperCase() : '?';
+        if (previewEmail) previewEmail.textContent = email || 'tu@email.com';
+        if (previewTelefono) previewTelefono.textContent = telefono || 'Sin teléfono';
+    }
+
+    [nombreIn, emailIn, telefonoIn].forEach((input) => {
+        if (input) input.addEventListener('input', actualizarPreview);
+    });
+
+    function showError(input, msgEl) {
+        input.classList.add('is-invalid-custom');
+        msgEl.classList.add('show');
+    }
+
+    function clearError(input, msgEl) {
+        input.classList.remove('is-invalid-custom');
+        msgEl.classList.remove('show');
+    }
+
+    // Limpieza en tiempo real
+    if (nombreIn) {
+        nombreIn.addEventListener('input', function () {
+            if (this.value.trim().length >= 2) clearError(this, nombreErr);
+        });
+    }
+    if (emailIn) {
+        emailIn.addEventListener('input', function () {
+            if (this.validity.valid) clearError(this, emailErr);
+        });
+    }
+    if (telefonoIn) {
+        telefonoIn.addEventListener('input', function () {
+
+            const telefono = this.value.trim();
+
+            if (telefono === '' || telefono.length >= 6) {
+                clearError(this, telefonoErr);
+            }
+
+        });
+    }
+
+    form.addEventListener('submit', function (e) {
+        let valid = true;
+
+        if (!nombreIn.value.trim() || nombreIn.value.trim().length < 2) {
+            showError(nombreIn, nombreErr);
+            valid = false;
+        } else {
+            clearError(nombreIn, nombreErr);
+        }
+
+        if (!emailIn.value.trim() || !emailIn.validity.valid) {
+            showError(emailIn, emailErr);
+            valid = false;
+        } else {
+            clearError(emailIn, emailErr);
+        }
+
+        if (telefonoIn.value.trim() && telefonoIn.value.trim().length < 6) {
+            showError(telefonoIn, telefonoErr);
+            valid = false;
+        } else {
+            clearError(telefonoIn, telefonoErr);
+        }
+
+        if (!valid) {
+            e.preventDefault();
+            jsAlertMsg.textContent = 'Por favor, revisá los campos marcados en rojo.';
+            jsAlert.style.display  = 'flex';
+            return;
+        }
+
+        jsAlert.style.display    = 'none';
+        btnSpinner.style.display = 'block';
+        btnIcon.style.display    = 'none';
+        btnText.textContent      = 'Guardando…';
+        submitBtn.disabled       = true;
+    });
+
+    // Auto-ocultar alertas PHP después de 6s
+    const phpAlertPerfil = document.querySelector('.alert-vinito--error:not(#jsAlert), .alert-vinito--success');
+    if (phpAlertPerfil) {
+        setTimeout(function () {
+            phpAlertPerfil.style.transition = 'opacity 0.5s';
+            phpAlertPerfil.style.opacity    = '0';
+            setTimeout(function () { phpAlertPerfil.remove(); }, 500);
         }, 6000);
     }
 })();

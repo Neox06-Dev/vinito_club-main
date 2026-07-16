@@ -3,7 +3,7 @@
 session_start();
 
 // Secciones válidas
-$secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle', 'carrito', 'login', 'registro'];
+$secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle', 'carrito', 'login', 'registro', 'mi-cuenta', 'editar-perfil', 'seguridad'];
 $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'inicio';
 
 
@@ -61,6 +61,14 @@ require_once 'classes/Vino.php';
         
         case 'mi-cuenta':
             require_once 'vistas/mi-cuenta.php';
+            break;
+
+        case 'editar-perfil':
+            require_once 'vistas/editar-perfil.php';
+            break;
+
+        case 'seguridad':
+            require_once 'vistas/seguridad.php';
             break;
     }
     ?>

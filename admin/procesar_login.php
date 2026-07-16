@@ -5,15 +5,25 @@ session_start();
 require_once '../classes/Conexion.php';
 require_once '../classes/Usuario.php';
 
-$email = $_POST['email'];
-$password = $_POST['password'];
+$login = trim($_POST['login'] ?? '');
+$password = $_POST['password'] ?? '';
 
-$usuario = Usuario::buscarPorEmail($email);
+if ($login === '' || $password === '') {
+    header('Location: index.php?sec=login&error=campos');
+    exit;
+}
+
+$usuario = Usuario::buscarPorLogin($login);
 
 if (
     $usuario &&
     $usuario->verificarPassword($password)
 ) {
+
+    if ($usuario->getRol() !== 'admin') {
+        header('Location: index.php?sec=login&error=rol');
+        exit;
+    }
 
     $_SESSION['id_usuario'] = $usuario->getId();
     $_SESSION['nombre'] = $usuario->getNombre();

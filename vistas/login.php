@@ -52,7 +52,7 @@ $success = $_GET['success'] ?? '';
             <?php if ($error === 'credenciales'): ?>
             <div class="alert-vinito alert-vinito--error" role="alert">
                 <i class="bi bi-exclamation-circle-fill"></i>
-                <span>Credenciales incorrectas. Verificá tu email y contraseña.</span>
+                <span>Credenciales incorrectas. Verificá tu email/nombre y contraseña.</span>
             </div>
             <?php elseif ($error === 'sesion'): ?>
             <div class="alert-vinito alert-vinito--error" role="alert">

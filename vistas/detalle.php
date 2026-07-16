@@ -118,7 +118,7 @@ $categoriaClase = match ($categoriaClase) {
                 <!-- ACCIONES -->
                 <div class="detalle-acciones d-flex gap-3 flex-wrap">
                     <?php if ($producto->estaEnStock()): ?>
-                        <button class="btn btn-hero-primary btn-detalle-comprar js-agregar-carrito"
+                        <button class="btn btn-hero-primary btn-detalle-comprar js-agregar-carrito flex-fill"
                             type="button"
                             data-id="<?= $producto->getIdVino() ?>">
                             <i class="bi bi-bag-plus"></i> &nbsp; Agregar al carrito
@@ -126,7 +126,7 @@ $categoriaClase = match ($categoriaClase) {
                     <?php else: ?>
                         <button class="btn btn-hero-primary" disabled>Sin stock</button>
                     <?php endif; ?>
-                    <a href="index.php?seccion=tienda" class="btn btn-hero-outline">
+                    <a href="index.php?seccion=tienda" class="btn btn-hero-outline flex-fill">
                         <i class="bi bi-arrow-left"></i> &nbsp; Volver a la tienda
                     </a>
                 </div>
