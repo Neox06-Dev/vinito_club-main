@@ -8,6 +8,7 @@ class Usuario
     private ?string $telefono;
     private string $password;
     private string $rol;
+    private string $fecha_registro;
 
     public static function buscarPorEmail(string $email): ?Usuario
     {
@@ -39,6 +40,8 @@ class Usuario
         );
     }
 
+    // Getters
+
     public function getId(): int
     {
         return $this->id_usuario;
@@ -62,6 +65,11 @@ class Usuario
     public function getRol(): string
     {
         return $this->rol;
+    }
+
+    public function getFechaRegistro(): string
+    {
+        return $this->fecha_registro;
     }
 
     public static function buscarPorLogin(string $login): ?Usuario
@@ -235,4 +243,6 @@ class Usuario
 
         return $stmt->execute([$id]);
     }
+
+    
 }

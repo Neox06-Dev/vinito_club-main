@@ -1906,7 +1906,7 @@ body.login-page {
 .login-title {
     font-family: var(--font-display);
     font-size: 1.75rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--color-cream);
     text-align: center;
     margin-bottom: 0.4rem;
@@ -2055,14 +2055,12 @@ body.login-page {
 }
 
 .alert-vinito--error {
-    background: rgba(96,22,33,0.35);
-    border-color: rgba(122,30,45,0.6);
+    background: rgb(96, 22, 33);
     color: #f5b8c0;
 }
 
 .alert-vinito--success {
-    background: rgba(30,80,40,0.3);
-    border-color: rgba(50,130,60,0.5);
+    background: rgb(30, 80, 40);
     color: #a8e6b0;
 }
 

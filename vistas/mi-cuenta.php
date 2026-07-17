@@ -57,7 +57,7 @@ $success = $_GET['success'] ?? '';
                         <?= htmlspecialchars($usuario->getNombre()); ?>
                     </h2>
 
-                    <span class="account-badge">Cliente Vinito Club</span>
+                    <span class="account-badge">Miembro desde <?= date('d/m/Y', strtotime($usuario->getFechaRegistro())); ?></span>
 
                     <div class="account-divider"></div>
 
