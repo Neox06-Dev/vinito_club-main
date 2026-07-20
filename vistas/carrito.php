@@ -1,6 +1,8 @@
 <?php
 require_once 'classes/Carrito.php';
 
+$error = $_GET['error'] ?? '';
+
 $productos = Carrito::obtenerProductos();
 $cantidadProductos = Carrito::obtenerCantidadProductos();
 $subtotal = Carrito::obtenerSubtotal();
@@ -236,10 +238,30 @@ $total = $subtotal + $costoEnvio;
                         <i class="bi bi-trash3"></i>
                         Vaciar carrito
                     </button>
+                    
+                    <?php if ($cantidadProductos > 0): ?>
 
-                    <button class="btn-hero-primary w-100 mt-4 align-items-center justify-content-center" id="finalizarCompra">
-                        Finalizar compra
-                    </button>
+                        <a
+                            href="index.php?seccion=checkout"
+                            id="checkoutBtn"
+                            class="btn-hero-primary w-100 mt-4 text-decoration-none d-flex align-items-center justify-content-center"
+                        >
+                            Finalizar compra
+                        </a>
+
+                        <?php else: ?>
+
+                        <button
+                            id="checkoutBtn"
+                            class="btn-hero-primary w-100 text-center justify-content-center mt-4 disabled"
+                            disabled
+                            title="Agregá productos al carrito para poder finalizar la compra"
+                        >
+                            Finalizar compra
+                        </button>
+                        
+
+                        <?php endif; ?>
 
                 </div>
 

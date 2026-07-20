@@ -103,6 +103,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 clase: 'toast-error',
                 icono: 'bi bi-exclamation-triangle-fill me-2',
                 titulo: 'No se pudo completar'
+            },
+            warning: {
+                clase: 'toast-error',
+                icono: 'bi bi-exclamation-circle-fill me-2',
+                titulo: 'Carrito vacío'
             }
         };
 
@@ -305,6 +310,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!carritoColumna.querySelector('.carrito-item')) {
                     mostrarCarritoVacio();
                 }
+
+                actualizarEstadoCheckout();
             } catch (error) {
                 mostrarToast(error.message || 'No se pudo actualizar el carrito.', 'error');
             } finally {
@@ -328,6 +335,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 mostrarCarritoVacio();
                 actualizarResumenCarrito(data.cantidad, data.subtotal);
+                actualizarEstadoCheckout();
                 mostrarToast('Carrito vaciado.', 'removed');
             } catch (error) {
                 mostrarToast(error.message || 'No se pudo vaciar el carrito.', 'error');
@@ -336,6 +344,41 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    function actualizarEstadoCheckout() {
+
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        if (!checkoutBtn) return;
+
+        const cantidadProductos = document.querySelectorAll('.carrito-item').length;
+
+        if (cantidadProductos === 0) {
+
+            checkoutBtn.classList.add('disabled');
+            checkoutBtn.removeAttribute('href');
+            checkoutBtn.setAttribute('aria-disabled', 'true');
+
+        } else {
+
+            checkoutBtn.classList.remove('disabled');
+            checkoutBtn.href = 'index.php?seccion=checkout';
+            checkoutBtn.removeAttribute('aria-disabled');
+
+        }
+    }
+
+    const checkoutBtnEl = document.getElementById('checkoutBtn');
+    if (checkoutBtnEl) {
+        checkoutBtnEl.addEventListener('click', function (e) {
+            if (checkoutBtnEl.classList.contains('disabled') || checkoutBtnEl.disabled) {
+                e.preventDefault();
+                mostrarToast('Agregá al menos un producto para finalizar la compra.', 'warning');
+            }
+        });
+    }
+
+    actualizarEstadoCheckout();
 
     // ── PANEL ADMIN: CONTADORES ANIMADOS ─────────────────────
     const statNumbers = document.querySelectorAll('.stat-card h2');
@@ -882,6 +925,280 @@ document.addEventListener('DOMContentLoaded', function () {
             phpAlertPerfil.style.transition = 'opacity 0.5s';
             phpAlertPerfil.style.opacity    = '0';
             setTimeout(function () { phpAlertPerfil.remove(); }, 500);
+        }, 6000);
+    }
+})();
+// ── CHECKOUT PAGE ────────────────────────────────────────────────
+(function () {
+    'use strict';
+
+    const form = document.getElementById('checkoutForm');
+    if (!form) return;
+
+    const nombreIn    = document.getElementById('nombre');
+    const nombreErr   = document.getElementById('nombreError');
+    const emailIn     = document.getElementById('email');
+    const emailErr    = document.getElementById('emailError');
+    const telefonoIn  = document.getElementById('telefono');
+    const telefonoErr = document.getElementById('telefonoError');
+
+    const direccionWrap = document.getElementById('direccionWrap');
+    const calleIn        = document.getElementById('calle');
+    const calleErr       = document.getElementById('calleError');
+    const ciudadIn       = document.getElementById('ciudad');
+    const ciudadErr      = document.getElementById('ciudadError');
+    const cpIn           = document.getElementById('codigo_postal');
+    const cpErr          = document.getElementById('cpError');
+
+    const tarjetaWrap    = document.getElementById('tarjetaWrap');
+    const numTarjetaIn   = document.getElementById('numero_tarjeta');
+    const numTarjetaErr  = document.getElementById('tarjetaError');
+    const vencIn         = document.getElementById('vencimiento_tarjeta');
+    const vencErr        = document.getElementById('vencimientoError');
+    const cvvIn          = document.getElementById('cvv_tarjeta');
+    const cvvErr         = document.getElementById('cvvError');
+    const cuotasSelect   = document.getElementById('cuotas');
+    const cuotasDetalle  = document.getElementById('cuotasDetalle');
+
+    const entregaRadios = form.querySelectorAll('input[name="tipo_entrega"]');
+    const pagoRadios    = form.querySelectorAll('input[name="metodo_pago"]');
+
+    const resumenEnvio = document.getElementById('resumenEnvio');
+    const resumenTotal = document.getElementById('resumenTotal');
+    const envioInput   = document.getElementById('envioInput');
+    const totalInput   = document.getElementById('totalInput');
+    const subtotal     = parseFloat(document.querySelector('input[name="subtotal"]').value || '0');
+    const costoEnvioDomicilio = parseFloat(envioInput.value || '0');
+
+    const jsAlert    = document.getElementById('jsAlert');
+    const jsAlertMsg = document.getElementById('jsAlertMsg');
+    const submitBtn  = document.getElementById('submitBtn');
+    const btnSpinner = document.getElementById('btnSpinner');
+    const btnIcon    = document.getElementById('btnIcon');
+    const btnText    = document.getElementById('btnText');
+
+    function formatearMoneda(valor) {
+        return '$ ' + Math.round(valor).toLocaleString('es-AR');
+    }
+
+    function actualizarSeleccion(radios) {
+        radios.forEach((radio) => {
+            const option = radio.closest('.checkout-option');
+            if (!option) return;
+            option.classList.toggle('is-selected', radio.checked);
+        });
+    }
+
+    function tipoEntregaActual() {
+        const seleccionado = form.querySelector('input[name="tipo_entrega"]:checked');
+        return seleccionado ? seleccionado.value : 'domicilio';
+    }
+
+    function metodoPagoActual() {
+        const seleccionado = form.querySelector('input[name="metodo_pago"]:checked');
+        return seleccionado ? seleccionado.value : 'tarjeta';
+    }
+
+    function actualizarCuotas() {
+        if (!cuotasSelect || !cuotasDetalle) return;
+
+        const total = subtotal + (tipoEntregaActual() === 'domicilio' ? costoEnvioDomicilio : 0);
+        const cantidadCuotas = parseInt(cuotasSelect.value, 10) || 1;
+        const montoCuota = total / cantidadCuotas;
+
+        cuotasDetalle.textContent = cantidadCuotas === 1
+            ? `1 pago de ${formatearMoneda(total)}`
+            : `${cantidadCuotas} cuotas de ${formatearMoneda(montoCuota)}`;
+    }
+
+    function actualizarResumen() {
+        const esDomicilio = tipoEntregaActual() === 'domicilio';
+        const envio = esDomicilio ? costoEnvioDomicilio : 0;
+        const total = subtotal + envio;
+
+        resumenEnvio.textContent = envio > 0 ? formatearMoneda(envio) : 'Gratis';
+        resumenTotal.textContent = formatearMoneda(total);
+        envioInput.value = envio;
+        totalInput.value = total;
+
+        actualizarCuotas();
+    }
+
+    function actualizarVisibilidadBloques() {
+        const esDomicilio = tipoEntregaActual() === 'domicilio';
+        const esTarjeta   = metodoPagoActual() === 'tarjeta';
+
+        direccionWrap.classList.toggle('is-collapsed', !esDomicilio);
+        tarjetaWrap.classList.toggle('is-collapsed', !esTarjeta);
+
+        // Los campos ocultos no deben bloquear la validación ni el envío
+        const camposDireccion = [
+            [calleIn, calleErr],
+            [ciudadIn, ciudadErr],
+            [cpIn, cpErr]
+        ];
+        camposDireccion.forEach(([input, errEl]) => {
+            input.required = esDomicilio;
+            if (!esDomicilio) clearError(input, errEl);
+        });
+
+        const camposTarjeta = [
+            [numTarjetaIn, numTarjetaErr],
+            [vencIn, vencErr],
+            [cvvIn, cvvErr]
+        ];
+        camposTarjeta.forEach(([input, errEl]) => {
+            input.required = esTarjeta;
+            if (!esTarjeta) clearError(input, errEl);
+        });
+    }
+
+    function showError(input, msgEl) {
+        if (!input || !msgEl) return;
+        input.classList.add('is-invalid-custom');
+        msgEl.classList.add('show');
+    }
+
+    function clearError(input, msgEl) {
+        if (!input || !msgEl) return;
+        input.classList.remove('is-invalid-custom');
+        msgEl.classList.remove('show');
+    }
+
+    // Selección de entrega
+    entregaRadios.forEach((radio) => {
+        radio.addEventListener('change', function () {
+            actualizarSeleccion(entregaRadios);
+            actualizarVisibilidadBloques();
+            actualizarResumen();
+        });
+    });
+
+    // Selección de pago
+    pagoRadios.forEach((radio) => {
+        radio.addEventListener('change', function () {
+            actualizarSeleccion(pagoRadios);
+            actualizarVisibilidadBloques();
+        });
+    });
+
+    // Recalcular detalle de cuotas al cambiar la cantidad
+    if (cuotasSelect) {
+        cuotasSelect.addEventListener('change', actualizarCuotas);
+    }
+
+    // Formateo automático del número de tarjeta
+    if (numTarjetaIn) {
+        numTarjetaIn.addEventListener('input', function () {
+            let valor = this.value.replace(/\D/g, '').slice(0, 16);
+            this.value = valor.replace(/(.{4})/g, '$1 ').trim();
+            if (valor.length >= 13) clearError(this, numTarjetaErr);
+        });
+    }
+
+    // Formateo automático del vencimiento MM/AA
+    if (vencIn) {
+        vencIn.addEventListener('input', function () {
+            let valor = this.value.replace(/\D/g, '').slice(0, 4);
+            if (valor.length > 2) valor = valor.slice(0, 2) + '/' + valor.slice(2);
+            this.value = valor;
+            if (valor.length === 5) clearError(this, vencErr);
+        });
+    }
+
+    if (cvvIn) {
+        cvvIn.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 4);
+            if (this.value.length >= 3) clearError(this, cvvErr);
+        });
+    }
+
+    // Limpieza en tiempo real de campos base
+    if (nombreIn) {
+        nombreIn.addEventListener('input', function () {
+            if (this.value.trim().length >= 2) clearError(this, nombreErr);
+        });
+    }
+    if (emailIn) {
+        emailIn.addEventListener('input', function () {
+            if (this.validity.valid) clearError(this, emailErr);
+        });
+    }
+    if (telefonoIn) {
+        telefonoIn.addEventListener('input', function () {
+            if (this.value.trim().length >= 6) clearError(this, telefonoErr);
+        });
+    }
+    if (calleIn) calleIn.addEventListener('input', function () { if (this.value.trim()) clearError(this, calleErr); });
+    if (ciudadIn) ciudadIn.addEventListener('input', function () { if (this.value.trim()) clearError(this, ciudadErr); });
+    if (cpIn) cpIn.addEventListener('input', function () { if (this.value.trim()) clearError(this, cpErr); });
+
+    // Estado inicial
+    actualizarSeleccion(entregaRadios);
+    actualizarSeleccion(pagoRadios);
+    actualizarVisibilidadBloques();
+    actualizarCuotas();
+
+    form.addEventListener('submit', function (e) {
+        let valid = true;
+        const esDomicilio = tipoEntregaActual() === 'domicilio';
+        const esTarjeta   = metodoPagoActual() === 'tarjeta';
+
+        if (!nombreIn.value.trim() || nombreIn.value.trim().length < 2) {
+            showError(nombreIn, nombreErr);
+            valid = false;
+        } else {
+            clearError(nombreIn, nombreErr);
+        }
+
+        if (!emailIn.value.trim() || !emailIn.validity.valid) {
+            showError(emailIn, emailErr);
+            valid = false;
+        } else {
+            clearError(emailIn, emailErr);
+        }
+
+        if (!telefonoIn.value.trim() || telefonoIn.value.trim().length < 6) {
+            showError(telefonoIn, telefonoErr);
+            valid = false;
+        } else {
+            clearError(telefonoIn, telefonoErr);
+        }
+
+        if (esDomicilio) {
+            if (!calleIn.value.trim()) { showError(calleIn, calleErr); valid = false; } else clearError(calleIn, calleErr);
+            if (!ciudadIn.value.trim()) { showError(ciudadIn, ciudadErr); valid = false; } else clearError(ciudadIn, ciudadErr);
+            if (!cpIn.value.trim()) { showError(cpIn, cpErr); valid = false; } else clearError(cpIn, cpErr);
+        }
+
+        if (esTarjeta) {
+            if (numTarjetaIn.value.replace(/\s/g, '').length < 13) { showError(numTarjetaIn, numTarjetaErr); valid = false; } else clearError(numTarjetaIn, numTarjetaErr);
+            if (vencIn.value.length < 5) { showError(vencIn, vencErr); valid = false; } else clearError(vencIn, vencErr);
+            if (cvvIn.value.length < 3) { showError(cvvIn, cvvErr); valid = false; } else clearError(cvvIn, cvvErr);
+        }
+
+        if (!valid) {
+            e.preventDefault();
+            jsAlertMsg.textContent = 'Por favor, revisá los campos marcados en rojo.';
+            jsAlert.style.display  = 'flex';
+            jsAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        jsAlert.style.display    = 'none';
+        btnSpinner.style.display = 'block';
+        btnIcon.style.display    = 'none';
+        btnText.textContent      = 'Procesando…';
+        submitBtn.disabled       = true;
+    });
+
+    // Auto-ocultar alertas PHP después de 6s
+    const phpAlertCheckout = document.querySelector('.alert-vinito--error:not(#jsAlert), .alert-vinito--success');
+    if (phpAlertCheckout) {
+        setTimeout(function () {
+            phpAlertCheckout.style.transition = 'opacity 0.5s';
+            phpAlertCheckout.style.opacity    = '0';
+            setTimeout(function () { phpAlertCheckout.remove(); }, 500);
         }, 6000);
     }
 })();

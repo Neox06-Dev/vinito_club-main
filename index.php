@@ -3,12 +3,26 @@
 session_start();
 
 // Secciones válidas
-$secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle', 'carrito', 'login', 'registro', 'mi-cuenta', 'editar-perfil', 'seguridad'];
+$secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle', 'carrito', 'login', 'registro', 'mi-cuenta', 'editar-perfil', 'seguridad', 'checkout', 'pedido-confirmado', 'mis-pedidos'];
 $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'inicio';
-
 
 if (!in_array($seccion, $secciones_validas)) {
     $seccion = '404';
+}
+
+if ($seccion === 'checkout') {
+
+    if (!isset($_SESSION['id_usuario'])) {
+        header('Location: index.php?seccion=login&error=checkout');
+        exit;
+    }
+
+    require_once 'classes/Carrito.php';
+
+    if (Carrito::obtenerCantidadProductos() === 0) {
+        header('Location: index.php?seccion=carrito&error=carrito_vacio');
+        exit;
+    }
 }
 
 require_once 'includes/header.php';
@@ -69,6 +83,18 @@ require_once 'classes/Vino.php';
 
         case 'seguridad':
             require_once 'vistas/seguridad.php';
+            break;
+
+        case 'checkout':
+            require_once 'vistas/checkout.php';
+            break;
+
+        case 'pedido-confirmado':
+            require_once 'vistas/pedido-confirmado.php';
+            break;
+
+        case 'mis-pedidos':
+            require_once 'vistas/mis-pedidos.php';
             break;
     }
     ?>
