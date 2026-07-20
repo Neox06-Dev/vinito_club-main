@@ -1,9 +1,11 @@
 <?php
+require_once 'DetallePedido.php';
 
 class Pedido
 {
     private int $id_pedido;
     private int $id_usuario;
+    private int $cuotas;
     private string $fecha_pedido;
     private string $estado;
     private string $metodo_pago;
@@ -71,24 +73,164 @@ class Pedido
         return $this->total;
     }
 
+    public function getCuotas(): int
+    {
+        return $this->cuotas;
+    }
+
     // Métodos
-    // public static function crear()
-    // {
+    public static function crear(
+        int $idUsuario,
+        string $metodoPago,
+        int $cuotas,
+        string $metodoEnvio,
+        string $direccion,
+        ?string $observaciones,
+        float $subtotal,
+        float $costoEnvio,
+        float $total,
+        array $productos
+    ): int {
 
-    // }
+        $conexion = (new Conexion())->getConexion();
 
-    // public static function buscarPorId(int $id): ?Pedido
-    // {
+        try {
 
-    // }
+            $conexion->beginTransaction();
 
-    // public static function buscarPorUsuario(int $idUsuario): array
-    // {
+            $query = "INSERT INTO pedidos
+                (
+                    id_usuario,
+                    fecha_pedido,
+                    estado,
+                    metodo_pago,
+                    metodo_envio,
+                    direccion,
+                    observaciones,
+                    subtotal,
+                    costo_envio,
+                    total,
+                    cuotas
+                )
+            VALUES
+            (
+                ?,
+                NOW(),
+                'Pendiente',
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?,
+                ?
+            )";
 
-    // }
+            $stmt = $conexion->prepare($query);
 
-    // public static function actualizarEstado(int $idPedido, string $estado): bool
-    // {
+            $stmt->execute([
+                $idUsuario,
+                $metodoPago,
+                $metodoEnvio,
+                $direccion,
+                $observaciones,
+                $subtotal,
+                $costoEnvio,
+                $total,
+                $cuotas
 
-    // }
+            ]);
+
+            $idPedido = (int) $conexion->lastInsertId();
+
+            foreach ($productos as $producto) {
+
+                DetallePedido::crear(
+                    $conexion,
+                    $idPedido,
+                    $producto
+                );
+
+            }
+
+            $conexion->commit();
+
+            return $idPedido;
+
+        } catch (Throwable $e) {
+
+            $conexion->rollBack();
+
+            throw $e;
+
+        }
+
+    }
+
+    public static function buscarPorId(int $idPedido): ?Pedido
+    {
+        $conexion = (new Conexion())->getConexion();
+
+        $query = "SELECT *
+                FROM pedidos
+                WHERE id_pedido = ?";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->setFetchMode(
+            PDO::FETCH_CLASS,
+            self::class
+        );
+
+        $stmt->execute([$idPedido]);
+
+        $pedido = $stmt->fetch();
+
+        return $pedido ?: null;
+    }
+
+    public static function buscarPorUsuario(int $idUsuario): array
+    {
+        $conexion = (new Conexion())->getConexion();
+
+        $query = "SELECT *
+                FROM pedidos
+                WHERE id_usuario = ?
+                ORDER BY fecha_pedido DESC";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->setFetchMode(
+            PDO::FETCH_CLASS,
+            self::class
+        );
+
+        $stmt->execute([$idUsuario]);
+
+        return $stmt->fetchAll();
+    }
+
+    public static function obtenerPedidoCompleto(int $idPedido): ?array
+    {
+        $pedido = self::buscarPorId($idPedido);
+
+        if (!$pedido) {
+            return null;
+        }
+
+        $usuario = Usuario::buscarPorId(
+            $pedido->getIdUsuario()
+        );
+
+        $productos = DetallePedido::obtenerPorPedido(
+            $pedido->getId()
+        );
+
+        return [
+            'pedido'    => $pedido,
+            'usuario'   => $usuario,
+            'productos' => $productos
+        ];
+    }
 }

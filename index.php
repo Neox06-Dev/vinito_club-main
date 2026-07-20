@@ -10,6 +10,8 @@ if (!in_array($seccion, $secciones_validas)) {
     $seccion = '404';
 }
 
+
+
 if ($seccion === 'checkout') {
 
     if (!isset($_SESSION['id_usuario'])) {
@@ -23,6 +25,15 @@ if ($seccion === 'checkout') {
         header('Location: index.php?seccion=carrito&error=carrito_vacio');
         exit;
     }
+}
+
+if ($seccion === 'pedido-confirmado') {
+
+    if (!isset($_GET['id']) || (int)$_GET['id'] <= 0) {
+        header('Location: index.php');
+        exit;
+    }
+
 }
 
 require_once 'includes/header.php';

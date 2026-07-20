@@ -302,7 +302,7 @@ $error = $_GET['error'] ?? '';
                                 <span class="checkout-option-icon"><i class="bi bi-credit-card-2-front"></i></span>
                                 <span class="checkout-option-body">
                                     <span class="checkout-option-title">Tarjeta de crédito o débito</span>
-                                    <span class="checkout-option-desc">Visa, Mastercard y American Express.</span>
+                                    <span class="checkout-option-desc">Visa, Mastercard, Mercado Pago y American Express.</span>
                                 </span>
                             </label>
 

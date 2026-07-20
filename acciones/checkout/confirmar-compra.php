@@ -5,6 +5,7 @@ session_start();
 require_once '../../classes/Conexion.php';
 require_once '../../classes/Usuario.php';
 require_once '../../classes/Carrito.php';
+require_once '../../classes/Pedido.php';
 
 // Verificar sesión activa
 if (!isset($_SESSION['id_usuario'])) {
@@ -68,10 +69,18 @@ $direccion = $tipoEntrega === 'domicilio'
     ? trim($calle . ', ' . $ciudad . ' (CP ' . $codigoPostal . ')' . ($referencia !== '' ? ' - ' . $referencia : ''))
     : 'Retiro en tienda — Av. del Libertador 1234, CABA';
 
-// NOTA: la persistencia en base de datos (tablas `pedidos` / `detalle_pedido`)
-// todavía no está implementada — Pedido::crear() y DetallePedido::crear()
-// están pendientes de desarrollo. Por ahora guardamos un snapshot del
-// pedido en sesión para mostrar la confirmación y liberamos el carrito.
+Pedido::crear(
+    $_SESSION['id_usuario'],
+    $metodoPago,
+    $cuotas,
+    $tipoEntrega,
+    $direccion,
+    $observaciones,
+    $subtotal,
+    $costoEnvio,
+    $total,
+    $productos
+);
 
 $numeroPedido = 'VC-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -5));
 
@@ -99,7 +108,20 @@ $_SESSION['ultimo_pedido'] = [
     'total'         => $total,
 ];
 
+$idPedido = Pedido::crear(
+    $_SESSION['id_usuario'],
+    $metodoPago,
+    $cuotas,
+    $tipoEntrega,
+    $direccion,
+    $observaciones,
+    $subtotal,
+    $costoEnvio,
+    $total,
+    $productos
+);
+
 Carrito::vaciar();
 
-header('Location: ../../index.php?seccion=pedido-confirmado');
+header('Location: ../../index.php?seccion=pedido-confirmado&id=' . $idPedido);
 exit;

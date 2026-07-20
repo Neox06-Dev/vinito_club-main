@@ -1,32 +1,46 @@
 <?php
 
+require_once 'classes/Pedido.php';
+require_once 'classes/DetallePedido.php';
+require_once 'classes/Usuario.php';
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($_SESSION['id_usuario'])) {
-    header('Location: index.php?seccion=login');
-    exit;
-}
+$idPedido = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
-if (!isset($_SESSION['ultimo_pedido'])) {
+if ($idPedido <= 0) {
     header('Location: index.php?seccion=inicio');
     exit;
 }
 
-$pedido = $_SESSION['ultimo_pedido'];
-unset($_SESSION['ultimo_pedido']);
+$datos = Pedido::obtenerPedidoCompleto($idPedido);
+
+if ($datos === null) {
+    header('Location: index.php?seccion=inicio');
+    exit;
+}
+
+$pedido = $datos['pedido'];
+$usuario = $datos['usuario'];
+$productos = $datos['productos'];
 
 $metodoPagoLabels = [
-    'tarjeta'        => 'Tarjeta de crédito o débito',
-    'transferencia'  => 'Transferencia bancaria',
-    'efectivo'       => 'Efectivo al retirar',
+    'tarjeta'       => 'Tarjeta de crédito o débito',
+    'transferencia' => 'Transferencia bancaria',
+    'efectivo'      => 'Efectivo al retirar',
 ];
 
 $tipoEntregaLabels = [
     'domicilio' => 'Envío a domicilio',
     'retiro'    => 'Retiro en tienda',
 ];
+
+if ($pedido->getIdUsuario() !== $_SESSION['id_usuario']) {
+    header('Location: index.php?seccion=inicio');
+    exit;
+}
 
 ?>
 
@@ -38,11 +52,11 @@ $tipoEntregaLabels = [
                 <!-- ÉXITO -->
                 <div class="procesar-card text-center">
                     <i class="bi bi-check-circle procesar-icon icon-ok"></i>
-                    <h2 class="procesar-title">¡Gracias por tu compra, <?= htmlspecialchars($pedido['nombre']); ?>!</h2>
+                    <h2 class="procesar-title">¡Gracias por tu compra, <?= htmlspecialchars($usuario->getNombre()); ?>!</h2>
                     <p class="procesar-sub">
-                        Tu pedido <strong class="checkout-pedido-numero"><?= htmlspecialchars($pedido['numero']); ?></strong>
+                        Tu pedido <strong class="checkout-pedido-numero">#<?= str_pad($pedido->getId(), 6, '0', STR_PAD_LEFT); ?></strong>
                         fue confirmado. Te enviamos los detalles a
-                        <strong><?= htmlspecialchars($pedido['email']); ?></strong>.
+                        <strong><?= htmlspecialchars($usuario->getEmail()); ?></strong>.
                     </p>
                 </div>
 
@@ -54,43 +68,44 @@ $tipoEntregaLabels = [
                         <tbody>
                             <tr>
                                 <th>Número de pedido</th>
-                                <td><?= htmlspecialchars($pedido['numero']); ?></td>
+                                <td>#<?= str_pad($pedido->getId(), 6, '0', STR_PAD_LEFT); ?></td>
                             </tr>
                             <tr>
                                 <th>Fecha</th>
-                                <td><?= htmlspecialchars($pedido['fecha']); ?> hs</td>
+                                <td><?= date('d/m/Y H:i', strtotime($pedido->getFechaPedido())); ?> hs</td>
                             </tr>
                             <tr>
                                 <th>Entrega</th>
                                 <td>
-                                    <?= htmlspecialchars($tipoEntregaLabels[$pedido['tipo_entrega']] ?? $pedido['tipo_entrega']); ?>
+                                    <?= htmlspecialchars($tipoEntregaLabels[$pedido->getMetodoEnvio()] ?? $pedido->getMetodoEnvio()); ?>
                                     <br>
-                                    <span class="checkout-resumen-direccion"><?= htmlspecialchars($pedido['direccion']); ?></span>
+                                    <span class="checkout-resumen-direccion"><?= htmlspecialchars($pedido->getDireccion()); ?></span>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Método de pago</th>
                                 <td>
-                                    <?= htmlspecialchars($metodoPagoLabels[$pedido['metodo_pago']] ?? $pedido['metodo_pago']); ?>
-                                    <?php if ($pedido['metodo_pago'] === 'tarjeta' && ($pedido['cuotas'] ?? 1) > 1): ?>
-                                        <br>
-                                        <span class="checkout-resumen-direccion">
-                                            <?= (int) $pedido['cuotas']; ?> cuotas de
-                                            $ <?= number_format($pedido['total'] / $pedido['cuotas'], 0, ',', '.'); ?>
-                                        </span>
+                                    <?= htmlspecialchars($metodoPagoLabels[$pedido->getMetodoPago()] ?? $pedido->getMetodoPago()); ?>
+                                    <?php if ($pedido->getMetodoPago() === 'tarjeta'): ?>
+
+                                    <tr>
+                                        <th>Cuotas</th>
+                                        <td><?= $pedido->getCuotas(); ?> cuota<?= $pedido->getCuotas() > 1 ? 's' : ''; ?></td>
+                                    </tr>
+
                                     <?php endif; ?>
                                 </td>
                             </tr>
-                            <?php if (!empty($pedido['observaciones'])): ?>
+                            <?php if (!empty($pedido->getObservaciones())): ?>
                             <tr>
                                 <th>Observaciones</th>
-                                <td><?= nl2br(htmlspecialchars($pedido['observaciones'])); ?></td>
+                                <td><?= nl2br(htmlspecialchars($pedido->getObservaciones())); ?></td>
                             </tr>
                             <?php endif; ?>
                             <tr>
                                 <th>Productos</th>
                                 <td>
-                                    <?php foreach ($pedido['productos'] as $item): ?>
+                                    <?php foreach ($productos as $item): ?>
                                     <div class="checkout-confirmado-item">
                                         <?= htmlspecialchars($item['cantidad']); ?>x
                                         <?= htmlspecialchars($item['nombre']); ?>
@@ -103,20 +118,20 @@ $tipoEntregaLabels = [
                             </tr>
                             <tr>
                                 <th>Subtotal</th>
-                                <td>$ <?= number_format($pedido['subtotal'], 0, ',', '.'); ?></td>
+                                <td>$ <?= number_format($pedido->getSubtotal(), 0, ',', '.'); ?></td>
                             </tr>
                             <tr>
                                 <th>Envío</th>
                                 <td>
-                                    <?= $pedido['costo_envio'] > 0
-                                        ? '$ ' . number_format($pedido['costo_envio'], 0, ',', '.')
+                                    <?= $pedido->getCostoEnvio() > 0
+                                        ? '$ ' . number_format($pedido->getCostoEnvio(), 0, ',', '.')
                                         : 'Gratis'; ?>
                                 </td>
                             </tr>
                             <tr>
                                 <th>Total</th>
                                 <td class="checkout-confirmado-total">
-                                    $ <?= number_format($pedido['total'], 0, ',', '.'); ?>
+                                    $ <?= number_format($pedido->getTotal(), 0, ',', '.'); ?>
                                 </td>
                             </tr>
                         </tbody>

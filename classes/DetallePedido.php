@@ -42,13 +42,52 @@ class DetallePedido
     }
 
     // Métodos
-    // public static function crear()
-    // {
+    public static function crear(
+        PDO $conexion,
+        int $idPedido,
+        array $producto
+    ): bool {
 
-    // }
+        $vino = $producto['vino'];
 
-    // public static function buscarPorPedido(int $idPedido): array
-    // {
+        $query = "INSERT INTO detalle_pedidos
+            (
+                id_pedido,
+                id_vino,
+                cantidad,
+                precio_unitario,
+                subtotal
+            )
+            VALUES
+            (
+                ?, ?, ?, ?, ?
+            )";
 
-    // }
+        $stmt = $conexion->prepare($query);
+
+        return $stmt->execute([
+            $idPedido,
+            $vino->getIdVino(),
+            $producto['cantidad'],
+            $vino->getPrecio(),
+            $producto['subtotal']
+        ]);
+    }
+
+    public static function obtenerPorPedido(int $idPedido): array
+    {
+        $conexion = (new Conexion())->getConexion();
+
+        $query = "SELECT dp.*, v.nombre, v.bodega, v.imagen
+                FROM detalle_pedidos dp
+                INNER JOIN vinos v
+                        ON dp.id_vino = v.id_vino
+                WHERE dp.id_pedido = ?";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->execute([$idPedido]);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
