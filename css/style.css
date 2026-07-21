@@ -3598,6 +3598,230 @@ body.admin-nav-open{
 }
 
 
+/* MIS PEDIDOS */
+
+.pedidos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.pedido-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.1rem 1.4rem;
+    transition: var(--transition);
+}
+
+.pedido-card:hover {
+    border-color: rgba(196,163,103,0.45);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(0,0,0,0.28);
+}
+
+.pedido-thumb {
+    position: relative;
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: rgba(196,163,103,0.08);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pedido-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pedido-thumb i {
+    font-size: 1.6rem;
+    color: var(--color-gold);
+}
+
+.pedido-thumb--fallback img {
+    display: none;
+}
+
+.pedido-thumb-fallback-icon {
+    display: none;
+    font-size: 1.6rem;
+    color: var(--color-gold);
+}
+
+.pedido-thumb--fallback .pedido-thumb-fallback-icon {
+    display: block;
+}
+
+.pedido-thumb-badge {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 5px;
+    border-radius: 50%;
+    background: var(--color-wine);
+    color: var(--color-cream);
+    font-size: .68rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--color-bg-card);
+}
+
+.pedido-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.pedido-meta {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: .74rem;
+    color: var(--color-grey-light);
+    margin: 0 0 .3rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.pedido-numero {
+    color: var(--color-gold);
+    font-weight: 600;
+}
+
+.pedido-meta-dot {
+    opacity: .5;
+}
+
+.pedido-titulo {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-cream);
+    margin: 0 0 .15rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pedido-extra {
+    font-size: .78rem;
+    color: var(--color-grey-light);
+    margin: 0 0 .55rem;
+}
+
+.pedido-status {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .3rem .75rem;
+    border-radius: 999px;
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+}
+
+.pedido-status--pendiente {
+    background: rgba(196,163,103,0.12);
+    color: var(--color-gold);
+    border-color: rgba(196,163,103,0.35);
+}
+
+.pedido-status--preparando {
+    background: rgba(245,245,237,0.08);
+    color: var(--color-cream);
+    border-color: rgba(245,245,237,0.25);
+}
+
+.pedido-status--enviado {
+    background: rgba(196,163,103,0.16);
+    color: var(--color-gold-light);
+    border-color: rgba(196,163,103,0.4);
+}
+
+.pedido-status--entregado {
+    background: rgba(109,191,126,0.12);
+    color: #6dbf7e;
+    border-color: rgba(109,191,126,0.35);
+}
+
+.pedido-status--cancelado {
+    background: rgba(191,109,109,0.12);
+    color: #d98686;
+    border-color: rgba(191,109,109,0.35);
+}
+
+.pedido-footer {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: .6rem;
+}
+
+.pedido-price {
+    color: var(--color-cream);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+}
+
+.pedido-btn-detalle {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .4rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-gold);
+    font-size: .78rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+
+.pedido-btn-detalle:hover {
+    border-color: var(--color-gold);
+    background: rgba(196,163,103,0.08);
+    color: var(--color-gold);
+}
+
+@media (max-width: 640px) {
+    .pedido-card {
+        flex-wrap: wrap;
+    }
+
+    .pedido-footer {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: .25rem;
+        padding-top: .75rem;
+        border-top: 1px dashed var(--color-border);
+    }
+}
+
+@media (max-width: 480px) {
+    .pedido-card {
+        gap: 1rem;
+    }
+}
+
 /* CHECKOUT */
 
 .checkout-page .account-page-header {
