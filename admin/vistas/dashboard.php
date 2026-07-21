@@ -28,6 +28,7 @@
             <a href="index.php?sec=categorias">Categorías</a>
             <a href="index.php?sec=regiones">Regiones</a>
             <a href="index.php?sec=varietales">Varietales</a>
+            <a href="index.php?sec=pedidos">Pedidos</a>
 
             <h6>SISTEMA</h6>
 
@@ -70,6 +71,9 @@
                 </a>
                 <a href="index.php?sec=vino-crear" class=" btn-hero-outline">
                     Agregar vino &nbsp;<i class="bi bi-plus"></i>
+                </a>
+                <a href="index.php?sec=pedidos" class=" btn-hero-outline">
+                    Ver pedidos &nbsp;<i class="bi bi-bag"></i>
                 </a>
             </div>
         </section>

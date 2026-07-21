@@ -514,6 +514,76 @@ switch ($seccion) {
         header('Location: index.php?sec=varietales');
         exit;
 
+    case 'pedidos':
+
+        require_once '../classes/Pedido.php';
+
+        $pedidos = Pedido::listarTodos();
+
+        $estadoVariantes = [
+            'pendiente'   => 'pendiente',
+            'preparando'  => 'preparando',
+            'enviado'     => 'enviado',
+            'entregado'   => 'entregado',
+            'cancelado'   => 'cancelado',
+        ];
+
+        $estadoIconos = [
+            'pendiente'   => 'bi-hourglass-split',
+            'preparando'  => 'bi-box-seam',
+            'enviado'     => 'bi-truck',
+            'entregado'   => 'bi-check-circle',
+            'cancelado'   => 'bi-x-circle',
+        ];
+
+        require_once 'vistas/pedidos.php';
+
+        break;
+
+    case 'pedido-ver':
+
+        require_once '../classes/Pedido.php';
+        require_once '../classes/DetallePedido.php';
+        require_once '../classes/Usuario.php';
+
+        $id = (int) ($_GET['id'] ?? 0);
+
+        if ($id <= 0) {
+            header('Location: index.php?sec=pedidos');
+            exit;
+        }
+
+        $estadosDisponibles = ['Pendiente', 'Preparando', 'Enviado', 'Entregado', 'Cancelado'];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $nuevoEstado = trim($_POST['estado'] ?? '');
+
+            if (in_array($nuevoEstado, $estadosDisponibles, true)) {
+                Pedido::actualizarEstado($id, $nuevoEstado);
+            }
+
+            header('Location: index.php?sec=pedido-ver&id=' . $id . '&success=1');
+            exit;
+        }
+
+        $datos = Pedido::obtenerPedidoCompleto($id);
+
+        if ($datos === null) {
+            header('Location: index.php?sec=pedidos');
+            exit;
+        }
+
+        $pedido = $datos['pedido'];
+        $usuario = $datos['usuario'];
+        $productos = $datos['productos'];
+
+        $success = $_GET['success'] ?? '';
+
+        require_once 'vistas/pedido-ver.php';
+
+        break;
+
     default:
         header('Location: index.php?sec=dashboard');
         exit;

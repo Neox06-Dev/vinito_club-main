@@ -1384,13 +1384,15 @@ img { max-width: 100%; display: block; }
     padding-bottom: 12px;
     border-bottom: 1px solid var(--color-border);
 }
-.resumen-table {
+.resumen-table ,.resumen-table th,.resumen-table td {
     margin: 0;
-    color: var(--color-cream);
+    color: var(--color-cream) !important;
     font-size: 14px;
     width: 100%;
     table-layout: fixed;
+    background: transparent !important;
 }
+
 .resumen-table th {
     color: var(--color-gold);
     font-size: 10px;

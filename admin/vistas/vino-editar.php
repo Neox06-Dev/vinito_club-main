@@ -30,6 +30,7 @@
             <a href="index.php?sec=categorias">Categorías</a>
             <a href="index.php?sec=regiones">Regiones</a>
             <a href="index.php?sec=varietales">Varietales</a>
+            <a href="index.php?sec=pedidos">Pedidos</a>
             
             <h6>SISTEMA</h6>
 

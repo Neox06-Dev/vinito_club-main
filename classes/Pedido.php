@@ -1,4 +1,6 @@
 <?php
+require_once 'Conexion.php';
+require_once 'Usuario.php';
 require_once 'DetallePedido.php';
 
 class Pedido
@@ -232,5 +234,39 @@ class Pedido
             'usuario'   => $usuario,
             'productos' => $productos
         ];
+    }
+
+    public static function listarTodos(): array
+    {
+        $conexion = (new Conexion())->getConexion();
+
+        $query = "
+            SELECT
+                p.*,
+                u.nombre AS cliente
+            FROM pedidos p
+            INNER JOIN usuarios u
+                ON p.id_usuario = u.id_usuario
+            ORDER BY p.fecha_pedido DESC
+        ";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function actualizarEstado(int $idPedido, string $estado): bool
+    {
+        $conexion = (new Conexion())->getConexion();
+
+        $query = "UPDATE pedidos
+                SET estado = ?
+                WHERE id_pedido = ?";
+
+        $stmt = $conexion->prepare($query);
+
+        return $stmt->execute([$estado, $idPedido]);
     }
 }
