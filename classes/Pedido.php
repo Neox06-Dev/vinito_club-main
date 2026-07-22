@@ -2,6 +2,7 @@
 require_once 'Conexion.php';
 require_once 'Usuario.php';
 require_once 'DetallePedido.php';
+require_once 'Vino.php';
 
 class Pedido
 {
@@ -93,7 +94,6 @@ class Pedido
         float $total,
         array $productos
     ): int {
-
         $conexion = (new Conexion())->getConexion();
 
         try {
@@ -153,6 +153,16 @@ class Pedido
                     $idPedido,
                     $producto
                 );
+
+                if (!Vino::descontarStock(
+                    $conexion,
+                    $producto['vino']->getIdVino(),
+                    $producto['cantidad']
+                )) {
+                    throw new Exception(
+                        'Stock insuficiente para completar la compra.'
+                    );
+                }
 
             }
 

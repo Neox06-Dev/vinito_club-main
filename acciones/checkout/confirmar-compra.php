@@ -69,18 +69,6 @@ $direccion = $tipoEntrega === 'domicilio'
     ? trim($calle . ', ' . $ciudad . ' (CP ' . $codigoPostal . ')' . ($referencia !== '' ? ' - ' . $referencia : ''))
     : 'Retiro en tienda — Av. del Libertador 1234, CABA';
 
-Pedido::crear(
-    $_SESSION['id_usuario'],
-    $metodoPago,
-    $cuotas,
-    $tipoEntrega,
-    $direccion,
-    $observaciones,
-    $subtotal,
-    $costoEnvio,
-    $total,
-    $productos
-);
 
 $numeroPedido = 'VC-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -5));
 

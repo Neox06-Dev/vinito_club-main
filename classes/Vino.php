@@ -513,6 +513,30 @@ class Vino
         ]);
     }
 
+    public static function descontarStock(
+        PDO $conexion,
+        int $idVino,
+        int $cantidad
+    ): bool
+    {
+
+        $query = "
+            UPDATE vinos
+            SET stock = stock - ?
+            WHERE id_vino = ?
+            AND stock >= ?
+        ";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->execute([
+            $cantidad,
+            $idVino,
+            $cantidad
+        ]);
+
+        return $stmt->rowCount() > 0;
+    }
 
     //SETTERS
     public function setNombre(string $nombre): void
