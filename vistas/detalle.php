@@ -137,9 +137,9 @@ $categoriaClase = match ($categoriaClase) {
         <?php if (!empty($relacionados)): ?>
             <div class="relacionados-section mt-5 pt-4">
                 <h3 class="subsection-title mb-4">También te puede interesar</h3>
-                <div class="row g-4">
+                <div class="row g-4 relacionados-carousel">
                     <?php foreach ($relacionados as $r): ?>
-                        <div class="col-lg-4 col-md-6">
+                        <div class="col-lg-4 col-md-6 relacionados-item">
                             <article class="product-card">
                                 <a href="index.php?seccion=detalle&id=<?= $r->getIdVino() ?>" class="product-card-link">
                                     <div class="product-card-img-wrap">
