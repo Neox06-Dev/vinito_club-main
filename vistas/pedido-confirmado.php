@@ -139,10 +139,10 @@ if ($pedido->getIdUsuario() !== $_SESSION['id_usuario']) {
                 </div>
 
                 <div class="text-center mt-4 d-flex gap-3 justify-content-center flex-wrap">
-                    <a href="index.php?seccion=inicio" class="btn btn-hero-primary">
+                    <a href="index.php?seccion=inicio" class="btn btn-hero-primary flex-fill justify-content-center">
                         <i class="bi bi-house"></i> &nbsp; Volver al inicio
                     </a>
-                    <a href="index.php?seccion=tienda" class="btn btn-hero-outline">
+                    <a href="index.php?seccion=tienda" class="btn btn-hero-outline flex-fill justify-content-center">
                         Seguir comprando <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>

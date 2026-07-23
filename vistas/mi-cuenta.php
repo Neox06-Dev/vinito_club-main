@@ -1,6 +1,7 @@
 <?php
 
 require_once 'classes/Usuario.php';
+require_once 'classes/Pedido.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -14,7 +15,9 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 $usuario = Usuario::buscarPorId($_SESSION['id_usuario']);
-
+// Priorizar la dirección guardada en el perfil; si no existe, usar la del último pedido
+$direccionPerfil = $usuario->getDireccion();
+$direccion = $direccionPerfil ?? Pedido::buscarUltimaDireccion($_SESSION['id_usuario']);
 $success = $_GET['success'] ?? '';
 
 ?>
@@ -27,6 +30,11 @@ $success = $_GET['success'] ?? '';
         <div class="alert-vinito alert-vinito--success mb-4" role="alert">
             <i class="bi bi-check-circle-fill"></i>
             <span>Tus datos se actualizaron correctamente.</span>
+        </div>
+        <?php elseif ($success === 'direccion'): ?>
+        <div class="alert-vinito alert-vinito--success mb-4" role="alert">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>Tu dirección se actualizó correctamente.</span>
         </div>
         <?php endif; ?>
 
@@ -158,8 +166,21 @@ $success = $_GET['success'] ?? '';
                                     <i class="bi bi-geo-alt"></i>
                                     Dirección
                                 </h2>
+
+                                <a href="index.php?seccion=editar-direccion" class="account-edit-btn">
+                                    <i class="bi bi-pencil"></i>
+                                    Editar
+                                </a>
                             </div>
 
+                            <?php if ($direccion): ?>
+                            <div class="account-info-list">
+                                <div class="account-info-item">
+                                    <span><?= $direccionPerfil ? 'Dirección guardada' : 'Última dirección utilizada'; ?></span>
+                                    <strong><?= htmlspecialchars($direccion); ?></strong>
+                                </div>
+                            </div>
+                            <?php else: ?>
                             <div class="account-empty-state">
                                 <div class="account-empty-icon">
                                     <i class="bi bi-geo-alt"></i>
@@ -168,10 +189,11 @@ $success = $_GET['success'] ?? '';
                                     Todavía no registraste una dirección
                                 </p>
                                 <p class="account-empty-text">
-                                    Vas a poder agregarla durante tu primera compra
-                                    para agilizar tus próximos pedidos.
+                                    Hacé clic en <strong>Editar</strong> para agregar
+                                    tu dirección de envío y agilizar tus próximos pedidos.
                                 </p>
                             </div>
+                            <?php endif; ?>
 
                         </div>
                     </div>

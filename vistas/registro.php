@@ -108,7 +108,10 @@ $success = $_GET['success'] ?? '';
                 <div class="form-grid">
                     <!-- Nombre -->
                     <div class="form-floating-custom">
-                        <label for="nombre" class="form-label-custom">Nombre</label>
+                        <label for="nombre" class="form-label-custom">
+                            Nombre
+                            <span class="text-danger">*</span>
+                        </label>
                         <div class="input-icon-wrap">
                             <input
                                 type="text"
@@ -130,7 +133,10 @@ $success = $_GET['success'] ?? '';
 
                     <!-- Email -->
                     <div class="form-floating-custom">
-                        <label for="email" class="form-label-custom">Email</label>
+                        <label for="email" class="form-label-custom">
+                            Email
+                            <span class="text-danger">*</span>
+                        </label>
                         <div class="input-icon-wrap">
                             <input
                                 type="email"
@@ -173,7 +179,10 @@ $success = $_GET['success'] ?? '';
 
                     <!-- Contraseña -->
                     <div class="form-floating-custom">
-                        <label for="password" class="form-label-custom">Contraseña</label>
+                        <label for="password" class="form-label-custom">
+                            Contraseña
+                            <span class="text-danger">*</span>
+                        </label>
                         <div class="input-icon-wrap password-wrap">
                             <input
                                 type="password"
@@ -204,7 +213,10 @@ $success = $_GET['success'] ?? '';
 
                 <!-- Confirmar contraseña -->
                 <div class="form-floating-custom full-width">
-                    <label for="password2" class="form-label-custom">Confirmar contraseña</label>
+                    <label for="password2" class="form-label-custom">
+                        Confirmar contraseña
+                        <span class="text-danger">*</span>
+                    </label>
                     <div class="input-icon-wrap password-wrap">
                         <input
                             type="password"

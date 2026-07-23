@@ -267,6 +267,30 @@ class Pedido
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Trae la dirección del pedido más reciente del usuario que haya sido
+    // enviado a domicilio (se excluye "retiro en tienda", que no es una
+    // dirección propia del cliente). Devuelve null si nunca cargó una.
+ 
+    public static function buscarUltimaDireccion(int $idUsuario): ?string
+    {
+        $conexion = (new Conexion())->getConexion();
+ 
+        $query = "SELECT direccion
+                FROM pedidos
+                WHERE id_usuario = ?
+                    AND metodo_envio = 'domicilio'
+                ORDER BY fecha_pedido DESC
+                LIMIT 1";
+ 
+        $stmt = $conexion->prepare($query);
+ 
+        $stmt->execute([$idUsuario]);
+ 
+        $direccion = $stmt->fetchColumn();
+ 
+        return $direccion !== false ? $direccion : null;
+    }
+ 
     public static function actualizarEstado(int $idPedido, string $estado): bool
     {
         $conexion = (new Conexion())->getConexion();

@@ -14,17 +14,26 @@
                 <form action="index.php?seccion=procesar_contacto" method="POST" class="contacto-form" novalidate>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="nombre" class="form-label-custom">Nombre *</label>
+                            <label for="nombre" class="form-label-custom">
+                                Nombre
+                                <span class="text-danger">*</span>
+                            </label>
                             <input type="text" class="form-control form-control-custom" id="nombre" name="nombre"
                                 placeholder="Tu nombre" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="apellido" class="form-label-custom">Apellido *</label>
+                            <label for="apellido" class="form-label-custom">
+                                Apellido
+                                <span class="text-danger">*</span>
+                            </label>
                             <input type="text" class="form-control form-control-custom" id="apellido" name="apellido"
                                 placeholder="Tu apellido" required>
                         </div>
                         <div class="col-12">
-                            <label for="email" class="form-label-custom">Email *</label>
+                            <label for="email" class="form-label-custom">
+                                Email
+                                <span class="text-danger">*</span>
+                            </label>
                             <input type="email" class="form-control form-control-custom" id="email" name="email"
                                 placeholder="tu@email.com" required>
                         </div>
@@ -34,7 +43,10 @@
                                 placeholder="+54 11 1234-5678">
                         </div>
                         <div class="col-12">
-                            <label for="motivo" class="form-label-custom">Motivo de contacto *</label>
+                            <label for="motivo" class="form-label-custom">
+                                Motivo de contacto
+                                <span class="text-danger">*</span>
+                            </label>
                             <select class="form-select form-control-custom" id="motivo" name="motivo" required>
                                 <option value="" disabled selected>Seleccioná un motivo</option>
                                 <option value="consulta">Consulta sobre un vino</option>
@@ -45,7 +57,10 @@
                             </select>
                         </div>
                         <div class="col-12">
-                            <label for="mensaje" class="form-label-custom">Mensaje *</label>
+                            <label for="mensaje" class="form-label-custom">
+                                Mensaje
+                                <span class="text-danger">*</span>
+                            </label>
                             <textarea class="form-control form-control-custom" id="mensaje" name="mensaje"
                                 rows="5" placeholder="Contanos en qué podemos ayudarte..." required></textarea>
                         </div>

@@ -95,7 +95,7 @@
 
             <article class="stat-card stat-card--venta">
                 <h2>$ <?= number_format($estadisticasVentas['ticket_promedio'], 0, ',', '.') ?></h2>
-                <span>Ticket promedio</span>
+                <span>Promedio de ventas</span>
             </article>
 
             <article class="stat-card stat-card--venta stat-card--alerta">

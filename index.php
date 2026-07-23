@@ -5,7 +5,7 @@ require_once 'includes/header.php';
 require_once 'classes/Vino.php';
 
 // Secciones válidas
-$secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle', 'carrito', 'login', 'registro', 'mi-cuenta', 'editar-perfil', 'seguridad', 'checkout', 'pedido-confirmado', 'mis-pedidos', 'detalle-pedidos', '404'];
+$secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle', 'carrito', 'login', 'registro', 'mi-cuenta', 'editar-perfil', 'editar-direccion', 'seguridad', 'checkout', 'pedido-confirmado', 'mis-pedidos', 'detalle-pedidos', '404'];
 $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'inicio';
 
 if (!in_array($seccion, $secciones_validas)) {
@@ -87,6 +87,10 @@ if ($seccion === 'pedido-confirmado') {
 
         case 'editar-perfil':
             require_once 'vistas/editar-perfil.php';
+            break;
+
+        case 'editar-direccion':
+            require_once 'vistas/editar-direccion.php';
             break;
 
         case 'seguridad':

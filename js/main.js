@@ -1262,3 +1262,123 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 })();
+
+// ── EDITAR DIRECCIÓN ────────────────────────────────────────────────
+(function () {
+    'use strict';
+
+    const form = document.getElementById('editarDireccionForm');
+    if (!form) return;
+
+    const calleIn  = document.getElementById('calle');
+    const calleErr = document.getElementById('calleError');
+    const ciudadIn  = document.getElementById('ciudad');
+    const ciudadErr = document.getElementById('ciudadError');
+    const cpIn      = document.getElementById('codigo_postal');
+    const cpErr     = document.getElementById('cpError');
+    const jsAlert   = document.getElementById('jsAlertDir');
+    const jsAlertMsg = document.getElementById('jsAlertDirMsg');
+    const submitBtn  = document.getElementById('submitBtnDir');
+    const btnSpinner = document.getElementById('btnSpinnerDir');
+    const btnIcon    = document.getElementById('btnIconDir');
+    const btnText    = document.getElementById('btnTextDir');
+
+    // Vista previa en vivo
+    const previewDireccion = document.getElementById('previewDireccion');
+
+    function actualizarPreviewDir() {
+        const calle  = calleIn ? calleIn.value.trim() : '';
+        const ciudad = ciudadIn ? ciudadIn.value.trim() : '';
+        const cp     = cpIn ? cpIn.value.trim() : '';
+        const ref    = document.getElementById('referencia') ? document.getElementById('referencia').value.trim() : '';
+
+        let preview = '';
+        if (calle)  preview += calle;
+        if (ciudad) preview += (preview ? ', ' : '') + ciudad;
+        if (cp)     preview += ' (CP ' + cp + ')';
+        if (ref)    preview += ' - ' + ref;
+
+        if (previewDireccion) {
+            previewDireccion.textContent = preview || 'Tu dirección';
+        }
+    }
+
+    [calleIn, ciudadIn, cpIn, document.getElementById('referencia')].forEach(function (input) {
+        if (input) input.addEventListener('input', actualizarPreviewDir);
+    });
+
+    function showError(input, msgEl) {
+        if (input) input.classList.add('is-invalid-custom');
+        if (msgEl) msgEl.classList.add('show');
+    }
+
+    function clearError(input, msgEl) {
+        if (input) input.classList.remove('is-invalid-custom');
+        if (msgEl) msgEl.classList.remove('show');
+    }
+
+    // Limpieza en tiempo real
+    if (calleIn) {
+        calleIn.addEventListener('input', function () {
+            if (this.value.trim().length >= 3) clearError(this, calleErr);
+        });
+    }
+    if (ciudadIn) {
+        ciudadIn.addEventListener('input', function () {
+            if (this.value.trim().length >= 2) clearError(this, ciudadErr);
+        });
+    }
+    if (cpIn) {
+        cpIn.addEventListener('input', function () {
+            if (this.value.trim().length >= 1) clearError(this, cpErr);
+        });
+    }
+
+    form.addEventListener('submit', function (e) {
+        let valid = true;
+
+        if (!calleIn.value.trim() || calleIn.value.trim().length < 3) {
+            showError(calleIn, calleErr);
+            valid = false;
+        } else {
+            clearError(calleIn, calleErr);
+        }
+
+        if (!ciudadIn.value.trim() || ciudadIn.value.trim().length < 2) {
+            showError(ciudadIn, ciudadErr);
+            valid = false;
+        } else {
+            clearError(ciudadIn, ciudadErr);
+        }
+
+        if (!cpIn.value.trim()) {
+            showError(cpIn, cpErr);
+            valid = false;
+        } else {
+            clearError(cpIn, cpErr);
+        }
+
+        if (!valid) {
+            e.preventDefault();
+            jsAlertMsg.textContent = 'Por favor, revisá los campos marcados en rojo.';
+            jsAlert.style.display  = 'flex';
+            return;
+        }
+
+        jsAlert.style.display    = 'none';
+        btnSpinner.style.display = 'block';
+        btnIcon.style.display    = 'none';
+        btnText.textContent      = 'Guardando…';
+        submitBtn.disabled       = true;
+    });
+
+    // Auto-ocultar alertas PHP después de 6s
+    const phpAlertDir = document.querySelector('.alert-vinito--error:not(#jsAlertDir), .alert-vinito--success');
+    if (phpAlertDir) {
+        setTimeout(function () {
+            phpAlertDir.style.transition = 'opacity 0.5s';
+            phpAlertDir.style.opacity    = '0';
+            setTimeout(function () { phpAlertDir.remove(); }, 500);
+        }, 6000);
+    }
+})();
