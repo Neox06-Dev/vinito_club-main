@@ -3,7 +3,7 @@
 session_start();
 
 // Secciones válidas
-$secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle', 'carrito', 'login', 'registro', 'mi-cuenta', 'editar-perfil', 'seguridad', 'checkout', 'pedido-confirmado', 'mis-pedidos'];
+$secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle', 'carrito', 'login', 'registro', 'mi-cuenta', 'editar-perfil', 'seguridad', 'checkout', 'pedido-confirmado', 'mis-pedidos', 'detalle-pedidos', '404'];
 $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'inicio';
 
 if (!in_array($seccion, $secciones_validas)) {
@@ -106,6 +106,10 @@ require_once 'classes/Vino.php';
 
         case 'mis-pedidos':
             require_once 'vistas/mis-pedidos.php';
+            break;
+        
+        case 'detalle-pedidos':
+            require_once 'vistas/detalle-pedidos.php';
             break;
     }
     ?>

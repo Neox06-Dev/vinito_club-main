@@ -1202,3 +1202,63 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 6000);
     }
 })();
+
+// ── DASHBOARD ADMIN (gráfico de ventas) ─────────────────────────
+(function () {
+    'use strict';
+
+    const canvas = document.getElementById('ventasChart');
+    if (!canvas || typeof Chart === 'undefined' || !window.ventasPorDiaData) return;
+
+    const datos = window.ventasPorDiaData;
+
+    const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+    const etiquetas = Object.keys(datos).map((fecha) => {
+        const d = new Date(fecha + 'T00:00:00');
+        return diasSemana[d.getDay()] + ' ' + d.getDate();
+    });
+
+    const valores = Object.values(datos);
+
+    new Chart(canvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: etiquetas,
+            datasets: [{
+                label: 'Ventas',
+                data: valores,
+                backgroundColor: 'rgba(196,163,103,0.55)',
+                hoverBackgroundColor: 'rgba(196,163,103,0.85)',
+                borderRadius: 6,
+                maxBarThickness: 42
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => '$ ' + ctx.parsed.y.toLocaleString('es-AR')
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: 'rgba(245,245,237,0.65)' }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(196,163,103,0.1)' },
+                    ticks: {
+                        color: 'rgba(245,245,237,0.65)',
+                        callback: (valor) => '$ ' + Number(valor).toLocaleString('es-AR')
+                    }
+                }
+            }
+        }
+    });
+})();

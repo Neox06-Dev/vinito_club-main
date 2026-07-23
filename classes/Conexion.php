@@ -19,7 +19,10 @@ class Conexion {
             $this->db = new PDO(
                 self::DB_DSN,
                 self::DB_USER,
-                self::DB_PASS
+                self::DB_PASS,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                ]
             );
         } catch (Exception $e) {
             die('Error al conectar con la base de datos: ' . $e->getMessage());

@@ -279,4 +279,89 @@ class Pedido
 
         return $stmt->execute([$estado, $idPedido]);
     }
+
+    // Trae los N pedidos más recientes (con nombre de cliente) para el dashboard
+
+    public static function ultimos(int $limite = 4): array
+    {
+        $conexion = (new Conexion())->getConexion();
+
+        // $limite ya está tipado como int por PHP (no viene de un input externo
+        // sin validar), así que se puede interpolar directo con seguridad.
+        // Se evita bindValue() para LIMIT porque algunas configuraciones de
+        // PDO/MySQL lo manejan mal quedándose en silencio con ERRMODE_SILENT.
+        $limite = max(1, $limite);
+
+        $query = "
+            SELECT
+                p.*,
+                u.nombre AS cliente
+            FROM pedidos p
+            INNER JOIN usuarios u
+                ON p.id_usuario = u.id_usuario
+            ORDER BY p.fecha_pedido DESC
+            LIMIT {$limite}
+        ";
+
+        $stmt = $conexion->query($query);
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Estadísticas de ventas para el dashboard: facturación, cantidad de
+    // pedidos, ticket promedio, pendientes y ventas por día de la última semana.
+    // Los pedidos cancelados no se contabilizan como venta real.
+
+    public static function estadisticasVentas(): array
+    {
+        $conexion = (new Conexion())->getConexion();
+
+        // Todo el resumen (facturado, cantidad, promedio y pendientes) sale
+        // de una sola consulta con agregación condicional, para no dejar
+        // varios cursores abiertos a la vez sobre la misma conexión.
+        $query = "
+            SELECT
+                COALESCE(SUM(CASE WHEN estado <> 'Cancelado' THEN total END), 0) AS facturado,
+                COUNT(CASE WHEN estado <> 'Cancelado' THEN 1 END) AS cantidad_pedidos,
+                COALESCE(AVG(CASE WHEN estado <> 'Cancelado' THEN total END), 0) AS ticket_promedio,
+                COUNT(CASE WHEN estado = 'Pendiente' THEN 1 END) AS pendientes
+            FROM pedidos
+        ";
+
+        $stmt = $conexion->query($query);
+        $resumen = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        // Ventas por día (últimos 7 días, incluyendo hoy)
+        $queryVentasDia = "
+            SELECT
+                DATE(fecha_pedido) AS dia,
+                SUM(total) AS total
+            FROM pedidos
+            WHERE estado <> 'Cancelado'
+                AND fecha_pedido >= (CURDATE() - INTERVAL 6 DAY)
+            GROUP BY DATE(fecha_pedido)
+        ";
+
+        $stmtVentasDia = $conexion->query($queryVentasDia);
+        $filas = $stmtVentasDia->fetchAll(PDO::FETCH_KEY_PAIR);
+        $stmtVentasDia->closeCursor();
+
+        // Se completan los días sin ventas con 0 para que el gráfico
+        // muestre siempre los últimos 7 días de forma continua.
+        $ventasPorDia = [];
+
+        for ($i = 6; $i >= 0; $i--) {
+            $fecha = date('Y-m-d', strtotime("-{$i} days"));
+            $ventasPorDia[$fecha] = (float) ($filas[$fecha] ?? 0);
+        }
+
+        return [
+            'facturado'        => (float) $resumen['facturado'],
+            'cantidad_pedidos' => (int) $resumen['cantidad_pedidos'],
+            'ticket_promedio'  => (float) $resumen['ticket_promedio'],
+            'pendientes'       => (int) $resumen['pendientes'],
+            'ventas_por_dia'   => $ventasPorDia,
+        ];
+    }
 }

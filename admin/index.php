@@ -33,12 +33,46 @@ switch ($seccion) {
         require_once '../classes/Vino.php';
         require_once '../classes/Categoria.php';
         require_once '../classes/Varietal.php';
+        require_once '../classes/Pedido.php';
 
         $totalVinos = count(Vino::catalogo_completo());
         $totalCategorias = count(Categoria::todas());
         $totalVarietales = count(Varietal::todas());
 
         $ultimosVinos = Vino::ultimos();
+
+        $errorVentas = null;
+
+        try {
+            $estadisticasVentas = Pedido::estadisticasVentas();
+            $ultimosPedidos = Pedido::ultimos(4);
+        } catch (Throwable $e) {
+            $errorVentas = $e->getMessage();
+            $estadisticasVentas = [
+                'facturado'        => 0,
+                'cantidad_pedidos' => 0,
+                'ticket_promedio'  => 0,
+                'pendientes'       => 0,
+                'ventas_por_dia'   => [],
+            ];
+            $ultimosPedidos = [];
+        }
+
+        $estadoVariantes = [
+            'pendiente'   => 'pendiente',
+            'preparando'  => 'preparando',
+            'enviado'     => 'enviado',
+            'entregado'   => 'entregado',
+            'cancelado'   => 'cancelado',
+        ];
+
+        $estadoIconos = [
+            'pendiente'   => 'bi-hourglass-split',
+            'preparando'  => 'bi-box-seam',
+            'enviado'     => 'bi-truck',
+            'entregado'   => 'bi-check-circle',
+            'cancelado'   => 'bi-x-circle',
+        ];
 
         require_once 'vistas/dashboard.php';
 

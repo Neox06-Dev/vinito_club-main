@@ -137,7 +137,9 @@ $total = $subtotal + $costoEnvio;
                                     <button
                                         class="qty-btn qty-plus"
                                         type="button"
-                                        data-id="<?= $vino->getIdVino() ?>">
+                                        data-id="<?= $vino->getIdVino() ?>"
+                                        <?= $item['cantidad'] >= $item['vino']->getStock() ? 'disabled' : '' ?>
+                                        >
 
                                         <i class="bi bi-plus"></i>
 

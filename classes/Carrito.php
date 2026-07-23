@@ -35,11 +35,13 @@ class Carrito
             return false;
         }
 
-        if (isset($_SESSION['carrito'][$idVino])) {
-            $_SESSION['carrito'][$idVino]++;
-        } else {
-            $_SESSION['carrito'][$idVino] = 1;
+        $cantidadActual = $_SESSION['carrito'][$idVino] ?? 0;
+
+        if ($cantidadActual >= $vino->getStock()) {
+            return false;
         }
+
+        $_SESSION['carrito'][$idVino] = $cantidadActual + 1;
 
         return true;
     }
@@ -107,6 +109,12 @@ class Carrito
         }
 
         if (!isset($_SESSION['carrito'][$idVino])) {
+            return false;
+        }
+
+        $vino = self::obtenerVino($idVino);
+
+        if ($_SESSION['carrito'][$idVino] >= $vino->getStock()) {
             return false;
         }
 

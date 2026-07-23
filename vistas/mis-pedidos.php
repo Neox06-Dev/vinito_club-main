@@ -149,7 +149,7 @@ function formatearFechaPedido(string $fecha, array $meses): string
                             $ <?= number_format($pedido->getTotal(), 0, ',', '.') ?>
                         </strong>
 
-                        <a href="index.php?seccion=pedido-confirmado&id=<?= $pedido->getId() ?>" class="pedido-btn-detalle">
+                        <a href="index.php?seccion=detalle-pedidos&id=<?= $pedido->getId() ?>" class="pedido-btn-detalle">
                             <i class="bi bi-eye"></i>
                             Detalles
                         </a>
