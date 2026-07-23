@@ -42,6 +42,16 @@ $_SESSION['nombre'] = $usuario->getNombre();
 $_SESSION['email'] = $usuario->getEmail();
 $_SESSION['rol'] = $usuario->getRol();
 
+// Solo crear la cookie si el usuario marcó "Recordar mi sesión"
+if (isset($_POST['remember']) && $_POST['remember'] === '1') {
+    setcookie(
+        'recordar_usuario',
+        (string) $usuario->getId(),
+        time() + (60 * 60 * 24 * 30),
+        '/'
+    );
+}
+
 // Redireccionar
 header('Location: ../../index.php');
 exit;

@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/Conexion.php';
+
 class Usuario
 {
     private int $id_usuario;

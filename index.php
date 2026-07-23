@@ -1,6 +1,8 @@
 <?php
 
-session_start();
+require_once 'includes/auth.php';
+require_once 'includes/header.php';
+require_once 'classes/Vino.php';
 
 // Secciones válidas
 $secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle', 'carrito', 'login', 'registro', 'mi-cuenta', 'editar-perfil', 'seguridad', 'checkout', 'pedido-confirmado', 'mis-pedidos', 'detalle-pedidos', '404'];
@@ -9,8 +11,6 @@ $seccion = isset($_GET['seccion']) ? $_GET['seccion'] : 'inicio';
 if (!in_array($seccion, $secciones_validas)) {
     $seccion = '404';
 }
-
-
 
 if ($seccion === 'checkout') {
 
@@ -35,9 +35,6 @@ if ($seccion === 'pedido-confirmado') {
     }
 
 }
-
-require_once 'includes/header.php';
-require_once 'classes/Vino.php';
 
 ?>
 

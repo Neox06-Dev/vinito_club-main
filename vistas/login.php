@@ -1,6 +1,7 @@
 <?php
 $error = $_GET['error'] ?? '';
 $success = $_GET['success'] ?? '';
+
 ?>
 
 <section class="login-page">
