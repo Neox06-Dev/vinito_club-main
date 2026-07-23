@@ -1382,3 +1382,43 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 6000);
     }
 })();
+
+// ── SIDEBAR DE FILTROS (TIENDA) ──────────────────────────────────────
+(function () {
+    'use strict';
+
+    const btnOpen    = document.getElementById('btnFiltrosMobile');
+    const btnClose   = document.getElementById('btnCloseFiltros');
+    const panel      = document.getElementById('filtrosPanel');
+    const overlay    = document.getElementById('filtrosOverlay');
+    const body       = document.body;
+
+    if (!btnOpen || !panel || !overlay) return;
+
+    function openFiltros() {
+        panel.classList.add('active');
+        overlay.classList.add('active');
+        body.style.overflow = 'hidden'; // Prevenir scroll del fondo
+    }
+
+    function closeFiltros() {
+        panel.classList.remove('active');
+        overlay.classList.remove('active');
+        body.style.overflow = '';
+    }
+
+    btnOpen.addEventListener('click', openFiltros);
+    
+    if (btnClose) {
+        btnClose.addEventListener('click', closeFiltros);
+    }
+
+    overlay.addEventListener('click', closeFiltros);
+
+    // Cerrar con la tecla ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && panel.classList.contains('active')) {
+            closeFiltros();
+        }
+    });
+})();

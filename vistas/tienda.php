@@ -117,17 +117,37 @@ function filtroUrl(string $param, string $valor): string
 <section class="tienda-section" id="tienda">
     <div class="container-fluid px-4">
 
-        <div class="tienda-header mb-4">
-            <div class="section-label">— Tienda —</div>
-            <h2 class="section-title">Nuestros <em>vinos</em></h2>
-            <p class="tienda-sub"><?= count($productos) ?> de <?= count($todos) ?> etiquetas</p>
+        <div class="tienda-header mb-4 d-flex justify-content-between align-items-end flex-wrap gap-3">
+            <div>
+                <div class="section-label">— Tienda —</div>
+                <h2 class="section-title">Nuestros <em>vinos</em></h2>
+                <p class="tienda-sub"><?= count($productos) ?> de <?= count($todos) ?> etiquetas</p>
+            </div>
+            
+            <!-- Botón de Filtros (Solo visible en Mobile/Tablet) -->
+            <button class="btn-hero-primary d-lg-none flex-fill justify-content-center" id="btnFiltrosMobile">
+                <i class="bi bi-funnel"></i>
+                Filtros
+            </button>
         </div>
 
         <div class="row">
 
             <!-- ── PANEL DE FILTROS (PHP GET) ── -->
-            <aside class="col-lg-2 col-md-3 tienda-sidebar">
-                <div class="filtros-panel">
+            <aside class="col-lg-2 tienda-sidebar">
+                
+                <!-- Overlay para mobile -->
+                <div class="filtros-sidebar-overlay" id="filtrosOverlay"></div>
+
+                <div class="filtros-panel" id="filtrosPanel">
+                    
+                    <!-- Header para mobile -->
+                    <div class="filtros-mobile-header d-lg-none">
+                        <h5>Filtros</h5>
+                        <button type="button" class="btn-close-filtros" id="btnCloseFiltros">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
 
                     <!-- CATEGORÍAS -->
                     <div class="filtro-grupo">
@@ -215,7 +235,7 @@ function filtroUrl(string $param, string $valor): string
             </aside>
 
             <!-- ── GRID DE PRODUCTOS ── -->
-            <div class="col-lg-10 col-md-9">
+            <div class="col-lg-10">
 
                 <!-- Toolbar ordenar -->
                 <div class="tienda-toolbar d-flex justify-content-between align-items-center mb-4">
