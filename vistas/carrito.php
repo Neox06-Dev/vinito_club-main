@@ -68,11 +68,11 @@ $total = $subtotal + $costoEnvio;
                     <article class="carrito-item mb-3" data-id="<?= $vino->getIdVino() ?>" data-precio="<?= $vino->getPrecio() ?>" data-cantidad="<?= $cantidad ?>">
 
                         <div class="carrito-item-img">
-
-                            <img
-                                src="<?= htmlspecialchars($vino->getImagenSrc()) ?>"
-                                alt="<?= htmlspecialchars($vino->getNombre()) ?>">
-
+                            <a href="index.php?seccion=detalle&id=<?= $vino->getIdVino() ?>" class="text-decoration-none">
+                                <img
+                                    src="<?= htmlspecialchars($vino->getImagenSrc()) ?>"
+                                    alt="<?= htmlspecialchars($vino->getNombre()) ?>">
+                            </a>
                         </div>
 
                         <div class="carrito-item-content">
@@ -80,7 +80,9 @@ $total = $subtotal + $costoEnvio;
                             <div class="carrito-item-info">
 
                                 <h2 class="carrito-item-title">
-                                    <?= htmlspecialchars($vino->getNombre()) ?>
+                                    <a href="index.php?seccion=detalle&id=<?= $vino->getIdVino() ?>" class="text-decoration-none text-white">
+                                        <?= htmlspecialchars($vino->getNombre()) ?>
+                                    </a>
                                 </h2>
 
                                 <p class="carrito-item-bodega">
