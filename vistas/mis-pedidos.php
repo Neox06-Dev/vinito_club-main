@@ -104,11 +104,13 @@ function formatearFechaPedido(string $fecha, array $meses): string
 
                     <div class="pedido-thumb">
                         <?php if ($primerItem): ?>
-                        <img
-                            src="assets/img/productos/<?= htmlspecialchars($primerItem['imagen']) ?>"
-                            alt="<?= htmlspecialchars($primerItem['nombre']) ?>"
-                            onerror="this.closest('.pedido-thumb').classList.add('pedido-thumb--fallback')">
-                        <i class="bi bi-bag pedido-thumb-fallback-icon"></i>
+                        <a href="index.php?seccion=detalle&id=<?= $primerItem['id_vino'] ?>">
+                            <img
+                                src="assets/img/productos/<?= htmlspecialchars($primerItem['imagen']) ?>"
+                                alt="<?= htmlspecialchars($primerItem['nombre']) ?>"
+                                onerror="this.closest('.pedido-thumb').classList.add('pedido-thumb--fallback')">
+                            <i class="bi bi-bag pedido-thumb-fallback-icon"></i>
+                        </a>
                         <?php else: ?>
                         <i class="bi bi-bag"></i>
                         <?php endif; ?>
@@ -127,7 +129,13 @@ function formatearFechaPedido(string $fecha, array $meses): string
                         </p>
 
                         <h3 class="pedido-titulo">
-                            <?= $primerItem ? htmlspecialchars($primerItem['nombre']) : 'Pedido #' . $pedido->getId() ?>
+                            <?php if ($primerItem): ?>
+                                <a href="index.php?seccion=detalle&id=<?= $primerItem['id_vino'] ?>" class="text-decoration-none text-white">
+                                    <?= htmlspecialchars($primerItem['nombre']) ?>
+                                </a>
+                            <?php else: ?>
+                                <?= 'Pedido #' . $pedido->getId() ?>
+                            <?php endif; ?>
                         </h3>
 
                         <?php if ($cantidadItems > 1): ?>

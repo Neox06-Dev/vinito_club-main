@@ -97,7 +97,9 @@ if ($pedido->getIdUsuario() !== $_SESSION['id_usuario']) {
                                     <?php foreach ($productos as $item): ?>
                                     <div class="checkout-confirmado-item">
                                         <?= htmlspecialchars($item['cantidad']); ?>x
-                                        <?= htmlspecialchars($item['nombre']); ?>
+                                        <a href="index.php?seccion=detalle&id=<?= $item['id_vino']; ?>" class="text-decoration-none text-white-50">
+                                            <?= htmlspecialchars($item['nombre']); ?>
+                                        </a>
                                         <span class="checkout-confirmado-item-precio">
                                             $ <?= number_format($item['subtotal'], 0, ',', '.'); ?>
                                         </span>
