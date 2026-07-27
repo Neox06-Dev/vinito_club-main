@@ -15,8 +15,58 @@ $error = $_GET['error'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    $nombre = trim($_POST['nombre'] ?? '');
+    $descripcion = trim($_POST['descripcion'] ?? '');
+    $precio = trim($_POST['precio'] ?? '');
+    $stock = trim($_POST['stock'] ?? '');
+    $volumenMl = trim($_POST['volumen_ml'] ?? '');
+    $bodega = trim($_POST['bodega'] ?? '');
+    $regionId = trim($_POST['region_id'] ?? '');
     $anioCosecha = trim($_POST['anio_cosecha'] ?? '');
     $temperaturaServicio = trim($_POST['temperatura_servicio'] ?? '');
+    $categoriaId = trim($_POST['categoria_id'] ?? '');
+    $varietalId = trim($_POST['varietal_id'] ?? '');
+    $imagenSubida = $_FILES['imagen']['name'] ?? '';
+
+    if ($nombre === '') {
+        header('Location: vino-crear.php?error=nombre');
+        exit;
+    }
+
+    if ($descripcion === '') {
+        header('Location: vino-crear.php?error=descripcion');
+        exit;
+    }
+
+    if ($precio === '') {
+        header('Location: vino-crear.php?error=precio');
+        exit;
+    }
+
+    if ($stock === '') {
+        header('Location: vino-crear.php?error=stock');
+        exit;
+    }
+
+    if ($volumenMl === '') {
+        header('Location: vino-crear.php?error=volumen_ml');
+        exit;
+    }
+
+    if ($imagenSubida === '') {
+        header('Location: vino-crear.php?error=imagen');
+        exit;
+    }
+
+    if ($bodega === '') {
+        header('Location: vino-crear.php?error=bodega');
+        exit;
+    }
+
+    if ($regionId === '') {
+        header('Location: vino-crear.php?error=region_id');
+        exit;
+    }
 
     if ($anioCosecha === '') {
         header('Location: vino-crear.php?error=anio_cosecha');
@@ -25,6 +75,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($temperaturaServicio === '') {
         header('Location: vino-crear.php?error=temperatura_servicio');
+        exit;
+    }
+
+    if ($categoriaId === '') {
+        header('Location: vino-crear.php?error=categoria_id');
+        exit;
+    }
+
+    if ($varietalId === '') {
+        header('Location: vino-crear.php?error=varietal_id');
         exit;
     }
 

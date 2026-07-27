@@ -50,9 +50,14 @@
             </div>
         <?php endif; ?>
 
+        <div class="alert-vinito alert-vinito--error js-alert-hidden" id="jsAlert" role="alert">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span id="jsAlertMsg"></span>
+        </div>
+
         <section class="form-panel">
 
-            <form method="POST">
+            <form method="POST" id="regionCrearForm">
 
                 <div class="form-section">
                     <h3 class="form-section-title"><i class="bi bi-info-circle"></i> Información general</h3>
@@ -68,6 +73,9 @@
                                 class="form-control-custom"
                                 required
                                 value="<?= htmlspecialchars($_POST['nombre'] ?? '') ?>">
+                            <p class="invalid-msg" id="nombreError" role="alert">
+                                Ingresá un nombre válido.
+                            </p>
                         </div>
 
                     </div>

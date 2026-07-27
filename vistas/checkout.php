@@ -35,7 +35,7 @@ $error = $_GET['error'] ?? '';
                 Finalizá tu <em>pedido</em>
             </h1>
 
-            <p class="account-subtitle">
+            <p class="nosotros-text">
                 Revisá tus datos, elegí cómo recibirlo y confirmá la compra.
             </p>
         </header>
@@ -102,7 +102,10 @@ $error = $_GET['error'] ?? '';
                         <div class="form-grid">
 
                             <div class="form-floating-custom">
-                                <label for="nombre" class="form-label-custom">Nombre completo</label>
+                                <label for="nombre" class="form-label-custom">
+                                    Nombre completo
+                                    <span class="text-danger">*</span>
+                                </label>
                                 <div class="input-icon-wrap">
                                     <input
                                         type="text"
@@ -122,7 +125,10 @@ $error = $_GET['error'] ?? '';
                             </div>
 
                             <div class="form-floating-custom">
-                                <label for="email" class="form-label-custom">Email</label>
+                                <label for="email" class="form-label-custom">
+                                    Email
+                                    <span class="text-danger">*</span>
+                                </label>
                                 <div class="input-icon-wrap">
                                     <input
                                         type="email"
@@ -142,7 +148,10 @@ $error = $_GET['error'] ?? '';
                             </div>
 
                             <div class="form-floating-custom full-width">
-                                <label for="telefono" class="form-label-custom">Teléfono de contacto</label>
+                                <label for="telefono" class="form-label-custom">
+                                    Teléfono de contacto
+                                    <span class="text-danger">*</span>
+                                </label>
                                 <div class="input-icon-wrap">
                                     <input
                                         type="tel"
@@ -209,7 +218,10 @@ $error = $_GET['error'] ?? '';
                             <div class="form-grid">
 
                                 <div class="form-floating-custom full-width">
-                                    <label for="calle" class="form-label-custom">Calle y número</label>
+                                    <label for="calle" class="form-label-custom">
+                                        Calle y número
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <div class="input-icon-wrap">
                                         <input
                                             type="text"
@@ -228,7 +240,10 @@ $error = $_GET['error'] ?? '';
                                 </div>
 
                                 <div class="form-floating-custom">
-                                    <label for="ciudad" class="form-label-custom">Ciudad</label>
+                                    <label for="ciudad" class="form-label-custom">
+                                        Ciudad
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <div class="input-icon-wrap">
                                         <input
                                             type="text"
@@ -247,7 +262,10 @@ $error = $_GET['error'] ?? '';
                                 </div>
 
                                 <div class="form-floating-custom">
-                                    <label for="codigo_postal" class="form-label-custom">Código postal</label>
+                                    <label for="codigo_postal" class="form-label-custom">
+                                        Código postal
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <div class="input-icon-wrap">
                                         <input
                                             type="text"
@@ -355,7 +373,10 @@ $error = $_GET['error'] ?? '';
                                 </div>
 
                                 <div class="form-floating-custom full-width">
-                                    <label for="numero_tarjeta" class="form-label-custom">Número de tarjeta</label>
+                                    <label for="numero_tarjeta" class="form-label-custom">
+                                        Número de tarjeta
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <div class="input-icon-wrap">
                                         <input
                                             type="text"
@@ -376,7 +397,10 @@ $error = $_GET['error'] ?? '';
                                 </div>
 
                                 <div class="form-floating-custom">
-                                    <label for="vencimiento_tarjeta" class="form-label-custom">Vencimiento</label>
+                                    <label for="vencimiento_tarjeta" class="form-label-custom">
+                                        Vencimiento
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <div class="input-icon-wrap">
                                         <input
                                             type="text"
@@ -396,7 +420,10 @@ $error = $_GET['error'] ?? '';
                                 </div>
 
                                 <div class="form-floating-custom">
-                                    <label for="cvv_tarjeta" class="form-label-custom">CVV</label>
+                                    <label for="cvv_tarjeta" class="form-label-custom">
+                                        CVV
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <div class="input-icon-wrap">
                                         <input
                                             type="text"
@@ -433,17 +460,17 @@ $error = $_GET['error'] ?? '';
                         <div class="account-module-header">
                             <h2>
                                 <i class="bi bi-chat-left-text"></i>
-                                Observaciones <span class="checkout-optional-tag">(opcional)</span>
+                                Observaciones
                             </h2>
                         </div>
 
                         <div class="form-floating-custom full-width mb-0">
-                            <label for="observaciones" class="form-label-custom">¿Algo que debamos saber?</label>
+                            <label for="observaciones" class="form-label-custom">¿Algo que debamos saber? (opcional)</label>
                             <textarea
                                 id="observaciones"
                                 name="observaciones"
-                                class="form-control checkout-textarea"
-                                rows="3"
+                                class="form-control form-control-custom"
+                                rows="4"
                                 placeholder="Ej: dejar en portería, horario preferido de entrega, etc."
                             ></textarea>
                         </div>
@@ -537,7 +564,7 @@ $error = $_GET['error'] ?? '';
                             <span id="btnText">Confirmar compra</span>
                         </button>
 
-                        <a href="index.php?seccion=carrito" class="checkout-back-link">
+                        <a href="index.php?seccion=carrito" class="btn btn-hero-outline w-100 mt-3 justify-content-center" aria-label="Volver al carrito">
                             <i class="bi bi-arrow-left"></i>
                             Volver al carrito
                         </a>

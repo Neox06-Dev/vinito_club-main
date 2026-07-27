@@ -235,7 +235,7 @@ if ($direccionGuardada !== '') {
 
                             <!-- Referencia (opcional) -->
                             <div class="form-floating-custom full-width">
-                                <label for="referencia" class="form-label-custom">Referencia <span class="text-muted" style="font-size:.82rem;">(opcional)</span></label>
+                                <label for="referencia" class="form-label-custom">Referencia <span>(opcional)</span></label>
                                 <div class="input-icon-wrap">
                                     <input
                                         type="text"

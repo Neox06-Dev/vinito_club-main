@@ -79,6 +79,11 @@ class Categoria
 
     public function crear(): bool
     {
+        if (trim($this->nombre) === '') {
+            $this->error = 'El nombre de la categoría es obligatorio.';
+            return false;
+        }
+
         if (self::existeNombre($this->nombre)) {
             $this->error = 'La categoría ya existe.';
             return false;

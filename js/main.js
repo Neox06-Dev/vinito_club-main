@@ -1422,3 +1422,87 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 })();
+
+// ── ADMIN: AGREGAR VINO ──────────────────────────────────────────────
+(function () {
+    'use strict';
+
+    const form = document.getElementById('vinoForm');
+    if (!form) return;
+
+    const inputs = {
+        nombre: { in: document.getElementById('nombre'), err: document.getElementById('nombreError') },
+        descripcion: { in: document.getElementById('descripcion'), err: document.getElementById('descripcionError') },
+        precio: { in: document.getElementById('precio'), err: document.getElementById('precioError') },
+        stock: { in: document.getElementById('stock'), err: document.getElementById('stockError') },
+        volumen: { in: document.getElementById('volumen_ml'), err: document.getElementById('volumenError') },
+        imagen: { in: document.getElementById('imagen'), err: document.getElementById('imagenError') },
+        bodega: { in: document.getElementById('bodega'), err: document.getElementById('bodegaError') },
+        region: { in: document.getElementById('region_id'), err: document.getElementById('regionError') },
+        anio: { in: document.getElementById('anio_cosecha'), err: document.getElementById('anioError') },
+        temp: { in: document.getElementById('temperatura_servicio'), err: document.getElementById('tempError') },
+        varietal: { in: document.getElementById('varietal_id'), err: document.getElementById('varietalError') }
+    };
+
+    const jsAlert    = document.getElementById('jsAlertVino');
+    const jsAlertMsg = document.getElementById('jsAlertVinoMsg');
+    const submitBtn  = document.getElementById('submitBtnVino');
+    const btnSpinner = document.getElementById('btnSpinnerVino');
+    const btnIcon    = document.getElementById('btnIconVino');
+    const btnText    = document.getElementById('btnTextVino');
+
+    function showError(input, msgEl) {
+        if (input) input.classList.add('is-invalid-custom');
+        if (msgEl) msgEl.classList.add('show');
+    }
+
+    function clearError(input, msgEl) {
+        if (input) input.classList.remove('is-invalid-custom');
+        if (msgEl) msgEl.classList.remove('show');
+    }
+
+    // Limpieza en tiempo real para todos los inputs
+    Object.values(inputs).forEach(obj => {
+        if (obj.in) {
+            obj.in.addEventListener('input', function () {
+                if (this.value.trim() !== "") clearError(this, obj.err);
+            });
+            obj.in.addEventListener('change', function () {
+                if (this.value !== "" && this.value !== "0") clearError(this, obj.err);
+            });
+        }
+    });
+
+    form.addEventListener('submit', function (e) {
+        let valid = true;
+        let firstInvalid = null;
+
+        // Validar campos requeridos
+        for (const [key, obj] of Object.entries(inputs)) {
+            if (obj.in && obj.in.hasAttribute('required')) {
+                if (!obj.in.value || obj.in.value.trim() === "") {
+                    showError(obj.in, obj.err);
+                    valid = false;
+                    if (!firstInvalid) firstInvalid = obj.in;
+                } else {
+                    clearError(obj.in, obj.err);
+                }
+            }
+        }
+
+        if (!valid) {
+            e.preventDefault();
+            jsAlertMsg.textContent = 'Por favor, completá todos los campos obligatorios.';
+            jsAlert.style.display  = 'flex';
+            if (firstInvalid) firstInvalid.focus();
+            return;
+        }
+
+        // Estado loading
+        jsAlert.style.display    = 'none';
+        if (btnSpinner) btnSpinner.style.display = 'inline-block';
+        if (btnIcon) btnIcon.style.display    = 'none';
+        if (btnText) btnText.textContent      = 'Guardando...';
+        if (submitBtn) submitBtn.disabled     = true;
+    });
+})();

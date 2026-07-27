@@ -79,6 +79,11 @@ class Region
 
     public function crear(): bool
     {
+        if (trim($this->nombre) === '') {
+            $this->error = 'El nombre de la región es obligatorio.';
+            return false;
+        }
+
         if (self::existeNombre($this->nombre)) {
             $this->error = 'La región ya existe.';
             return false;

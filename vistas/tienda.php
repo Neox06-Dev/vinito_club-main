@@ -133,11 +133,11 @@ function filtroUrlMultiple(string $param, string $valor, array $seleccionados): 
                 <h2 class="section-title">Nuestros <em>vinos</em></h2>
                 <p class="tienda-sub"><?= count($productos) ?> de <?= count($todos) ?> etiquetas</p>
             </div>
-            
-            <button class="btn-hero-primary flex-fill justify-content-center d-lg-none" id="btnFiltrosMobile">
+            <button class="account-edit-btn justify-content-center d-lg-none" id="btnFiltrosMobile">
                 <i class="bi bi-funnel"></i>
                 Filtros
             </button>
+            
         </div>
 
         <div class="row">

@@ -1,8 +1,8 @@
 <?php
 
 require_once 'includes/auth.php';
-require_once 'includes/header.php';
 require_once 'classes/Vino.php';
+
 
 // Secciones válidas
 $secciones_validas = ['inicio', 'tienda', 'contacto', 'datos', 'procesar_contacto', 'detalle', 'carrito', 'login', 'registro', 'mi-cuenta', 'editar-perfil', 'editar-direccion', 'seguridad', 'checkout', 'pedido-confirmado', 'mis-pedidos', 'detalle-pedidos', '404'];
@@ -12,15 +12,13 @@ if (!in_array($seccion, $secciones_validas)) {
     $seccion = '404';
 }
 
+// Validaciones antes de header.php (para evitar lo de "headers already sent")
 if ($seccion === 'checkout') {
-
     if (!isset($_SESSION['id_usuario'])) {
         header('Location: index.php?seccion=login&error=checkout');
         exit;
     }
-
     require_once 'classes/Carrito.php';
-
     if (Carrito::obtenerCantidadProductos() === 0) {
         header('Location: index.php?seccion=carrito&error=carrito_vacio');
         exit;
@@ -28,14 +26,13 @@ if ($seccion === 'checkout') {
 }
 
 if ($seccion === 'pedido-confirmado') {
-
     if (!isset($_GET['id']) || (int)$_GET['id'] <= 0) {
         header('Location: index.php');
         exit;
     }
-
 }
 
+require_once 'includes/header.php';
 ?>
 
 <main id="main-content">

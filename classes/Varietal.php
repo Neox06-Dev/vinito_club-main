@@ -79,6 +79,11 @@ class Varietal
 
     public function crear(): bool
     {
+        if (trim($this->nombre) === '') {
+            $this->error = 'El nombre del varietal es obligatorio.';
+            return false;
+        }
+
         if (self::existeNombre($this->nombre)) {
             $this->error = 'El varietal ya existe.';
             return false;

@@ -29,6 +29,16 @@ if (
     $_SESSION['nombre'] = $usuario->getNombre();
     $_SESSION['rol'] = $usuario->getRol();
 
+    // Solo crear la cookie si el admin marcó "Recordar mi sesión"
+    if (isset($_POST['remember']) && $_POST['remember'] === '1') {
+        setcookie(
+            'recordar_admin',
+            (string) $usuario->getId(),
+            time() + (60 * 60 * 24 * 30),
+            '/'
+        );
+    }
+
     header('Location: index.php?sec=dashboard');
     exit;
 }

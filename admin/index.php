@@ -5,6 +5,24 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 require_once 'includes/functions.php';
+require_once '../classes/Usuario.php';
+
+// Si no hay sesión activa pero existe la cookie "recordar_admin", reloguear automáticamente
+if (
+    !isset($_SESSION['id_usuario']) &&
+    isset($_COOKIE['recordar_admin'])
+) {
+
+    $usuario = Usuario::buscarPorId(
+        (int) $_COOKIE['recordar_admin']
+    );
+
+    if ($usuario && $usuario->getRol() === 'admin') {
+        $_SESSION['id_usuario'] = $usuario->getId();
+        $_SESSION['nombre'] = $usuario->getNombre();
+        $_SESSION['rol'] = $usuario->getRol();
+    }
+}
 
 $adminLogueado = isset($_SESSION['id_usuario']) && $_SESSION['rol'] === 'admin';
 
