@@ -68,6 +68,11 @@ $error = $_GET['error'] ?? '';
             <i class="bi bi-exclamation-circle-fill"></i>
             <span>Completá la dirección de entrega o elegí retiro en tienda.</span>
         </div>
+        <?php elseif ($error === 'stock'): ?>
+        <div class="alert-vinito alert-vinito--error mb-4" role="alert">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span>Uno de los vinos de tu carrito se quedó sin stock justo ahora. Revisá las cantidades antes de volver a confirmar.</span>
+        </div>
         <?php endif; ?>
 
         <!-- Alerta JS (validación cliente) -->

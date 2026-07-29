@@ -18,7 +18,15 @@ if (!$vino) {
     exit;
 }
 
-$vino->eliminar();
+if (!$vino->eliminar()) {
+
+    header(
+        'Location: vinos.php?error=' .
+            urlencode($vino->getError())
+    );
+
+    exit;
+}
 
 header('Location: vinos.php');
 exit;

@@ -3,6 +3,7 @@ require_once 'Conexion.php';
 require_once 'Usuario.php';
 require_once 'DetallePedido.php';
 require_once 'Vino.php';
+require_once __DIR__ . '/../config/app.php';
 
 class Pedido
 {
@@ -118,7 +119,7 @@ class Pedido
             (
                 ?,
                 NOW(),
-                'Pendiente',
+                ?,
                 ?,
                 ?,
                 ?,
@@ -133,6 +134,7 @@ class Pedido
 
             $stmt->execute([
                 $idUsuario,
+                EstadoPedido::PENDIENTE,
                 $metodoPago,
                 $metodoEnvio,
                 $direccion,
@@ -267,30 +269,30 @@ class Pedido
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Trae la dirección del pedido más reciente del usuario que haya sido
-    // enviado a domicilio (se excluye "retiro en tienda", que no es una
-    // dirección propia del cliente). Devuelve null si nunca cargó una.
- 
+    /* 
+        Trae la dirección del pedido más reciente del usuario que haya sido
+    enviado a domicilio (se excluye "retiro en tienda", que no es una
+        dirección propia del cliente). Devuelve null si nunca cargó una.
+    */
+
     public static function buscarUltimaDireccion(int $idUsuario): ?string
     {
         $conexion = (new Conexion())->getConexion();
- 
+
         $query = "SELECT direccion
                 FROM pedidos
                 WHERE id_usuario = ?
-                    AND metodo_envio = 'domicilio'
+                    AND metodo_envio = '" . MetodoEnvio::DOMICILIO . "'
                 ORDER BY fecha_pedido DESC
                 LIMIT 1";
- 
-        $stmt = $conexion->prepare($query);
- 
+
+        $stmt = $conexion->prepare($query); 
         $stmt->execute([$idUsuario]);
- 
-        $direccion = $stmt->fetchColumn();
- 
+
+        $direccion = $stmt->fetchColumn(); 
         return $direccion !== false ? $direccion : null;
     }
- 
+
     public static function actualizarEstado(int $idPedido, string $estado): bool
     {
         $conexion = (new Conexion())->getConexion();
@@ -310,10 +312,13 @@ class Pedido
     {
         $conexion = (new Conexion())->getConexion();
 
-        // $limite ya está tipado como int por PHP (no viene de un input externo
-        // sin validar), así que se puede interpolar directo con seguridad.
-        // Se evita bindValue() para LIMIT porque algunas configuraciones de
-        // PDO/MySQL lo manejan mal quedándose en silencio con ERRMODE_SILENT.
+        /* 
+            $limite ya está tipado como int por PHP (no viene de un input externo
+            sin validar), así que se puede interpolar directo con seguridad.
+            Se evita bindValue() para LIMIT porque algunas configuraciones de
+            PDO/MySQL lo manejan mal quedándose en silencio con ERRMODE_SILENT.
+        */
+
         $limite = max(1, $limite);
 
         $query = "
@@ -332,9 +337,11 @@ class Pedido
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Estadísticas de ventas para el dashboard: facturación, cantidad de
-    // pedidos, ticket promedio, pendientes y ventas por día de la última semana.
-    // Los pedidos cancelados no se contabilizan como venta real.
+    /* 
+        Estadísticas de ventas para el dashboard: facturación, cantidad de
+        pedidos, ticket promedio, pendientes y ventas por día de la última semana.
+        Los pedidos cancelados no se contabilizan como venta real.
+    */
 
     public static function estadisticasVentas(): array
     {
@@ -343,12 +350,15 @@ class Pedido
         // Todo el resumen (facturado, cantidad, promedio y pendientes) sale
         // de una sola consulta con agregación condicional, para no dejar
         // varios cursores abiertos a la vez sobre la misma conexión.
+        $cancelado = EstadoPedido::CANCELADO;
+        $pendiente = EstadoPedido::PENDIENTE;
+
         $query = "
             SELECT
-                COALESCE(SUM(CASE WHEN estado <> 'Cancelado' THEN total END), 0) AS facturado,
-                COUNT(CASE WHEN estado <> 'Cancelado' THEN 1 END) AS cantidad_pedidos,
-                COALESCE(AVG(CASE WHEN estado <> 'Cancelado' THEN total END), 0) AS ticket_promedio,
-                COUNT(CASE WHEN estado = 'Pendiente' THEN 1 END) AS pendientes
+                COALESCE(SUM(CASE WHEN estado <> '{$cancelado}' THEN total END), 0) AS facturado,
+                COUNT(CASE WHEN estado <> '{$cancelado}' THEN 1 END) AS cantidad_pedidos,
+                COALESCE(AVG(CASE WHEN estado <> '{$cancelado}' THEN total END), 0) AS ticket_promedio,
+                COUNT(CASE WHEN estado = '{$pendiente}' THEN 1 END) AS pendientes
             FROM pedidos
         ";
 
@@ -362,7 +372,7 @@ class Pedido
                 DATE(fecha_pedido) AS dia,
                 SUM(total) AS total
             FROM pedidos
-            WHERE estado <> 'Cancelado'
+            WHERE estado <> '{$cancelado}'
                 AND fecha_pedido >= (CURDATE() - INTERVAL 6 DAY)
             GROUP BY DATE(fecha_pedido)
         ";

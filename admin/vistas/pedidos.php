@@ -85,7 +85,7 @@
 
                                     <?php
                                         $estadoClave = strtolower(trim($pedido['estado']));
-                                        $variante = $estadoVariantes[$estadoClave] ?? 'pendiente';
+                                        $variante = $estadoVariantes[$estadoClave] ?? strtolower(EstadoPedido::PENDIENTE);
                                         $icono = $estadoIconos[$estadoClave] ?? 'bi-hourglass-split';
                                     ?>
 

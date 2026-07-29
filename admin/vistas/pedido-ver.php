@@ -7,26 +7,26 @@
 /** @var string $success */
 
 $metodoPagoLabels = [
-    'tarjeta'       => 'Tarjeta de crédito o débito',
-    'transferencia' => 'Transferencia bancaria',
-    'efectivo'      => 'Efectivo al retirar',
+    MetodoPago::TARJETA    => 'Tarjeta de crédito o débito',
+    'transferencia'        => 'Transferencia bancaria',
+    MetodoPago::EFECTIVO   => 'Efectivo al retirar',
 ];
 
 $tipoEntregaLabels = [
-    'domicilio' => 'Envío a domicilio',
-    'retiro'    => 'Retiro en tienda',
+    MetodoEnvio::DOMICILIO => 'Envío a domicilio',
+    MetodoEnvio::RETIRO    => 'Retiro en tienda',
 ];
 
 $estadoVariantes = [
-    'pendiente'   => 'pendiente',
-    'preparando'  => 'preparando',
-    'enviado'     => 'enviado',
-    'entregado'   => 'entregado',
-    'cancelado'   => 'cancelado',
+    strtolower(EstadoPedido::PENDIENTE)  => 'pendiente',
+    strtolower(EstadoPedido::PREPARANDO) => 'preparando',
+    strtolower(EstadoPedido::ENVIADO)    => 'enviado',
+    strtolower(EstadoPedido::ENTREGADO)  => 'entregado',
+    strtolower(EstadoPedido::CANCELADO)  => 'cancelado',
 ];
 
 $estadoActualClave = strtolower(trim($pedido->getEstado()));
-$varianteActual = $estadoVariantes[$estadoActualClave] ?? 'pendiente';
+$varianteActual = $estadoVariantes[$estadoActualClave] ?? strtolower(EstadoPedido::PENDIENTE);
 ?>
 
 <div class="admin-layout">
@@ -116,7 +116,7 @@ $varianteActual = $estadoVariantes[$estadoActualClave] ?? 'pendiente';
                                     <th>Método de pago</th>
                                     <td>
                                         <?= htmlspecialchars($metodoPagoLabels[$pedido->getMetodoPago()] ?? $pedido->getMetodoPago()); ?>
-                                        <?php if ($pedido->getMetodoPago() === 'tarjeta' && $pedido->getCuotas() > 1): ?>
+                                        <?php if ($pedido->getMetodoPago() === MetodoPago::TARJETA && $pedido->getCuotas() > 1): ?>
                                             <br>
                                             <span class="checkout-resumen-direccion">
                                                 <?= $pedido->getCuotas(); ?> cuotas

@@ -43,6 +43,13 @@
             </a>
         </header>
 
+        <?php if (!empty($error)): ?>
+            <div class="alert-vinito alert-vinito--error">
+                <i class="bi bi-exclamation-triangle"></i>
+                <?= htmlspecialchars($error) ?>
+            </div>
+        <?php endif; ?>
+
         <section class="table-panel">
             <div class="table-responsive">
                 <table class="table-vinos">

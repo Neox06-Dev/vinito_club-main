@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: localhost:3306
--- Tiempo de generación: 23-07-2026 a las 17:32:24
+-- Tiempo de generación: 28-07-2026 a las 15:08:49
 -- Versión del servidor: 8.4.3
 -- Versión de PHP: 8.5.1
 
@@ -65,14 +65,8 @@ CREATE TABLE `detalle_pedidos` (
 --
 
 INSERT INTO `detalle_pedidos` (`id_detalle`, `id_pedido`, `id_vino`, `cantidad`, `precio_unitario`, `subtotal`) VALUES
-(1, 5, 5, 1, 31000.00, 31000.00),
-(2, 6, 22, 1, 25000.00, 25000.00),
-(3, 7, 22, 1, 25000.00, 25000.00),
-(4, 8, 8, 1, 11200.00, 11200.00),
-(5, 9, 8, 1, 11200.00, 11200.00),
-(8, 12, 23, 1, 15830.00, 15830.00),
-(9, 13, 23, 7, 15830.00, 110810.00),
-(11, 15, 11, 3, 10500.00, 31500.00);
+(16, 20, 2, 2, 14500.00, 29000.00),
+(17, 21, 2, 1, 14500.00, 14500.00);
 
 -- --------------------------------------------------------
 
@@ -100,14 +94,8 @@ CREATE TABLE `pedidos` (
 --
 
 INSERT INTO `pedidos` (`id_pedido`, `id_usuario`, `fecha_pedido`, `estado`, `metodo_pago`, `metodo_envio`, `direccion`, `observaciones`, `subtotal`, `costo_envio`, `total`, `cuotas`) VALUES
-(5, 10, '2026-07-20 22:21:59', 'Cancelado', 'tarjeta', 'domicilio', 'kjgkgkh1342, CABA (CP 12341)', '', 31000.00, 0.00, 31000.00, 1),
-(6, 10, '2026-07-20 22:34:10', 'Cancelado', 'tarjeta', 'retiro', 'Retiro en tienda — Av. del Libertador 1234, CABA', '', 25000.00, 0.00, 25000.00, 2),
-(7, 10, '2026-07-20 22:34:10', 'Preparando', 'tarjeta', 'retiro', 'Retiro en tienda — Av. del Libertador 1234, CABA', '', 25000.00, 0.00, 25000.00, 2),
-(8, 10, '2026-07-20 22:55:00', 'Entregado', 'efectivo', 'retiro', 'Retiro en tienda — Av. del Libertador 1234, CABA', '', 11200.00, 0.00, 11200.00, 1),
-(9, 10, '2026-07-20 22:55:00', 'Enviado', 'efectivo', 'retiro', 'Retiro en tienda — Av. del Libertador 1234, CABA', '', 11200.00, 0.00, 11200.00, 1),
-(12, 10, '2026-07-22 21:48:39', 'Entregado', 'efectivo', 'retiro', 'Retiro en tienda — Av. del Libertador 1234, CABA', '', 15830.00, 0.00, 15830.00, 1),
-(13, 10, '2026-07-22 22:20:33', 'Entregado', 'efectivo', 'retiro', 'Retiro en tienda — Av. del Libertador 1234, CABA', '', 110810.00, 0.00, 110810.00, 1),
-(15, 10, '2026-07-23 16:05:54', 'Pendiente', 'tarjeta', 'domicilio', 'Balvanera 1234, CABA (CP 1476)', '', 31500.00, 0.00, 31500.00, 3);
+(20, 10, '2026-07-27 23:23:48', 'Pendiente', 'tarjeta', 'domicilio', 'Balvanera 1234, CABA (CP 1476) - 3B', 'nose', 29000.00, 0.00, 29000.00, 3),
+(21, 10, '2026-07-27 23:24:26', 'Pendiente', 'efectivo', 'retiro', 'Retiro en tienda — Av. del Libertador 1234, CABA', '', 14500.00, 0.00, 14500.00, 1);
 
 -- --------------------------------------------------------
 
@@ -158,7 +146,7 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `email`, `password`, `rol`, `telefono`, `fecha_registro`, `direccion`) VALUES
 (1, 'Administrador', 'admin@vinitoclub.com', '$2y$12$ev/UjO4P/lH1sNTfb9xyLOh6WT42h6m9haqX8wSJMNzkPhSx5gFd2', 'admin', '', '2026-07-17 21:23:57', NULL),
-(10, 'Nicolas Gonzalez', 'nico.gonzalez.1116@gmail.com', '$2y$12$XIV7AoBbbBX93V3ln7wmj.eBdG1ES2UUY10aHTrbomybfwjDNK/E.', 'cliente', '1131354138', '2026-07-17 21:23:57', 'Balvanera 1234, CABA (CP 1476)');
+(10, 'Nicolas Gonzalez', 'nico.gonzalez.1116@gmail.com', '$2y$12$Pb7KPTtXvXxQM1Npsns70eyyFJNrn1FBSyfxX8quP10eM6aPi5NP2', 'cliente', '1131354138', '2026-07-17 21:23:57', 'Balvanera 1234, CABA (CP 1476)');
 
 -- --------------------------------------------------------
 
@@ -215,7 +203,7 @@ CREATE TABLE `vinos` (
 
 INSERT INTO `vinos` (`id_vino`, `nombre`, `descripcion`, `precio`, `stock`, `imagen`, `anio_cosecha`, `volumen_ml`, `temperatura_servicio`, `bodega`, `categoria_id`, `maridaje`, `destacado`, `region_id`) VALUES
 (1, 'Camino del Valle', 'Un Malbec de carácter profundo, con aromas a frutas negras maduras, violetas y especias suaves. En boca es estructurado, con taninos firmes y un final prolongado que evoca la tierra mendocina.', 18900.00, 45, 'camino-del-valle.png', '2019-03-15', 750, 16, 'Zuccardi', 1, 'Carnes rojas, estofados, quesos curados', 1, 8),
-(2, 'Cuvée Riche', 'Chardonnay fresco y expresivo, con notas de durazno, pera y un delicado toque de vainilla. Fermentado parcialmente en roble francés, logra equilibrio entre frescura y complejidad.', 14500.00, 34, 'cuvee-riche.png', '2021-02-10', 750, 10, 'Chandon', 2, 'Pescados, mariscos, pasta con crema', 1, 6),
+(2, 'Cuvée Riche', 'Chardonnay fresco y expresivo, con notas de durazno, pera y un delicado toque de vainilla. Fermentado parcialmente en roble francés, logra equilibrio entre frescura y complejidad.', 14500.00, 31, 'cuvee-riche.png', '2021-02-10', 750, 10, 'Chandon', 2, 'Pescados, mariscos, pasta con crema', 1, 6),
 (3, 'Stella Rosa', 'Rosé elegante y sutil, con aromas de frutilla, frambuesa y pétalos de rosa. Seco y refrescante, ideal para el aperitivo o para acompañar platos mediterráneos.', 12800.00, 28, 'rosa-de-otono.png', '2022-01-20', 750, 9, 'Achaval Ferrer', 3, 'Ensaladas, salmón, quesos frescos', 1, 8),
 (4, 'Gran Espumante Brut Nature', 'Elaborado por el método champenoise, este espumante de burbuja fina y persistente ofrece notas de brioche, manzana verde y cítricos. Sin azúcar añadida, es seco y mineral.', 22500.00, 18, 'brut-nature.png', '2020-11-05', 750, 8, 'Crotta', 4, 'Ostras, caviar, sushi, aperitivos', 1, 5),
 (5, 'Alma Negra', 'Un blend de autor que combina la potencia del Malbec con la estructura del Cabernet y la complejidad del Petit Verdot. Notas de ciruela, tabaco y grafito. Vino de guarda.', 31000.00, 12, 'alma-negra.png', '2018-04-22', 750, 17, 'Ernesto Catena', 1, 'Cordero, caza, quesos añejos', 1, 8),
@@ -229,9 +217,11 @@ INSERT INTO `vinos` (`id_vino`, `nombre`, `descripcion`, `precio`, `stock`, `ima
 (13, 'Malbec Clásico', 'El Malbec cotidiano por excelencia. Frutal, amable y versátil. Aromas a ciruela y mora con un toque de vainilla. Taninos suaves y final agradable. El vino de todos los días.', 7900.00, 80, 'malbec-clasico.png', '2022-03-20', 750, 16, 'Trapiche', 1, 'Pastas, pizza, carnes a la parrilla', 0, 1),
 (14, 'Pinot Noir', 'Estilo alsaciano poco común en Argentina. Aromas ahumados, melocotón, jengibre y flores blancas. Textura untuosa y acidez refrescante. Un blanco que sorprende y enamora.', 15300.00, 20, 'pinot-noir.png', '2022-02-28', 750, 11, 'Zuccardi', 2, 'Carne de cerdo, curry suave, pasta al salmón', 0, 4),
 (15, 'Los Haroldos Gran Corte', 'La cima de la vitivinicultura argentina. Blend icónico de Catena Zapata con 5 años de crianza en roble francés. Complejidad extraordinaria: cassis, chocolate amargo, cedro y tabaco. Vino de colección.', 48000.00, 5, 'haroldos-gran-corte.png', '2017-04-10', 750, 18, 'Catena Zapata', 1, 'Rib eye, ossobuco, quesos muy añejos', 0, 1),
-(21, 'San Nicolas Wines', 'Descubrí la elegancia del San Nicolás Wines, el vino ícono de la bodega Catena Zapata. Elaborado con una exclusiva composición de Pinot Noir provenientes de viñedos de Valle de Uco, este tinto seco ofrece una experiencia única', 74800.00, 32, 'vino-nicolas.webp', '2021-05-15', 750, 16, 'Catena Zapata', 1, 'Risottos de hongos, pastas con salsa boloñesa, cocina mediterránea con hierbas.', 1, 8),
-(22, 'P.S García', 'Un vino que desafía lo convencional. El Petit Verdot de P.S. García nace en el histórico valle del Itata, donde la brisa del Pacífico y los suelos graníticos dan vida a un tinto de carácter vibrante y personalidad única.', 25000.00, 14, 'ps-garcia.png', '2013-07-01', 750, 18, ' Viña P.S. García', 1, 'Carnes rojas, platos especiados, quesos curados', 1, 9),
-(23, 'Colomé Estate Torrontes', 'El Colomé Estate Torrontés es la expresión más pura del blanco argentino de altura. Proveniente de los viñedos más altos del mundo, en el Valle Calchaquí (Salta), este vino combina frescura, elegancia y una intensidad aromática inconfundible.', 15830.00, 10, '6a32bfc8dfdd7-colome.webp', '2023-03-22', 750, 9, 'Colomé', 2, 'Pescados, mariscos, sushi, ensaladas frescas y quesos suaves.', 1, 7);
+(21, 'San Nicolas Wines', 'Descubrí la elegancia del San Nicolás Wines, el vino ícono de la bodega Catena Zapata. Elaborado con una exclusiva composición de Pinot Noir provenientes de viñedos de Valle de Uco, este tinto seco ofrece una experiencia única', 74800.00, 31, 'vino-nicolas.webp', '2021-05-15', 750, 16, 'Catena Zapata', 1, 'Risottos de hongos, pastas con salsa boloñesa, cocina mediterránea con hierbas.', 1, 8),
+(22, 'P.S García', 'Un vino que desafía lo convencional. El Petit Verdot de P.S. García nace en el histórico valle del Itata, donde la brisa del Pacífico y los suelos graníticos dan vida a un tinto de carácter vibrante y personalidad única.', 25000.00, 12, 'ps-garcia.png', '2013-07-01', 750, 18, ' Viña P.S. García', 1, 'Carnes rojas, platos especiados, quesos curados', 1, 9),
+(23, 'Colomé Estate Torrontes', 'El Colomé Estate Torrontés es la expresión más pura del blanco argentino de altura. Proveniente de los viñedos más altos del mundo, en el Valle Calchaquí (Salta), este vino combina frescura, elegancia y una intensidad aromática inconfundible.', 15830.00, 8, '6a32bfc8dfdd7-colome.webp', '2023-03-22', 750, 9, 'Colomé', 2, 'Pescados, mariscos, sushi, ensaladas frescas y quesos suaves.', 1, 7),
+(27, 'Santa Julia Natural ', 'El Santa Julia Natural es un espumante argentino elaborado con uvas Torrontés y Moscato, que se caracteriza por su frescura y suavidad. Presenta un color amarillo pálido con reflejos verdosos, acompañado de una burbuja fina y persistente.', 11999.00, 14, '6a64ea41d3ada-espumante-santa-julia.png', '2024-02-25', 750, 7, 'Santa Julia', 4, 'Aperitivos, Postres, Sushi, sobre mesa', 0, 1),
+(28, 'Tomero Rosé', 'El Tomero Rosé es un vino joven y vibrante elaborado en Mendoza por la Bodega Vistalba, a partir de uvas Pinot Noir cuidadosamente seleccionadas. Su color rosado tenue con matices salmón anticipa frescura y elegancia. En nariz, despliega aromas delicados a frutos rojos como frutilla y cereza, acompañados de sutiles notas florales.', 10560.00, 26, '6a64ecb572349-tomero-rose.png', '2022-02-16', 750, 8, 'Vistalba', 3, 'Ensaladas, sushi, mariscos, quesos suaves o simplemente como aperitivo en una tarde cálida.', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -258,9 +248,11 @@ INSERT INTO `vino_varietal` (`vino_id`, `varietal_id`) VALUES
 (2, 4),
 (4, 4),
 (12, 4),
+(27, 4),
 (3, 5),
 (14, 5),
 (21, 5),
+(28, 5),
 (7, 6),
 (6, 7),
 (10, 7),
@@ -342,25 +334,25 @@ ALTER TABLE `categorias`
 -- AUTO_INCREMENT de la tabla `detalle_pedidos`
 --
 ALTER TABLE `detalle_pedidos`
-  MODIFY `id_detalle` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_detalle` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id_pedido` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_pedido` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `regiones`
 --
 ALTER TABLE `regiones`
-  MODIFY `id_region` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_region` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_usuario` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `varietales`
@@ -372,7 +364,7 @@ ALTER TABLE `varietales`
 -- AUTO_INCREMENT de la tabla `vinos`
 --
 ALTER TABLE `vinos`
-  MODIFY `id_vino` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_vino` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- Restricciones para tablas volcadas

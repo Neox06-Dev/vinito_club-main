@@ -3,6 +3,7 @@
 require_once 'classes/Pedido.php';
 require_once 'classes/DetallePedido.php';
 require_once 'classes/Usuario.php';
+require_once 'config/app.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -27,14 +28,14 @@ $usuario = $datos['usuario'];
 $productos = $datos['productos'];
 
 $metodoPagoLabels = [
-    'tarjeta'       => 'Tarjeta de crédito o débito',
-    'transferencia' => 'Transferencia bancaria',
-    'efectivo'      => 'Efectivo al retirar',
+    MetodoPago::TARJETA    => 'Tarjeta de crédito o débito',
+    'transferencia'        => 'Transferencia bancaria',
+    MetodoPago::EFECTIVO   => 'Efectivo al retirar',
 ];
 
 $tipoEntregaLabels = [
-    'domicilio' => 'Envío a domicilio',
-    'retiro'    => 'Retiro en tienda',
+    MetodoEnvio::DOMICILIO => 'Envío a domicilio',
+    MetodoEnvio::RETIRO    => 'Retiro en tienda',
 ];
 
 if ($pedido->getIdUsuario() !== $_SESSION['id_usuario']) {
@@ -86,7 +87,7 @@ if ($pedido->getIdUsuario() !== $_SESSION['id_usuario']) {
                                 <th>Método de pago</th>
                                 <td>
                                     <?= htmlspecialchars($metodoPagoLabels[$pedido->getMetodoPago()] ?? $pedido->getMetodoPago()); ?>
-                                    <?php if ($pedido->getMetodoPago() === 'tarjeta'): ?>
+                                    <?php if ($pedido->getMetodoPago() === MetodoPago::TARJETA): ?>
 
                                     <tr>
                                         <th>Cuotas</th>

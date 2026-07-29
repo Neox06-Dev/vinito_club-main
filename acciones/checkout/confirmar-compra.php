@@ -6,6 +6,7 @@ require_once '../../classes/Conexion.php';
 require_once '../../classes/Usuario.php';
 require_once '../../classes/Carrito.php';
 require_once '../../classes/Pedido.php';
+require_once '../../config/app.php';
 
 // Verificar sesión activa
 if (!isset($_SESSION['id_usuario'])) {
@@ -30,12 +31,12 @@ if (empty($productos)) {
 $nombre = trim($_POST['nombre'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $telefono = trim($_POST['telefono'] ?? '');
-$tipoEntrega = $_POST['tipo_entrega'] ?? 'domicilio';
-$metodoPago = $_POST['metodo_pago'] ?? 'tarjeta';
+$tipoEntrega = $_POST['tipo_entrega'] ?? MetodoEnvio::DOMICILIO;
+$metodoPago = $_POST['metodo_pago'] ?? MetodoPago::TARJETA;
 $observaciones = trim($_POST['observaciones'] ?? '');
 
 $cuotas = (int) ($_POST['cuotas'] ?? 1);
-if ($metodoPago !== 'tarjeta' || $cuotas < 1 || $cuotas > 6) {
+if ($metodoPago !== MetodoPago::TARJETA || $cuotas < 1 || $cuotas > 6) {
     $cuotas = 1;
 }
 
@@ -60,12 +61,12 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 // Si es envío a domicilio, la dirección es obligatoria
-if ($tipoEntrega === 'domicilio' && ($calle === '' || $ciudad === '' || $codigoPostal === '')) {
+if ($tipoEntrega === MetodoEnvio::DOMICILIO && ($calle === '' || $ciudad === '' || $codigoPostal === '')) {
     header('Location: ../../index.php?seccion=checkout&error=direccion');
     exit;
 }
 
-$direccion = $tipoEntrega === 'domicilio'
+$direccion = $tipoEntrega === MetodoEnvio::DOMICILIO
     ? trim($calle . ', ' . $ciudad . ' (CP ' . $codigoPostal . ')' . ($referencia !== '' ? ' - ' . $referencia : ''))
     : 'Retiro en tienda — Av. del Libertador 1234, CABA';
 
@@ -96,18 +97,30 @@ $_SESSION['ultimo_pedido'] = [
     'total'         => $total,
 ];
 
-$idPedido = Pedido::crear(
-    $_SESSION['id_usuario'],
-    $metodoPago,
-    $cuotas,
-    $tipoEntrega,
-    $direccion,
-    $observaciones,
-    $subtotal,
-    $costoEnvio,
-    $total,
-    $productos
-);
+try {
+
+    $idPedido = Pedido::crear(
+        $_SESSION['id_usuario'],
+        $metodoPago,
+        $cuotas,
+        $tipoEntrega,
+        $direccion,
+        $observaciones,
+        $subtotal,
+        $costoEnvio,
+        $total,
+        $productos
+    );
+
+} catch (Throwable $e) {
+
+    // Puede fallar por stock insuficiente (Vino::descontarStock) si otro
+    // usuario compró el mismo vino justo antes. No se vacía el carrito:
+    // el usuario vuelve al checkout y puede ajustar las cantidades.
+    header('Location: ../../index.php?seccion=checkout&error=stock');
+    exit;
+
+}
 
 Carrito::vaciar();
 

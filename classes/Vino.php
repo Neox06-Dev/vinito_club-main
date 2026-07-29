@@ -21,6 +21,7 @@ class Vino
     private int $destacado;
     private int $region_id;
     private ?int $varietal_id = null;
+    private string $error = '';
 
 
     // CONSTRUCTOR
@@ -491,6 +492,27 @@ class Vino
     {
         $conexion = (new Conexion())->getConexion();
 
+        // Un vino con pedidos asociados no se puede borrar: la FK
+        // fk_detalle_vino es ON DELETE RESTRICT, así que MySQL rechazaría
+        // el DELETE. Se corta acá antes con un mensaje amigable en vez de
+        // dejar que explote como error SQL sin manejar.
+        $queryPedidos = "
+            SELECT COUNT(*)
+            FROM detalle_pedidos
+            WHERE id_vino = :id_vino
+        ";
+
+        $stmtPedidos = $conexion->prepare($queryPedidos);
+
+        $stmtPedidos->execute([
+            ':id_vino' => $this->id_vino
+        ]);
+
+        if ($stmtPedidos->fetchColumn() > 0) {
+            $this->error = 'No se puede eliminar: este vino tiene pedidos asociados. Podés dejarlo sin stock en lugar de borrarlo.';
+            return false;
+        }
+
         // eliminar relaciones vino-varietal
         $queryRelacion = "
             DELETE FROM vino_varietal
@@ -511,6 +533,11 @@ class Vino
         return $stmtVino->execute([
             $this->id_vino
         ]);
+    }
+
+    public function getError(): string
+    {
+        return $this->error;
     }
 
     public static function descontarStock(

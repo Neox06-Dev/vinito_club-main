@@ -6,6 +6,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 
 require_once 'includes/functions.php';
 require_once '../classes/Usuario.php';
+require_once '../config/app.php';
 
 // Si no hay sesión activa pero existe la cookie "recordar_admin", reloguear automáticamente
 if (
@@ -77,19 +78,19 @@ switch ($seccion) {
         }
 
         $estadoVariantes = [
-            'pendiente'   => 'pendiente',
-            'preparando'  => 'preparando',
-            'enviado'     => 'enviado',
-            'entregado'   => 'entregado',
-            'cancelado'   => 'cancelado',
+            strtolower(EstadoPedido::PENDIENTE)  => 'pendiente',
+            strtolower(EstadoPedido::PREPARANDO) => 'preparando',
+            strtolower(EstadoPedido::ENVIADO)    => 'enviado',
+            strtolower(EstadoPedido::ENTREGADO)  => 'entregado',
+            strtolower(EstadoPedido::CANCELADO)  => 'cancelado',
         ];
 
         $estadoIconos = [
-            'pendiente'   => 'bi-hourglass-split',
-            'preparando'  => 'bi-box-seam',
-            'enviado'     => 'bi-truck',
-            'entregado'   => 'bi-check-circle',
-            'cancelado'   => 'bi-x-circle',
+            strtolower(EstadoPedido::PENDIENTE)  => 'bi-hourglass-split',
+            strtolower(EstadoPedido::PREPARANDO) => 'bi-box-seam',
+            strtolower(EstadoPedido::ENVIADO)    => 'bi-truck',
+            strtolower(EstadoPedido::ENTREGADO)  => 'bi-check-circle',
+            strtolower(EstadoPedido::CANCELADO)  => 'bi-x-circle',
         ];
 
         require_once 'vistas/dashboard.php';
@@ -100,6 +101,8 @@ switch ($seccion) {
 
         require_once '../classes/Conexion.php';
         require_once '../classes/Vino.php';
+
+        $error = $_GET['error'] ?? '';
 
         $vinos = Vino::catalogo_completo();
 
@@ -573,19 +576,19 @@ switch ($seccion) {
         $pedidos = Pedido::listarTodos();
 
         $estadoVariantes = [
-            'pendiente'   => 'pendiente',
-            'preparando'  => 'preparando',
-            'enviado'     => 'enviado',
-            'entregado'   => 'entregado',
-            'cancelado'   => 'cancelado',
+            strtolower(EstadoPedido::PENDIENTE)  => 'pendiente',
+            strtolower(EstadoPedido::PREPARANDO) => 'preparando',
+            strtolower(EstadoPedido::ENVIADO)    => 'enviado',
+            strtolower(EstadoPedido::ENTREGADO)  => 'entregado',
+            strtolower(EstadoPedido::CANCELADO)  => 'cancelado',
         ];
 
         $estadoIconos = [
-            'pendiente'   => 'bi-hourglass-split',
-            'preparando'  => 'bi-box-seam',
-            'enviado'     => 'bi-truck',
-            'entregado'   => 'bi-check-circle',
-            'cancelado'   => 'bi-x-circle',
+            strtolower(EstadoPedido::PENDIENTE)  => 'bi-hourglass-split',
+            strtolower(EstadoPedido::PREPARANDO) => 'bi-box-seam',
+            strtolower(EstadoPedido::ENVIADO)    => 'bi-truck',
+            strtolower(EstadoPedido::ENTREGADO)  => 'bi-check-circle',
+            strtolower(EstadoPedido::CANCELADO)  => 'bi-x-circle',
         ];
 
         require_once 'vistas/pedidos.php';
@@ -605,7 +608,7 @@ switch ($seccion) {
             exit;
         }
 
-        $estadosDisponibles = ['Pendiente', 'Preparando', 'Enviado', 'Entregado', 'Cancelado'];
+        $estadosDisponibles = EstadoPedido::TODOS;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 

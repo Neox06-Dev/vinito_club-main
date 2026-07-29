@@ -2,6 +2,7 @@
 
 require_once 'classes/Pedido.php';
 require_once 'classes/DetallePedido.php';
+require_once 'config/app.php';
 
 $pedidos = Pedido::buscarPorUsuario(
     $_SESSION['id_usuario']
@@ -9,19 +10,19 @@ $pedidos = Pedido::buscarPorUsuario(
 
 // Estados de pedido -> variante visual del badge
 $estadoVariantes = [
-    'pendiente'   => 'pendiente',
-    'preparando'  => 'preparando',
-    'enviado'     => 'enviado',
-    'entregado'   => 'entregado',
-    'cancelado'   => 'cancelado',
+    strtolower(EstadoPedido::PENDIENTE)  => 'pendiente',
+    strtolower(EstadoPedido::PREPARANDO) => 'preparando',
+    strtolower(EstadoPedido::ENVIADO)    => 'enviado',
+    strtolower(EstadoPedido::ENTREGADO)  => 'entregado',
+    strtolower(EstadoPedido::CANCELADO)  => 'cancelado',
 ];
 
 $estadoIconos = [
-    'pendiente'   => 'bi-hourglass-split',
-    'preparando'  => 'bi-box-seam',
-    'enviado'     => 'bi-truck',
-    'entregado'   => 'bi-check-circle',
-    'cancelado'   => 'bi-x-circle',
+    strtolower(EstadoPedido::PENDIENTE)  => 'bi-hourglass-split',
+    strtolower(EstadoPedido::PREPARANDO) => 'bi-box-seam',
+    strtolower(EstadoPedido::ENVIADO)    => 'bi-truck',
+    strtolower(EstadoPedido::ENTREGADO)  => 'bi-check-circle',
+    strtolower(EstadoPedido::CANCELADO)  => 'bi-x-circle',
 ];
 
 // date() no traduce nombres de mes según locale, así que se arma a mano
@@ -95,7 +96,7 @@ function formatearFechaPedido(string $fecha, array $meses): string
                     $cantidadItems = count($items);
 
                     $estadoClave = strtolower(trim($pedido->getEstado()));
-                    $variante = $estadoVariantes[$estadoClave] ?? 'pendiente';
+                    $variante = $estadoVariantes[$estadoClave] ?? strtolower(EstadoPedido::PENDIENTE);
                     $icono = $estadoIconos[$estadoClave] ?? 'bi-hourglass-split';
 
                 ?>

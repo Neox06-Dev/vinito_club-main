@@ -266,13 +266,8 @@ $total = $subtotal + $costoEnvio;
                         
 
                         <?php endif; ?>
-
                 </div>
-
             </aside>
-
         </div>
-
     </div>
-
 </section>
