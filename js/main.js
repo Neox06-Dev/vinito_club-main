@@ -1415,6 +1415,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     overlay.addEventListener('click', closeFiltros);
 
+    // Abrir automáticamente si venimos de aplicar un filtro (indicador en URL)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('filtros') === 'abiertos') {
+        // Solo en mobile/tablet (donde el botón es visible)
+        if (window.getComputedStyle(btnOpen).display !== 'none') {
+            openFiltros();
+        }
+    }
+
     // Cerrar con la tecla ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && panel.classList.contains('active')) {

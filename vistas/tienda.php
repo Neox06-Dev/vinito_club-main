@@ -91,11 +91,11 @@ $varietales = array_unique($varietales);
 sort($regiones);
 sort($varietales);
 
-/**
- * Construir URL de filtro para selección múltiple
- * Si el valor ya existe en el parámetro, lo quita (toggle).
- * Si no existe, lo agrega.
- * Si se pasa 'todos', se limpia ese parámetro.
+/*
+    Construir URL de filtro para selección múltiple
+    Si el valor ya existe en el parámetro, lo quita (toggle).
+    Si no existe, lo agrega.
+    Si se pasa 'todos', limpia ese parámetro.
  */
 function filtroUrlMultiple(string $param, string $valor, array $seleccionados): string
 {
@@ -120,6 +120,8 @@ function filtroUrlMultiple(string $param, string $valor, array $seleccionados): 
         }
     }
 
+    // Añadimos indicador para que la sidebar permanezca abierta en mobile
+    $parametros['filtros'] = 'abiertos';
     return 'index.php?seccion=tienda&' . http_build_query($parametros);
 }
 ?>
@@ -133,11 +135,11 @@ function filtroUrlMultiple(string $param, string $valor, array $seleccionados): 
                 <h2 class="section-title">Nuestros <em>vinos</em></h2>
                 <p class="tienda-sub"><?= count($productos) ?> de <?= count($todos) ?> etiquetas</p>
             </div>
-            <button class="account-edit-btn justify-content-center d-lg-none" id="btnFiltrosMobile">
+            
+            <button class="btn-accion btn-editar d-lg-none" id="btnFiltrosMobile">
                 <i class="bi bi-funnel"></i>
                 Filtros
             </button>
-            
         </div>
 
         <div class="row">
