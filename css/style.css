@@ -2496,6 +2496,8 @@ body.login-page {
 
 .admin-section-heading{
     margin: .5rem 0 1rem;
+    opacity: 0;
+    animation: adminFadeInUp .6s var(--ease) .1s both;
 }
 
 .admin-section-heading h2{
