@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('America/Argentina/Buenos_Aires');
+
 class Conexion {
     private const DB_HOST = 'localhost';
     private const DB_USER = 'root';
@@ -24,6 +26,9 @@ class Conexion {
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 ]
             );
+
+            // Horario de Argentina
+            $this->db->exec("SET time_zone = '-03:00'");
         } catch (Exception $e) {
             die('Error al conectar con la base de datos: ' . $e->getMessage());
         }
