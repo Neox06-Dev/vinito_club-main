@@ -492,10 +492,12 @@ class Vino
     {
         $conexion = (new Conexion())->getConexion();
 
-        // Un vino con pedidos asociados no se puede borrar: la FK
-        // fk_detalle_vino es ON DELETE RESTRICT, así que MySQL rechazaría
-        // el DELETE. Se corta acá antes con un mensaje amigable en vez de
-        // dejar que explote como error SQL sin manejar.
+        /* 
+            Un vino con pedidos asociados no se puede borrar: la FK
+            fk_detalle_vino es ON DELETE RESTRICT, así que MySQL rechazaría
+            el DELETE. Se corta acá antes con un mensaje en vez de
+            dejar que explote como error SQL sin manejar.
+        */
         $queryPedidos = "
             SELECT COUNT(*)
             FROM detalle_pedidos

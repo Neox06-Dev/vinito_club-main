@@ -3,8 +3,7 @@
 /*
     Constantes generales de la app: estados de pedido, métodos de pago
     y métodos de envío. Se centralizan acá para no repetir los mismos
-    strings sueltos en varios archivos. Los valores son EXACTAMENTE los
-    mismos que ya se usaban, así que no cambia ningún comportamiento.
+    strings sueltos en varios archivos.
 */
 
 // Estados posibles de un pedido (coincide con el ENUM de la tabla `pedidos`)
