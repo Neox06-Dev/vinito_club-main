@@ -23,7 +23,7 @@
 
 # 📖 Descripción
 
-**Vinito Club** es un e-commerce de vinos desarrollado como proyecto final para la materia **Programación ll** En Escuela Da vinci .
+**Vinito Club** es un e-commerce de vinos desarrollado como proyecto final para la materia **Programación ll** En *Escuela Da vinci* .
 
 El proyecto fue construido íntegramente utilizando **Programación Orientada a Objetos**, una **Base de Datos Relacional en MySQL** y una arquitectura modular basada en clases, aplicando buenas prácticas de desarrollo, seguridad y organización del código.
 
@@ -118,7 +118,7 @@ El sistema cuenta con una cara pública destinada a los clientes y un panel admi
 
 ---
 
-## 🍷 Tienda
+## 🏪 Tienda
 
 <p align="center">
     <img src="docs/images/tienda.jpeg" width="90%">
@@ -159,7 +159,7 @@ El sistema cuenta con una cara pública destinada a los clientes y un panel admi
 ### Gestión de Pedidos
 
 <p align="center">
-    <img src="docs/images/admin-pedidos.png" width="90%">
+    <img src="docs/images/admin-pedidos.jpeg" width="90%">
 </p>
 
 ---
@@ -182,7 +182,7 @@ Principales entidades:
 ## DER
 
 <p align="center">
-    <img src="docs/images/der.png" width="95%">
+    <img src="docs/images/DER_VinitoClub.png" width="45%">
 </p>
 
 ---
@@ -272,11 +272,11 @@ Durante el desarrollo de este proyecto se trabajó sobre:
 
 # 👨‍💻 Autor
 
-**Nicolás**
+**Nicolás González/Neox06-Dev**
 
-Proyecto desarrollado como trabajo final para la materia **Diseño y Desarrollo Web**.
+Proyecto desarrollado como trabajo final para la materia **Programación ll** en la carrera de **Diseño y Desarrollo Web**.
 
-⭐ **Calificación obtenida:** **10/10**
+⭐ **Calificación obtenida en el final:** **10/10**
 
 ---
 
